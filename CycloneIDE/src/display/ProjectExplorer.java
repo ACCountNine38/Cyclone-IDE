@@ -12,7 +12,7 @@ public class ProjectExplorer extends Perspective{
 	private static int orginX = 25;
 	private static int orginY = 25;
 	private static int width = (int) (Perspective.screenWidth/4 - 25);
-	private static int height = (int) (Perspective.screenHeight - 65);
+	private static int height = (int) (Perspective.screenHeight - 65) - 25;
 	
 	private JTextArea consoleTextArea = new JTextArea();
 	

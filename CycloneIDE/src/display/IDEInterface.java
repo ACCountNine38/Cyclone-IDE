@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class IDEInterface extends State {
 	
@@ -20,8 +19,10 @@ public class IDEInterface extends State {
 		
 		addPerspectives();
 		
+		addMenuBar();
+		
 		frameSetup(this, "Cyclone IDE", (int) Perspective.screenWidth, (int) Perspective.screenHeight);
-
+		
 	}
 	
 	private void addPerspectives(){

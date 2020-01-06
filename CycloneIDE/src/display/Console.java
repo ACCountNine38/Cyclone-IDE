@@ -12,9 +12,9 @@ public class Console extends Perspective {
 	private static int orginX = (int) (Perspective.screenWidth/4 + 25);
 	private static int orginY = (int) (Perspective.screenHeight*2/3 + 25);
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
-	private static int height = (int) (Perspective.screenHeight/3 - 65);
+	private static int height = (int) (Perspective.screenHeight/3 - 65) - 25;
 	
-	private JTextArea consoleTextArea = new JTextArea();
+	public static JTextArea consoleTextArea = new JTextArea();
 	
 	public Console() {
 		
