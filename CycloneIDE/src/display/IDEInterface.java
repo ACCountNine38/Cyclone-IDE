@@ -126,6 +126,7 @@ public class IDEInterface extends State {
 		
 	}
 	
+	//This method is used to create a class
     public void createClass(){
         String[] options = {"option1", "option2", "option3"};
         String selectionObject = (String) JOptionPane.showInputDialog(null, "Choose", "Menu", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
