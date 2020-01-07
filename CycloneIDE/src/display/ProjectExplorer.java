@@ -94,6 +94,30 @@ public class ProjectExplorer extends Perspective{
 		
 	}
 	
+	public JPanel getProjectExplorerPanel() {
+		return projectExplorerPanel;
+	}
+
+	public void setProjectExplorerPanel(JPanel projectExplorerPanel) {
+		this.projectExplorerPanel = projectExplorerPanel;
+	}
+
+	public ArrayList<String> getProjectDirectories() {
+		return projectDirectories;
+	}
+
+	public void setProjectDirectories(ArrayList<String> projectDirectories) {
+		this.projectDirectories = projectDirectories;
+	}
+
+	public ArrayList<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(ArrayList<Project> projects) {
+		this.projects = projects;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
