@@ -198,6 +198,9 @@ public class ProjectExplorer extends Perspective{
 					
 					//Display the file's contents in the text editor
 					
+					//Use a different tab for each class file
+					//https://stackoverflow.com/questions/56136129/how-to-add-a-new-tab-to-jtabbedpane-with-a-jtextarea
+					
 				} 
 				
 			}
