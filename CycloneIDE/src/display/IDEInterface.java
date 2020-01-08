@@ -2,7 +2,9 @@ package display;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -38,7 +40,7 @@ public class IDEInterface extends State {
 		editor = new Editor();
 		add(editor);
 		
-		projectExplorer = new ProjectExplorer();
+		projectExplorer = new ProjectExplorer(this);
 		add(projectExplorer);
 		
 	}
@@ -200,6 +202,31 @@ public class IDEInterface extends State {
 		}
         
     }
-
+    
+    public void loadFileToEditor(String projectName, String className) {
+    	
+    	//File file = new File(String.format("projects/%s/%s", projectName, className));
+    	String file = loadFileAsString(String.format("projects/%s/%s", projectName, className));
+    	editor.getEditorTextArea().setText(file);
+    	
+    }
+    
+	private String loadFileAsString(String path) {
+		StringBuilder builder = new StringBuilder();
+		
+		try{
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			String line;
+			while((line = br.readLine()) != null)
+				 builder.append(line + "\n");
+			br.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		return builder.toString();
+		
+	}
+    
 }
 

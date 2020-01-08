@@ -30,8 +30,20 @@ public class ProjectExplorer extends Perspective{
 	//	-Button that when pressed reveals project files
 	//	-Project file buttons that appear and disappear when project file is clicked
 	
+	IDEInterface ide; //IDEInterface is passed into the project explorer
 	
-	public ProjectExplorer() {
+//	public ProjectExplorer() {
+//		
+//		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, new Color(243, 243, 243));
+//		
+//		addJComponents();
+//		loadFiles();
+//		createProjects();
+//	}
+	
+	public ProjectExplorer(IDEInterface ide) {
+		
+		this.ide = ide;
 		
 		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, new Color(243, 243, 243));
 		
@@ -194,9 +206,12 @@ public class ProjectExplorer extends Perspective{
 			for(JButton classButton: currentProject.getFileButtons()) {
 				
 				//Open the class file if its button is pressed
-				if(e.getSource() == currentProject.getProjectButton()) {
+				if(e.getSource() == classButton) {
+					
+					System.out.println(classButton.getText() + " class button was pressed");
 					
 					//Display the file's contents in the text editor
+					ide.loadFileToEditor(currentProject.getProjectName(), classButton.getText());
 					
 					//Use a different tab for each class file
 					//https://stackoverflow.com/questions/56136129/how-to-add-a-new-tab-to-jtabbedpane-with-a-jtextarea
