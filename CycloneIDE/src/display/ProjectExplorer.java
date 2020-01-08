@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -82,6 +83,12 @@ public class ProjectExplorer extends Perspective{
 			Project project = new Project(projectDirectories.get(i));
 			projects.add(project);
 			projectExplorerPanel.add(project.getProjectPanel());
+			project.getProjectButton().addActionListener(this); //Add action listener to project button
+			
+			//Add action listeners to all class buttons within the project
+			for(JButton classButton: project.getFileButtons()) {
+				classButton.addActionListener(this);
+			}
 			
 		}
 		
@@ -103,13 +110,7 @@ public class ProjectExplorer extends Perspective{
 		Project project = new Project(projectName);
 		projects.add(project);
 		projectExplorerPanel.add(project.getProjectPanel()); //not required
-		updateProjects();
-		
-	}
-	
-	//This method adds a single new class to a project
-	public void addNewClass(String className) {
-		
+		project.getProjectButton().addActionListener(this); //Add action listener to project button
 		updateProjects();
 		
 	}
@@ -126,8 +127,16 @@ public class ProjectExplorer extends Perspective{
 		
 		//Add the each projects components to the main panel
 		for(Project currentProject: projects) {
+			
+			//Reload the class file buttons
 			currentProject.setupFileButtons();
 			projectExplorerPanel.add(currentProject.getProjectPanel());
+			
+			//Add action listeners to all class buttons within the project
+			for(JButton classButton: currentProject.getFileButtons()) {
+				classButton.addActionListener(this);
+			}
+			
 		}
 		
 		//Must be called when removing components
@@ -168,7 +177,32 @@ public class ProjectExplorer extends Perspective{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
+		//Open or collapse a project
+		for(Project currentProject: projects) {
+			
+			//Collapse project if the project button is pressed
+			if(e.getSource() == currentProject.getProjectButton()) {
+				System.out.println("project button pressed");
+				currentProject.collapse();
+				projectExplorerPanel.revalidate();
+				projectExplorerPanel.repaint();
+				break;
+			} 
+			
+			//Check if a class button within a project is pressed
+			for(JButton classButton: currentProject.getFileButtons()) {
+				
+				//Open the class file if its button is pressed
+				if(e.getSource() == currentProject.getProjectButton()) {
+					
+					//Display the file's contents in the text editor
+					
+				} 
+				
+			}
+			
+		}
 		
 	}
 

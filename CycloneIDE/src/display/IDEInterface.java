@@ -66,6 +66,7 @@ public class IDEInterface extends State {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		//Create a new project or class
 		if(e.getSource() == getNewProjectOption()) {
 			createProject();
 		} else if (e.getSource() == getNewClassOption()) {

@@ -33,10 +33,12 @@ public class Project {
 		
 		this.projectName = projectName;
 		this.filepath = new File(String.format("projects/%s", projectName));
-		open = false;
+		open = true;
 		
 		setupJComponents();
 		setupFileButtons();
+		
+		collapse();
 		
 	}
 	
@@ -49,7 +51,7 @@ public class Project {
 		projectPanel.setMaximumSize(projectPanel.getSize());
 		projectPanel.setMinimumSize(projectPanel.getSize());
 		projectPanel.setPreferredSize(projectPanel.getSize());
-		//projectPanel.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
+		projectPanel.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
 		
 		//Setup the folder button
 		projectButton.setSize(width, buttonHeight);
@@ -62,6 +64,7 @@ public class Project {
 		//Setup the file panel
 		filePanel.setLayout(null);
 		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
+		filePanel.setBorder(BorderFactory.createLineBorder(Color.green, 5));
 		projectPanel.add(filePanel);
 		
 	}
@@ -95,9 +98,73 @@ public class Project {
 			
 		}
 		
+		//Set panel dimensions if project is collapsed
+		if(!open) {
+			
+			//Set the project panel size
+			projectPanel.setSize(width, buttonHeight);
+			projectPanel.setMaximumSize(projectPanel.getSize());
+			projectPanel.setMinimumSize(projectPanel.getSize());
+			projectPanel.setPreferredSize(projectPanel.getSize());
+			
+			//Set the file panel size
+			filePanel.setSize(0, 0);
+			
+			//Revalidate and repaint
+			projectPanel.revalidate();
+			projectPanel.repaint();
+			
+		}
+		
+		
 		//Revalidate and repaint
 		filePanel.revalidate();
 		filePanel.repaint();
+		
+	}
+	
+	//This method displays or hides the project class buttons
+	public void collapse() {
+		
+		if(open) { //Collapse
+			
+			open = false;
+			
+			//Set the project panel size
+			projectPanel.setSize(width, buttonHeight);
+			projectPanel.setMaximumSize(projectPanel.getSize());
+			projectPanel.setMinimumSize(projectPanel.getSize());
+			projectPanel.setPreferredSize(projectPanel.getSize());
+			
+			//Set the file panel size
+			filePanel.setSize(0, 0);
+			
+			//Revalidate and repaint
+			projectPanel.revalidate();
+			projectPanel.repaint();
+			filePanel.revalidate();
+			filePanel.repaint();
+			
+		} else { //Uncollapse
+			
+			open = true;
+			
+			//Set the project panel size
+			projectPanel.setSize(width, (filepath.listFiles().length + 1) * buttonHeight);
+			projectPanel.setMaximumSize(projectPanel.getSize());
+			projectPanel.setMinimumSize(projectPanel.getSize());
+			projectPanel.setPreferredSize(projectPanel.getSize());
+			
+			//Set the file panel size
+			filePanel.setSize(width, filepath.listFiles().length * buttonHeight);
+			
+			//Revalidate and repaint
+			projectPanel.revalidate();
+			projectPanel.repaint();
+			filePanel.revalidate();
+			filePanel.repaint();
+			
+		}
 		
 	}
 	
