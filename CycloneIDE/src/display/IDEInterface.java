@@ -3,6 +3,7 @@ package display;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -76,12 +77,12 @@ public class IDEInterface extends State {
 	//This method allows the user to create a project
 	private void createProject() {
 		
-		String projectName = JOptionPane.showInputDialog("Deleting your account will delete all of your projects\nEnter your passowrd to confirm:").trim();
+		String projectName = JOptionPane.showInputDialog("Enter a project name:").trim();
 		System.out.println(projectName);
 		
 		boolean validName = true;
 		
-		if(projectName == null) {
+		if(projectName.isEmpty()) {
 			validName = false;
 			//Display error message
 			//JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
@@ -93,10 +94,9 @@ public class IDEInterface extends State {
 				validName = false;
 				//Display error message
 				JOptionPane.showMessageDialog(null, "The project name is already taken","INVALID", JOptionPane.WARNING_MESSAGE);
-			}
-			
-			if(!validName)
 				break;
+			}
+				
 		}
 		
 		//A filename can't contain any of the following characters
@@ -105,7 +105,7 @@ public class IDEInterface extends State {
 				projectName.contains(":") || projectName.contains("*") || 
 				projectName.contains("?") || projectName.contains("\"") || 
 				projectName.contains("<") || projectName.contains(">") || 
-				projectName.contains("|") || projectName.isEmpty() || projectName.matches("[ ]+")) {
+				projectName.contains("|")) {
 			JOptionPane.showMessageDialog(null, "A filename can't contain any of the following characters:\n\\/:*?\"<>|","INVALID", JOptionPane.WARNING_MESSAGE);
 			validName = false;
 		}
@@ -118,6 +118,7 @@ public class IDEInterface extends State {
 
 			if(directoryCreated) {
 				System.out.println("Project folder created");
+				projectExplorer.addNewProject(projectName); //add the project to the project explorer
 			} else {
 				System.out.println("Project folder was not created");
 			}
@@ -128,9 +129,75 @@ public class IDEInterface extends State {
 	
 	//This method is used to create a class
     public void createClass(){
-        String[] options = {"option1", "option2", "option3"};
-        String selectionObject = (String) JOptionPane.showInputDialog(null, "Choose", "Menu", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-        System.out.println("test");
+    	
+    	//Select the project
+        String selectedProject = (String) JOptionPane.showInputDialog(null, "Choose a project to create a class in:", "Menu", JOptionPane.PLAIN_MESSAGE, null, 
+        		projectExplorer.getProjectDirectories().toArray(), projectExplorer.getProjectDirectories().get(0));
+        System.out.println("Creating class within: " + selectedProject);
+        
+        //Enter a class name
+		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
+		System.out.println(className);
+		
+		boolean validName = true;
+		
+		//Check if a class name was entered
+		if(className.isEmpty()) {
+			validName = false;
+			//Display error message
+			//JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
+		}
+		
+		//Check if the class name is taken
+		Project project = null;
+		
+		for(Project currentProject: projectExplorer.getProjects()) {
+			if(selectedProject.equals(currentProject.getProjectName())) {
+				project = currentProject;
+				break;
+			}
+			System.out.println(currentProject.getProjectName());
+		}
+		
+		for(File currentClass: project.getFilepath().listFiles()) {
+			
+			if(className.equalsIgnoreCase(currentClass.getName())) {
+				validName = false;
+				//Display error message
+				JOptionPane.showMessageDialog(null, "The class name is already taken","INVALID", JOptionPane.WARNING_MESSAGE);
+				break;
+			}
+			
+		}
+		
+		//A filename can't contain any of the following characters
+		//\/:*?"<>|
+		if(className.contains("\\") || className.contains("/") || 
+				className.contains(":") || className.contains("*") || 
+				className.contains("?") || className.contains("\"") || 
+				className.contains("<") || className.contains(">") || 
+				className.contains("|")) {
+			JOptionPane.showMessageDialog(null, "A filename can't contain any of the following characters:\n\\/:*?\"<>|","INVALID", JOptionPane.WARNING_MESSAGE);
+			validName = false;
+		}
+		
+		//If the project name is not taken, create the folder
+		if(validName) {
+			
+			File file = new File(String.format("projects/%s/%s", project.getProjectName(), className));
+
+			try {
+				file.createNewFile();
+				System.out.println("Class file was created");
+				//projectExplorer.addNewClass(className);
+				projectExplorer.updateProjects();
+			} catch (IOException e) {
+				System.out.println("Class file was not created");
+				e.printStackTrace();
+			}
+			
+		}
+        
     }
 
 }

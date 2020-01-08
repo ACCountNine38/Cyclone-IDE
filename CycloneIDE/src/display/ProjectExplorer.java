@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -93,6 +95,52 @@ public class ProjectExplorer extends Perspective{
 		projects.clear();
 		
 	}
+	
+	//This method adds a single new project
+	public void addNewProject(String projectName) {
+		
+		projectDirectories.add(projectName);
+		Project project = new Project(projectName);
+		projects.add(project);
+		projectExplorerPanel.add(project.getProjectPanel()); //not required
+		updateProjects();
+		
+	}
+	
+	//This method adds a single new class to a project
+	public void addNewClass(String className) {
+		
+		updateProjects();
+		
+	}
+	
+	//This method updates the project list - to be called when a project or class is created or deleted
+	public void updateProjects() {
+		
+		//Remove all project components from the main panel
+		projectExplorerPanel.removeAll();
+		
+		//Sort the project and project directories array lists
+		Collections.sort(projectDirectories);
+		Collections.sort(projects, alphaSorter);
+		
+		//Add the each projects components to the main panel
+		for(Project currentProject: projects) {
+			currentProject.setupFileButtons();
+			projectExplorerPanel.add(currentProject.getProjectPanel());
+		}
+		
+		//Must be called when removing components
+		projectExplorerPanel.revalidate();
+		projectExplorerPanel.repaint();
+		
+	}
+	
+	public static Comparator<Project> alphaSorter = new Comparator<Project>(){
+		public int compare(Project proj1, Project proj2) {
+			return proj1.getProjectName().compareTo(proj2.getProjectName());
+		}
+	};
 	
 	public JPanel getProjectExplorerPanel() {
 		return projectExplorerPanel;

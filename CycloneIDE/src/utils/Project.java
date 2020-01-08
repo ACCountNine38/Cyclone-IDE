@@ -27,11 +27,13 @@ public class Project {
 	
 	private String projectName;
 	private File filepath; 
+	private boolean open;
 	
 	public Project(String projectName) {
 		
 		this.projectName = projectName;
 		this.filepath = new File(String.format("projects/%s", projectName));
+		open = false;
 		
 		setupJComponents();
 		setupFileButtons();
@@ -65,12 +67,24 @@ public class Project {
 	}
 	
 	//This method sets up the buttons used to access individual files within the project
-	private void setupFileButtons() {
+	public void setupFileButtons() {
+		
+		//Clear the panel and button array list
+		filePanel.removeAll();
+		fileButtons.clear();
+		
+		//Set the dimensions of the panels
+		projectPanel.setBounds(0, 0, width, (filepath.listFiles().length + 1) * buttonHeight);
+		projectPanel.setMaximumSize(projectPanel.getSize());
+		projectPanel.setMinimumSize(projectPanel.getSize());
+		projectPanel.setPreferredSize(projectPanel.getSize());
+		
+		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
 		
 		//Loop through the project directory array and create a project for each directory
 		for(int i = 0; i < filepath.listFiles().length; i++) {
 			
-			System.out.println("file: " +filepath.listFiles()[i].getName());
+			System.out.println("file: " + filepath.listFiles()[i].getName());
 			JButton fileButton = new JButton(filepath.listFiles()[i].getName());
 			fileButton.setBounds(width / 10, i * buttonHeight, width * 9 / 10, buttonHeight);
 			fileButton.setMaximumSize(fileButton.getSize());
@@ -80,6 +94,10 @@ public class Project {
 			fileButtons.add(fileButton);
 			
 		}
+		
+		//Revalidate and repaint
+		filePanel.revalidate();
+		filePanel.repaint();
 		
 	}
 	
@@ -129,6 +147,14 @@ public class Project {
 
 	public void setFilepath(File filepath) {
 		this.filepath = filepath;
+	}
+
+	public boolean isOpen() {
+		return open;
+	}
+
+	public void setOpen(boolean open) {
+		this.open = open;
 	}
 
 }
