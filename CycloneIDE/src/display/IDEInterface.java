@@ -203,15 +203,6 @@ public class IDEInterface extends State {
 		}
         
     }
-    
-    public void loadFileToEditor(String projectName, String className) { //Not being called - Used for testing
-    	
-    	//File file = new File(String.format("projects/%s/%s", projectName, className));
-    	String fileText = FileInput.loadFileAsString(String.format("projects/%s/%s", projectName, className));
-    	//editor.getEditorTextArea().setText(fileText);
-    	editor.addTab(fileText, className);
-    	
-    }
 
 	public Console getConsole() {
 		return console;

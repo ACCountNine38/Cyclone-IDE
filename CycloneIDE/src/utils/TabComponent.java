@@ -27,15 +27,15 @@ public class TabComponent extends JPanel {
 		
 	}
 	
+	//Set up the title label
 	private void setupLabel() {
 		titleLabel.setText(title);
 		titleLabel.setOpaque(true);
 		add(titleLabel);
 	}
 	
+	//Set up the title button
 	private void setupButton() {
-		//default JButton font is Dialog.bold 12
-//		closeButton.setBorder(null);
 		closeButton.setMargin(new Insets(0,0,0,0));
 		closeButton.setSize(new Dimension(17, 17));
 		closeButton.setPreferredSize(closeButton.getSize());

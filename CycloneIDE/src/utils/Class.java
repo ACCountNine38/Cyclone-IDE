@@ -32,7 +32,7 @@ public class Class extends JButton {
 	private String projectName;
 	private String className; //Stores the name of the class
 	
-	private TabComponent tab;
+	private TabComponent tab; //Used in the editor tabbed pane
 	
 	public Class(String projectName, String className) {
 		

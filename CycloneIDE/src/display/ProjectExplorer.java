@@ -33,15 +33,6 @@ public class ProjectExplorer extends Perspective{
 	
 	IDEInterface ide; //IDEInterface is passed into the project explorer
 	
-//	public ProjectExplorer() {
-//		
-//		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, new Color(243, 243, 243));
-//		
-//		addJComponents();
-//		loadFiles();
-//		createProjects();
-//	}
-	
 	public ProjectExplorer(IDEInterface ide) {
 		
 		this.ide = ide;
@@ -215,9 +206,6 @@ public class ProjectExplorer extends Perspective{
 					//ide.loadFileToEditor(currentProject.getProjectName(), classButton.getText());
 					ide.getEditor().addTab(classButton);
 					classButton.setupText(); //Call here to update the line numbers
-					
-					//Use a different tab for each class file
-					//https://stackoverflow.com/questions/56136129/how-to-add-a-new-tab-to-jtabbedpane-with-a-jtextarea
 					
 				} 
 				

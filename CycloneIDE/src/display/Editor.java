@@ -30,11 +30,6 @@ public class Editor extends Perspective {
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
 	private static int height = (int) (Perspective.screenHeight/3*2 - 25);
 	
-	private JTextArea editorTextArea = new JTextArea();
-	private JScrollPane editorTextAreaScroll = new JScrollPane(editorTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	private LineNumberModelImpl lineNumberModel = new LineNumberModelImpl(editorTextArea);
-	private LineNumberComponent lineNumberComponent = new LineNumberComponent(lineNumberModel);
-	
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	
 	IDEInterface ide; //IDEInterface is passed into the editor
@@ -47,6 +42,10 @@ public class Editor extends Perspective {
 		
 		addJComponents();
 		
+		//Important methods
+		//tabbedPane.getSelectedComponent();
+		//tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
+		
 	}
 	
 	public void addJComponents() {
@@ -54,87 +53,6 @@ public class Editor extends Perspective {
 		//Setup tabbed pane
 		tabbedPane.setBounds(0, 0, width, height);
 		add(tabbedPane);
-		
-		editorTextArea.setFont(new Font("serif", Font.PLAIN, 22));
-		editorTextArea.setBounds(0, 0, width, height);
-		editorTextArea.setLineWrap(true);
-		editorTextArea.setWrapStyleWord(true);
-		editorTextArea.getDocument().addDocumentListener(new DocumentListener(){
-
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-
-				lineNumberComponent.adjustWidth();
-
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-
-				lineNumberComponent.adjustWidth();
-
-			}
-			
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-
-				lineNumberComponent.adjustWidth();
-
-			}
-
-		});
-		
-		//JScrollPane editorTextAreaScroll = new JScrollPane(editorTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		editorTextAreaScroll.setBounds(0 , 0, width, height);
-		editorTextAreaScroll.setRowHeaderView(lineNumberComponent);
-		//consoleTextAreaScroll.setViewportView(editorTextArea);
-		//add(consoleTextAreaScroll);
-		
-		tabbedPane.addTab("Tab1", editorTextAreaScroll);
-		
-	}
-	
-	//This method creates a new tab for a class file
-	public void addTab(String fileText, String className) {
-		
-		JTextArea editorTextArea = new JTextArea();
-		editorTextArea.setFont(new Font("serif", Font.PLAIN, 22));
-		editorTextArea.setBounds(0, 0, width, height);
-		editorTextArea.setLineWrap(true);
-		editorTextArea.setWrapStyleWord(true);
-		editorTextArea.getDocument().addDocumentListener(new DocumentListener(){
-
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-
-				lineNumberComponent.adjustWidth();
-
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-
-				lineNumberComponent.adjustWidth();
-
-			}
-			
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-
-				lineNumberComponent.adjustWidth();
-
-			}
-
-		});
-		editorTextArea.setText(fileText);
-		
-		
-		JScrollPane editorTextAreaScroll = new JScrollPane(editorTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		editorTextAreaScroll.setBounds(0 , 0, width, height);
-		editorTextAreaScroll.setRowHeaderView(lineNumberComponent);
-		
-		tabbedPane.addTab(className, editorTextAreaScroll);
-		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 		
 	}
 	
@@ -153,14 +71,6 @@ public class Editor extends Perspective {
 		classButton.getTab().getCloseButton().addActionListener(this);
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, classButton.getTab());
 		
-	}
-	
-	public JTextArea getEditorTextArea() {
-		return editorTextArea;
-	}
-
-	public void setEditorTextArea(JTextArea editorTextArea) {
-		this.editorTextArea = editorTextArea;
 	}
 
 	public JTabbedPane getTabbedPane() {
