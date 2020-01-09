@@ -205,7 +205,7 @@ public class ProjectExplorer extends Perspective{
 					//Display the file's contents in the text editor
 					//ide.loadFileToEditor(currentProject.getProjectName(), classButton.getText());
 					ide.getEditor().addTab(classButton);
-					classButton.setupText(); //Call here to update the line numbers
+					classButton.setupText(); //Call here to update the line numbers (also erases unsaved data from a text area)
 					
 				} 
 				
