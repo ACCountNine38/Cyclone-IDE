@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import utils.FileInput;
 import utils.Project;
 
 public class IDEInterface extends State {
@@ -37,7 +38,7 @@ public class IDEInterface extends State {
 		console = new Console();
 		add(console);
 		
-		editor = new Editor();
+		editor = new Editor(this);
 		add(editor);
 		
 		projectExplorer = new ProjectExplorer(this);
@@ -203,29 +204,37 @@ public class IDEInterface extends State {
         
     }
     
-    public void loadFileToEditor(String projectName, String className) {
+    public void loadFileToEditor(String projectName, String className) { //Not being called - Used for testing
     	
     	//File file = new File(String.format("projects/%s/%s", projectName, className));
-    	String file = loadFileAsString(String.format("projects/%s/%s", projectName, className));
-    	editor.getEditorTextArea().setText(file);
+    	String fileText = FileInput.loadFileAsString(String.format("projects/%s/%s", projectName, className));
+    	//editor.getEditorTextArea().setText(fileText);
+    	editor.addTab(fileText, className);
     	
     }
-    
-	private String loadFileAsString(String path) {
-		StringBuilder builder = new StringBuilder();
-		
-		try{
-			BufferedReader br = new BufferedReader(new FileReader(path));
-			String line;
-			while((line = br.readLine()) != null)
-				 builder.append(line + "\n");
-			br.close();
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		
-		return builder.toString();
-		
+
+	public Console getConsole() {
+		return console;
+	}
+
+	public void setConsole(Console console) {
+		this.console = console;
+	}
+
+	public Editor getEditor() {
+		return editor;
+	}
+
+	public void setEditor(Editor editor) {
+		this.editor = editor;
+	}
+
+	public ProjectExplorer getProjectExplorer() {
+		return projectExplorer;
+	}
+
+	public void setProjectExplorer(ProjectExplorer projectExplorer) {
+		this.projectExplorer = projectExplorer;
 	}
     
 }

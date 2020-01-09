@@ -23,7 +23,7 @@ public class Project {
 	private JPanel projectPanel = new JPanel();
 	private JButton projectButton = new JButton();
 	private JPanel filePanel = new JPanel(); //Within the main panel and stores buttons for each project file
-	private ArrayList<JButton> fileButtons = new ArrayList<JButton>(); //Contains buttons for each file within the project
+	private ArrayList<Class> fileButtons = new ArrayList<Class>(); //Contains buttons for each file within the project
 	
 	private String projectName;
 	private File filepath; 
@@ -84,17 +84,19 @@ public class Project {
 		
 		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
 		
-		//Loop through the project directory array and create a project for each directory
+		//Loop through the project directory array and create a file button and tab for each directory
 		for(int i = 0; i < filepath.listFiles().length; i++) {
 			
+			//Setup the file button
 			System.out.println("file: " + filepath.listFiles()[i].getName());
-			JButton fileButton = new JButton(filepath.listFiles()[i].getName());
+			Class fileButton = new Class(projectName, filepath.listFiles()[i].getName());
 			fileButton.setBounds(width / 10, i * buttonHeight, width * 9 / 10, buttonHeight);
 			fileButton.setMaximumSize(fileButton.getSize());
 			fileButton.setMinimumSize(fileButton.getSize());
 			fileButton.setPreferredSize(fileButton.getSize());
 			filePanel.add(fileButton);
 			fileButtons.add(fileButton);
+			
 			
 		}
 		
@@ -192,11 +194,11 @@ public class Project {
 		this.filePanel = filePanel;
 	}
 
-	public ArrayList<JButton> getFileButtons() {
+	public ArrayList<Class> getFileButtons() {
 		return fileButtons;
 	}
 
-	public void setFileButtons(ArrayList<JButton> fileButtons) {
+	public void setFileButtons(ArrayList<Class> fileButtons) {
 		this.fileButtons = fileButtons;
 	}
 

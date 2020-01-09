@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import utils.Project;
+import utils.Class;
 
 public class ProjectExplorer extends Perspective{
 	
@@ -203,7 +204,7 @@ public class ProjectExplorer extends Perspective{
 			} 
 			
 			//Check if a class button within a project is pressed
-			for(JButton classButton: currentProject.getFileButtons()) {
+			for(Class classButton: currentProject.getFileButtons()) {
 				
 				//Open the class file if its button is pressed
 				if(e.getSource() == classButton) {
@@ -211,7 +212,9 @@ public class ProjectExplorer extends Perspective{
 					System.out.println(classButton.getText() + " class button was pressed");
 					
 					//Display the file's contents in the text editor
-					ide.loadFileToEditor(currentProject.getProjectName(), classButton.getText());
+					//ide.loadFileToEditor(currentProject.getProjectName(), classButton.getText());
+					ide.getEditor().addTab(classButton);
+					classButton.setupText(); //Call here to update the line numbers
 					
 					//Use a different tab for each class file
 					//https://stackoverflow.com/questions/56136129/how-to-add-a-new-tab-to-jtabbedpane-with-a-jtextarea
