@@ -28,6 +28,8 @@ public class State extends JFrame implements ActionListener {
 	private JMenu fileMenu = new JMenu("File");
 	private JMenuItem newProjectOption = new JMenuItem("New Project");
 	private JMenuItem newClassOption = new JMenuItem("New Class");
+	private JMenuItem saveCurrentTabOption = new JMenuItem("Save Current Tab");
+	private JMenuItem saveAllTabsOption = new JMenuItem("Save All Tabs");
 	private JMenuItem exitOption = new JMenuItem("Exit IDE");
 	private JMenu editMenu = new JMenu("Edit");
 	private JMenu windowMenu = new JMenu("Window");
@@ -83,6 +85,11 @@ public class State extends JFrame implements ActionListener {
 
 		});
 
+		fileMenu.add(saveCurrentTabOption);
+		saveCurrentTabOption.addActionListener(this);
+		fileMenu.add(saveAllTabsOption);
+		saveAllTabsOption.addActionListener(this);
+		
 		fileMenu.add(exitOption);
 
 		// create a new menu for settings
@@ -137,6 +144,22 @@ public class State extends JFrame implements ActionListener {
 
 	public void setNewClassOption(JMenuItem newClassOption) {
 		this.newClassOption = newClassOption;
+	}
+
+	public JMenuItem getSaveCurrentTabOption() {
+		return saveCurrentTabOption;
+	}
+
+	public void setSaveCurrentTabOption(JMenuItem saveCurrentTabOption) {
+		this.saveCurrentTabOption = saveCurrentTabOption;
+	}
+
+	public JMenuItem getSaveAllTabsOption() {
+		return saveAllTabsOption;
+	}
+
+	public void setSaveAllTabsOption(JMenuItem saveAllTabsOption) {
+		this.saveAllTabsOption = saveAllTabsOption;
 	}
 
 	public JMenuItem getExitOption() {

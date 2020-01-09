@@ -1,7 +1,11 @@
 package display;
 
 import java.awt.Color;
+import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -10,13 +14,15 @@ import java.util.Comparator;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import utils.Project;
 import utils.Class;
+import utils.Project;
 
-public class ProjectExplorer extends Perspective{
+public class ProjectExplorer extends Perspective implements MouseListener {
 	
 	private static int orginX = 25;
 	private static int orginY = 25;
@@ -191,6 +197,19 @@ public class ProjectExplorer extends Perspective{
 				currentProject.collapse();
 				projectExplorerPanel.revalidate();
 				projectExplorerPanel.repaint();
+				
+				//TEST
+				
+				//Create the pop up menu
+				JPopupMenu menu = new JPopupMenu();
+			    JMenuItem anItem = new JMenuItem("Click Me!");
+			    menu.add(anItem);
+			    menu.show(currentProject.getProjectButton(), 
+			    		(int) currentProject.getProjectButton().getMousePosition().getX(), 
+			    		(int) currentProject.getProjectButton().getMousePosition().getY());
+			    
+				//TEST
+				
 				break;
 			} 
 			
@@ -212,6 +231,36 @@ public class ProjectExplorer extends Perspective{
 			}
 			
 		}
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 

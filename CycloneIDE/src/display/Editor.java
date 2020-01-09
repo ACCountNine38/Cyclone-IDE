@@ -2,11 +2,14 @@ package display;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import javax.swing.JTabbedPane;
 
-import utils.Project;
 import utils.Class;
+import utils.Project;
 
 public class Editor extends Perspective {
 	
@@ -57,6 +60,115 @@ public class Editor extends Perspective {
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, classButton.getTab());
 		
 	}
+	
+	//This method saves the current tab of the editor
+	public void saveCurrentTab(Class currentClass) {
+		
+		if(tabbedPane.getComponent(tabbedPane.getSelectedIndex()).equals(currentClass.getEditorTextAreaScroll())) {
+			System.out.println("saving class: " + currentClass.getClassName());
+			
+			//Save the text to the file
+			String classText = currentClass.getEditorTextArea().getText();
+			
+			File classFile = new File(String.format("projects/%s/%s", currentClass.getProjectName(), currentClass.getClassName()));
+			try {
+				
+				PrintWriter pr = new PrintWriter(classFile);
+				pr.print(classText);
+				
+				System.out.println("class saved: " + currentClass.getClassName());
+				
+				pr.close();
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("class save failed: " + currentClass.getClassName());
+			}
+			
+		}
+		
+	}
+	
+	//This method saves the current tab of the editor
+	public void saveCurrentTab() {
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				if(tabbedPane.getComponent(tabbedPane.getSelectedIndex()).equals(currentClass.getEditorTextAreaScroll())) {
+					System.out.println("saving class: " + currentClass.getClassName());
+					
+					//Save the text to the file
+					String classText = currentClass.getEditorTextArea().getText();
+					
+					File classFile = new File(String.format("projects/%s/%s", currentClass.getProjectName(), currentClass.getClassName()));
+					try {
+						
+						PrintWriter pr = new PrintWriter(classFile);
+						pr.print(classText);
+						
+						System.out.println("class saved: " + currentClass.getClassName());
+						
+						pr.close();
+						
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						System.out.println("class save failed: " + currentClass.getClassName());
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	//This method saved the classes of all opened tabs
+	public void saveAllTabs() { //NOTE* needs fixing
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				for(int i = 0; i < tabbedPane.getTabCount(); i++) {
+					
+					if(tabbedPane.getComponent(i).equals(currentClass.getEditorTextAreaScroll())) {
+						System.out.println("saving class: " + currentClass.getClassName());
+						
+						//Save the text to the file
+						String classText = currentClass.getEditorTextArea().getText();
+						
+						File classFile = new File(String.format("projects/%s/%s", currentClass.getProjectName(), currentClass.getClassName()));
+						try {
+							
+							PrintWriter pr = new PrintWriter(classFile);
+							pr.print(classText);
+							
+							System.out.println("class saved: " + currentClass.getClassName());
+							
+							pr.close();
+							
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println("class save failed: " + currentClass.getClassName());
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		System.out.println("All tabs saved");
+		
+	}
 
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
@@ -74,6 +186,9 @@ public class Editor extends Perspective {
 			for(Class classButton: currentProject.getFileButtons()) {
 				
 				if(e.getSource() == classButton.getTab().getCloseButton()) {
+					
+					//saveCurrentTab(classButton); //test saving the tab before its closed
+					saveAllTabs();
 					
 		            int i = tabbedPane.indexOfTabComponent(classButton.getTab());
 		            if (i != -1) {

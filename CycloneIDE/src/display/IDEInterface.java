@@ -72,8 +72,12 @@ public class IDEInterface extends State {
 		//Create a new project or class
 		if(e.getSource() == getNewProjectOption()) {
 			createProject();
-		} else if (e.getSource() == getNewClassOption()) {
+		} else if(e.getSource() == getNewClassOption()) {
 			createClass();
+		} else if(e.getSource() == getSaveCurrentTabOption()) {
+			editor.saveCurrentTab();
+		} else if (e.getSource() ==  getSaveAllTabsOption()) {
+			editor.saveAllTabs();
 		}
 		
 	}
