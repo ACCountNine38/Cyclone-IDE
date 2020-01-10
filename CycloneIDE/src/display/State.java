@@ -14,6 +14,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import assets.Images;
 import utils.FileExecutionTool;
 
 public class State extends JFrame implements ActionListener {
@@ -39,6 +40,7 @@ public class State extends JFrame implements ActionListener {
 	
 	public State() {
 
+		new Images();
 		new FileExecutionTool();
 		customCursor();
 

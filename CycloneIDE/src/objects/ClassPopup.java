@@ -1,4 +1,4 @@
-package utils;
+package objects;
 
 import javax.swing.JPopupMenu;
 
