@@ -143,6 +143,10 @@ public class IDEInterface extends State {
         		projectExplorer.getProjectDirectories().toArray(), projectExplorer.getProjectDirectories().get(0));
         System.out.println("Creating class within: " + selectedProject);
         
+        //Return from the method if nothing was entered
+        if(selectedProject == null)
+        	return;
+        
         //Enter a class name
 		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
 		System.out.println(className);
@@ -198,7 +202,7 @@ public class IDEInterface extends State {
 				file.createNewFile();
 				System.out.println("Class file was created");
 				//projectExplorer.addNewClass(className);
-				projectExplorer.updateProjects();
+				projectExplorer.addNewClass(selectedProject, className);
 			} catch (IOException e) {
 				System.out.println("Class file was not created");
 				e.printStackTrace();
@@ -207,7 +211,92 @@ public class IDEInterface extends State {
 		}
         
     }
+    
+	//This method is used to create a class given the project name
+    public void createClass(String projectName){
+    	
+    	int index = 0;
+    	for(int i = 0; i < projectExplorer.getProjectDirectories().size(); i++) {
+    		if(projectExplorer.getProjectDirectories().get(i).equals(projectName)) {
+    			index = i;
+    			break;
+    		}
+    	}
+    	
+    	//Select the project
+        String selectedProject = (String) JOptionPane.showInputDialog(null, "Choose a project to create a class in:", "Menu", JOptionPane.PLAIN_MESSAGE, null, 
+        		projectExplorer.getProjectDirectories().toArray(), projectExplorer.getProjectDirectories().get(index));
+        System.out.println("Creating class within: " + selectedProject);
+        
+        //Return from the method if nothing was entered
+        if(selectedProject == null)
+        	return;
+        
+        //Enter a class name
+		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
+		System.out.println(className);
+		
+		boolean validName = true;
+		
+		//Check if a class name was entered
+		if(className.isEmpty()) {
+			validName = false;
+			//Display error message
+			//JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
+		}
+		
+		//Check if the class name is taken
+		Project project = null;
+		
+		for(Project currentProject: projectExplorer.getProjects()) {
+			if(selectedProject.equals(currentProject.getProjectName())) {
+				project = currentProject;
+				break;
+			}
+			System.out.println(currentProject.getProjectName());
+		}
+		
+		for(File currentClass: project.getFilepath().listFiles()) {
+			
+			if(className.equalsIgnoreCase(currentClass.getName())) {
+				validName = false;
+				//Display error message
+				JOptionPane.showMessageDialog(null, "The class name is already taken","INVALID", JOptionPane.WARNING_MESSAGE);
+				break;
+			}
+			
+		}
+		
+		//A filename can't contain any of the following characters
+		//\/:*?"<>|
+		if(className.contains("\\") || className.contains("/") || 
+				className.contains(":") || className.contains("*") || 
+				className.contains("?") || className.contains("\"") || 
+				className.contains("<") || className.contains(">") || 
+				className.contains("|")) {
+			JOptionPane.showMessageDialog(null, "A filename can't contain any of the following characters:\n\\/:*?\"<>|","INVALID", JOptionPane.WARNING_MESSAGE);
+			validName = false;
+		}
+		
+		//If the project name is not taken, create the folder
+		if(validName) {
+			
+			File file = new File(String.format("projects/%s/%s", project.getProjectName(), className));
 
+			try {
+				file.createNewFile();
+				System.out.println("Class file was created");
+				//projectExplorer.addNewClass(className);
+				projectExplorer.addNewClass(selectedProject, className);
+			} catch (IOException e) {
+				System.out.println("Class file was not created");
+				e.printStackTrace();
+			}
+			
+		}
+        
+    }
+    
 	public Console getConsole() {
 		return console;
 	}

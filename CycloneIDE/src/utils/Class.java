@@ -1,23 +1,17 @@
 package utils;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicButtonUI;
 
 import display.Perspective;
+import display.ProjectExplorer;
 
 public class Class extends JButton {
 	
@@ -45,6 +39,21 @@ public class Class extends JButton {
 		setupText();
 		
 		tab = new TabComponent(className);
+		
+		addMouseListener(new MouseAdapter() {
+			
+			public void mouseClicked(MouseEvent e) {
+				
+				if(e.getButton() == MouseEvent.BUTTON3) {
+					System.out.println("right click project button");
+					//Create the pop up menu
+					ProjectExplorer.classPopup(Class.this);
+					
+				}
+				
+			}
+			
+		});
 		
 	}
 	

@@ -169,7 +169,14 @@ public class Editor extends Perspective {
 		System.out.println("All tabs saved");
 		
 	}
-
+	
+	public void removeDeletedClassTab(Class currentClass) {
+        int i = tabbedPane.indexOfTabComponent(currentClass.getTab());
+        if (i != -1) {
+        	tabbedPane.remove(i);
+        }
+	}
+	
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}

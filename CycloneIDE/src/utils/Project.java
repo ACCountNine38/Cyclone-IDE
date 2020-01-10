@@ -1,15 +1,22 @@
 package utils;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import display.Perspective;
+import display.ProjectExplorer;
 
 public class Project {
 	
@@ -42,6 +49,9 @@ public class Project {
 		
 	}
 	
+	public Project() {
+	}
+	
 	//This method sets up the panels and project button
 	private void setupJComponents() {
 		
@@ -59,6 +69,22 @@ public class Project {
 		projectButton.setMinimumSize(projectButton.getSize());
 		projectButton.setPreferredSize(projectButton.getSize());
 		projectButton.setText(projectName);
+		
+		projectButton.addMouseListener(new MouseAdapter() {
+
+			public void mouseClicked(MouseEvent e) {
+				
+				if(e.getButton() == MouseEvent.BUTTON3) {
+					System.out.println("right click project button");
+					//Create the pop up menu
+					ProjectExplorer.projectPopup(Project.this);
+					
+				}
+				
+			}
+			
+		});
+		
 		projectPanel.add(projectButton);
 		
 		//Setup the file panel
@@ -169,6 +195,79 @@ public class Project {
 		}
 		
 	}
+	
+	//This method reformats the class file buttons after a class is deleted or added
+	public void reformatFileButtons() { //NOTE: use this when adding project
+		
+		//Clear the panel and button array list
+		filePanel.removeAll();
+		
+		//Set the dimensions of the panels
+		projectPanel.setBounds(0, 0, width, (filepath.listFiles().length + 1) * buttonHeight);
+		projectPanel.setMaximumSize(projectPanel.getSize());
+		projectPanel.setMinimumSize(projectPanel.getSize());
+		projectPanel.setPreferredSize(projectPanel.getSize());
+		
+		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
+		
+		//Sort the file buttons alphabetically
+		Collections.sort(fileButtons, alphaSorter);
+		
+		int i = 0;
+		for(Class fileButton: fileButtons) {
+			fileButton.setBounds(width / 10, i * buttonHeight, width * 9 / 10, buttonHeight);
+			fileButton.setMaximumSize(fileButton.getSize());
+			fileButton.setMinimumSize(fileButton.getSize());
+			fileButton.setPreferredSize(fileButton.getSize());
+			filePanel.add(fileButton);
+			i++;
+		}
+		
+		//Set panel dimensions if project is collapsed
+		if(!open) {
+			
+			//Set the project panel size
+			projectPanel.setSize(width, buttonHeight);
+			projectPanel.setMaximumSize(projectPanel.getSize());
+			projectPanel.setMinimumSize(projectPanel.getSize());
+			projectPanel.setPreferredSize(projectPanel.getSize());
+			
+			//Set the file panel size
+			filePanel.setSize(0, 0);
+			
+			//Revalidate and repaint
+			projectPanel.revalidate();
+			projectPanel.repaint();
+			
+		}
+		
+		
+		//Revalidate and repaint
+		filePanel.revalidate();
+		filePanel.repaint();
+		
+	}
+	
+	public void addNewClass(String className) {
+		
+		//Add a new class to the file buttons array list
+		Class fileButton = new Class(projectName, className);
+		fileButton.setSize(width * 9 / 10, buttonHeight);
+		fileButton.setMaximumSize(fileButton.getSize());
+		fileButton.setMinimumSize(fileButton.getSize());
+		fileButton.setPreferredSize(fileButton.getSize());
+		fileButtons.add(fileButton);
+		
+		//Reformat the file buttons
+		reformatFileButtons();
+		
+	}
+	
+	public static Comparator<Class> alphaSorter = new Comparator<Class>(){
+		public int compare(Class class1, Class class2) {
+			return class1.getClassName().compareTo(class2.getClassName());
+		}
+	};
 	
 	public JPanel getProjectPanel() {
 		return projectPanel;
