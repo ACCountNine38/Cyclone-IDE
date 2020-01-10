@@ -14,7 +14,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import utils.Class;
 import utils.FileExecutionTool;
+import utils.Project;
 
 public class State extends JFrame implements ActionListener {
 
@@ -107,6 +109,34 @@ public class State extends JFrame implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				//Set the current file based on the selected tab
+				if(State.this instanceof IDEInterface && ((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedIndex() != -1) {
+					
+					for(Project currentProject: ((IDEInterface)State.this).getProjectExplorer().getProjects()) {
+						
+						for(Class currentClass: currentProject.getFileButtons()) {
+							
+							if(((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+								
+								//Save the current tab
+								((IDEInterface)State.this).getEditor().saveCurrentTab();
+								
+								//Set the current file
+								currentFile = new File(String.format("projects/%s/%s", 
+										currentClass.getProjectName(), currentClass.getClassName()));
+								
+								System.out.println(String.format("current file set to: projects/%s/%s", 
+										currentClass.getProjectName(), currentClass.getClassName()));
+								
+							}
+							
+						}
+					
+					}
+					
+				}
+				
 				// runs the current project
 				FileExecutionTool.executeFile(currentFile);
 

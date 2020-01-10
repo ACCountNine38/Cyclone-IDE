@@ -284,6 +284,12 @@ public class ProjectExplorer extends Perspective {
 					//ide.loadFileToEditor(currentProject.getProjectName(), classButton.getText());
 					ide.getEditor().addTab(classButton);
 					classButton.setupText(); //Call here to update the line numbers (also erases unsaved data from a text area)
+					//set the current file
+					State.currentFile = new File(String.format("projects/%s/%s", 
+							classButton.getProjectName(), classButton.getClassName()));
+					
+					System.out.println(String.format("current file set to: projects/%s/%s", 
+							classButton.getProjectName(), classButton.getClassName()));
 					
 				} 
 				

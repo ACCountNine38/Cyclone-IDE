@@ -110,7 +110,7 @@ public class Editor extends Perspective {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
 				
-				if(tabbedPane.getComponent(tabbedPane.getSelectedIndex()).equals(currentClass.getEditorTextAreaScroll())) {
+				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					System.out.println("saving class: " + currentClass.getClassName());
 					
 					//Save the text to the file
