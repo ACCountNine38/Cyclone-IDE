@@ -1,4 +1,4 @@
-package utils;
+package objects;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -8,13 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
+import assets.Images;
 import display.Perspective;
 import display.ProjectExplorer;
 
@@ -28,7 +26,7 @@ public class Project {
 	//	-Button that when pressed reveals project files
 	//	-Project file buttons that appear and disappear when project file is clicked
 	private JPanel projectPanel = new JPanel();
-	private JButton projectButton = new JButton();
+	private JButton projectButton = new JButton(Images.folderImage);
 	private JPanel filePanel = new JPanel(); //Within the main panel and stores buttons for each project file
 	private ArrayList<Class> fileButtons = new ArrayList<Class>(); //Contains buttons for each file within the project
 	
@@ -61,7 +59,8 @@ public class Project {
 		projectPanel.setMaximumSize(projectPanel.getSize());
 		projectPanel.setMinimumSize(projectPanel.getSize());
 		projectPanel.setPreferredSize(projectPanel.getSize());
-		projectPanel.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
+		projectPanel.setBackground(Color.white);
+		//projectPanel.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
 		
 		//Setup the folder button
 		projectButton.setSize(width, buttonHeight);
@@ -69,13 +68,15 @@ public class Project {
 		projectButton.setMinimumSize(projectButton.getSize());
 		projectButton.setPreferredSize(projectButton.getSize());
 		projectButton.setText(projectName);
+		projectButton.setOpaque(false);
+		projectButton.setContentAreaFilled(false);
+		projectButton.setBorderPainted(false);
 		
 		projectButton.addMouseListener(new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {
 				
 				if(e.getButton() == MouseEvent.BUTTON3) {
-					System.out.println("right click project button");
 					//Create the pop up menu
 					ProjectExplorer.projectPopup(Project.this);
 					
@@ -89,8 +90,9 @@ public class Project {
 		
 		//Setup the file panel
 		filePanel.setLayout(null);
+		filePanel.setBackground(Color.white);
 		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
-		filePanel.setBorder(BorderFactory.createLineBorder(Color.green, 5));
+		//filePanel.setBorder(BorderFactory.createLineBorder(Color.green, 5));
 		projectPanel.add(filePanel);
 		
 	}
@@ -114,7 +116,6 @@ public class Project {
 		for(int i = 0; i < filepath.listFiles().length; i++) {
 			
 			//Setup the file button
-			System.out.println("file: " + filepath.listFiles()[i].getName());
 			Class fileButton = new Class(projectName, filepath.listFiles()[i].getName());
 			fileButton.setBounds(width / 10, i * buttonHeight, width * 9 / 10, buttonHeight);
 			fileButton.setMaximumSize(fileButton.getSize());

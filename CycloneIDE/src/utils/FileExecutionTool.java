@@ -17,6 +17,7 @@ import commands.Input;
 import commands.Print;
 import display.Console;
 import display.Editor;
+import objects.Variable;
 
 public class FileExecutionTool {
 	

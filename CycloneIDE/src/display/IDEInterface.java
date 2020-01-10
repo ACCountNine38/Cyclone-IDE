@@ -11,8 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import objects.Project;
 import utils.FileInput;
-import utils.Project;
 
 public class IDEInterface extends State {
 	

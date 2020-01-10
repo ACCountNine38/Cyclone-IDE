@@ -2,6 +2,8 @@ package utils;
 
 import javax.swing.JPopupMenu;
 
+import objects.Project;
+
 public class ProjectPopup extends JPopupMenu {
 	
 	private Project project;

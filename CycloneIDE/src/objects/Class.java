@@ -1,5 +1,6 @@
-package utils;
+package objects;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -10,8 +11,13 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import assets.Images;
 import display.Perspective;
 import display.ProjectExplorer;
+import utils.FileInput;
+import utils.LineNumberComponent;
+import utils.LineNumberModelImpl;
+import utils.TabComponent;
 
 public class Class extends JButton {
 	
@@ -45,7 +51,6 @@ public class Class extends JButton {
 			public void mouseClicked(MouseEvent e) {
 				
 				if(e.getButton() == MouseEvent.BUTTON3) {
-					System.out.println("right click project button");
 					//Create the pop up menu
 					ProjectExplorer.classPopup(Class.this);
 					
@@ -58,6 +63,12 @@ public class Class extends JButton {
 	}
 	
 	public void addJComponents() {
+		
+		setIcon(Images.classImage);
+		setBackground(Color.white);
+		setOpaque(false);
+		setContentAreaFilled(false);
+		setBorderPainted(false);
 		
 		editorTextArea.setFont(new Font("serif", Font.PLAIN, 22));
 		editorTextArea.setBounds(0, 0, width, height);

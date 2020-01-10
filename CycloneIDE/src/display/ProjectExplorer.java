@@ -15,9 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import utils.Class;
-import utils.ClassPopup;
-import utils.Project;
+import objects.Class;
+import objects.ClassPopup;
+import objects.Project;
 import utils.ProjectPopup;
 
 public class ProjectExplorer extends Perspective {
@@ -70,6 +70,7 @@ public class ProjectExplorer extends Perspective {
 		
 		//Set up the main panel
 		projectExplorerPanel.setLayout(new BoxLayout(projectExplorerPanel, BoxLayout.Y_AXIS));
+		projectExplorerPanel.setBackground(Color.white);
 		JScrollPane consoleTextAreaScroll = new JScrollPane(projectExplorerPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		consoleTextAreaScroll.setBounds(0 , 0, width, height);
 		add(consoleTextAreaScroll); 
@@ -91,12 +92,6 @@ public class ProjectExplorer extends Perspective {
 		//Add the directories to the project directories array list
 		for(String project: directories) {
 			projectDirectories.add(project);
-		}
-		
-		//Print the names of each project
-		System.out.println("Projects: ");
-		for(String project: projectDirectories) {
-			System.out.println(project);
 		}
 		
 	}

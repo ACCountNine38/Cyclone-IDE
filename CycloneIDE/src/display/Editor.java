@@ -11,10 +11,11 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import javax.swing.JTextArea;
-import javax.swing.JTabbedPane;
 
-import utils.Class;
-import utils.Project;
+import objects.Class;
+import objects.Project;
+
+import javax.swing.JTabbedPane;
 
 public class Editor extends Perspective {
 	
