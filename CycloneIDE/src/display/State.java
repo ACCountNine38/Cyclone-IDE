@@ -20,7 +20,7 @@ public class State extends JFrame implements ActionListener {
 	public static final double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	public static final double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
-	public static File currentFile = null;
+	public static File currentFile = new File("tabs/testFile");
 	
 	public State() {
 
@@ -86,11 +86,10 @@ public class State extends JFrame implements ActionListener {
 		JMenuItem runOption = new JMenuItem("Run Project");
 
 		// add an action listener for button actions when clicked
-		exitOption.addActionListener(new ActionListener() {
+		runOption.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				// runs the current project
 				FileExecutionTool.executeFile(currentFile);
 

@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Scanner;
+
 import display.IDEInterface;
 
 public class Launcher {
