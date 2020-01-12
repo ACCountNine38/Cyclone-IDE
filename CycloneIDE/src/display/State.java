@@ -1,7 +1,6 @@
 package display;
 
 import java.awt.Image;
-import java.awt.MenuBar;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -12,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
 import assets.Images;
 import objects.Class;
@@ -22,8 +20,10 @@ import utils.FileExecutionTool;
 public class State extends JFrame implements ActionListener {
 
 	// final variables
-	public static final double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	public static final double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public static final double SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static final double SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	
+	public static boolean darkTheme = false;
 	
 	public static File currentFile = new File("tabs/testFile");
 	

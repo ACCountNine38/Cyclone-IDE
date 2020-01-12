@@ -82,7 +82,6 @@ public class FileExecutionTool {
 	public static void executeFile(File file) {
 		
 		Console.consoleTextPane.setText("");
-		testFile();
 		
 		userDeclaredVariables.clear();
 		
@@ -272,6 +271,12 @@ public class FileExecutionTool {
 		
 	}
 	
+	public void splitMethod() {
+		
+		
+		
+	}
+	
 	public static void terminate(String message) {
 		
 		StyledDocument doc = Console.consoleTextPane.getStyledDocument();
@@ -293,23 +298,6 @@ public class FileExecutionTool {
 			StyleConstants.setUnderline(blackStyle, false);
 			doc.insertString(doc.getLength(), " ", blackStyle);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private static void testFile() {
-		
-		try {
-			
-			PrintWriter pr = new PrintWriter(new File("tabs/testFile"));
-			
-			pr.println(Editor.editorTextArea.getText());
-			
-			pr.close();
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

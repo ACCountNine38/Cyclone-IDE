@@ -2,10 +2,7 @@ package display;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.beans.EventHandler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -14,6 +11,7 @@ import javax.swing.JTextArea;
 
 import objects.Class;
 import objects.Project;
+import popup.KeywordCustomizationPopup;
 
 import javax.swing.JTabbedPane;
 
@@ -23,8 +21,6 @@ public class Editor extends Perspective {
 	private static int orginY = 25;
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
 	private static int height = (int) (Perspective.screenHeight/3*2 - 25);
-	
-	public static JTextArea editorTextArea = new JTextArea();
 	
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	
@@ -45,12 +41,6 @@ public class Editor extends Perspective {
 	}
 	
 	public void addJComponents() {
-		
-		editorTextArea.setFont(new Font("serif", Font.PLAIN, 22));
-		editorTextArea.setBounds(0, 0, width, height);
-		editorTextArea.setLineWrap(true);
-		editorTextArea.setWrapStyleWord(true);
-		editorTextArea.setTabSize(2);
 		
 		tabbedPane.setBounds(0, 0, width, height);
 		add(tabbedPane);

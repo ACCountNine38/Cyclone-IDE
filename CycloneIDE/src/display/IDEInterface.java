@@ -51,7 +51,7 @@ public class IDEInterface extends State {
 
 		// set the name and size of the frame, and now allowing user to resize
 		frame.setTitle(name);
-		frame.setSize((int)State.screenWidth, (int)State.screenHeight);
+		frame.setSize((int)State.SCREEN_WIDTH, (int)State.SCREEN_HEIGHT);
 		frame.setResizable(false);
 
 		// disables auto layout, center program, exit frame when program closes

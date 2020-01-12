@@ -74,6 +74,7 @@ public class Class extends JButton {
 		editorTextArea.setBounds(0, 0, width, height);
 		editorTextArea.setLineWrap(true);
 		editorTextArea.setWrapStyleWord(true);
+		editorTextArea.setTabSize(2);
 		editorTextArea.getDocument().addDocumentListener(new DocumentListener(){
 
 			@Override
