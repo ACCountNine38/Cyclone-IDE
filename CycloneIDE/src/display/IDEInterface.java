@@ -2,6 +2,8 @@ package display;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import objects.Class;
 import objects.Project;
 import utils.FileInput;
 
@@ -30,6 +33,31 @@ public class IDEInterface extends State {
 		addMenuBar();
 		
 		frameSetup(this, "Cyclone IDE", (int) Perspective.screenWidth, (int) Perspective.screenHeight);
+		
+		//Warn user before closing while edited tabs are open
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				
+				if(editor.editedTabsOpen()) {
+					int option = JOptionPane.showConfirmDialog(IDEInterface.this, "Would you like to save edited tabs before closing");
+					System.out.println("Option = " + option);
+					//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
+					if(option == 0) {
+						editor.saveAllTabs();
+						System.exit(0);
+					} else if(option == 1) {
+						System.exit(0);
+					} 
+				} else {
+					System.exit(0);
+				}
+				
+			}
+			
+		});
 		
 	}
 	

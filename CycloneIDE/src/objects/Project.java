@@ -11,6 +11,7 @@ import java.util.Comparator;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import assets.Images;
 import display.Perspective;
@@ -71,6 +72,7 @@ public class Project {
 		projectButton.setOpaque(false);
 		projectButton.setContentAreaFilled(false);
 		projectButton.setBorderPainted(false);
+		projectButton.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		projectButton.addMouseListener(new MouseAdapter() {
 

@@ -1,6 +1,5 @@
-package utils;
+package objects;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 
@@ -42,6 +41,14 @@ public class TabComponent extends JPanel {
 		closeButton.setMaximumSize(closeButton.getSize());
 		closeButton.setMinimumSize(closeButton.getSize());
 		add(closeButton);
+	}
+	
+	public void showEdited() {
+		titleLabel.setText("*" + title);
+	}
+	
+	public void showSaved() {
+		titleLabel.setText(title);
 	}
 
 	public JLabel getTitleLabel() {

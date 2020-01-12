@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -17,7 +18,6 @@ import display.ProjectExplorer;
 import utils.FileInput;
 import utils.LineNumberComponent;
 import utils.LineNumberModelImpl;
-import utils.TabComponent;
 
 public class Class extends JButton {
 	
@@ -34,17 +34,21 @@ public class Class extends JButton {
 	
 	private TabComponent tab; //Used in the editor tabbed pane
 	
+	private boolean edited;
+	
 	public Class(String projectName, String className) {
 		
 		this.projectName = projectName;
 		this.className = className;
+		edited = false;
 		
 		setText(className); //Set the button text
+		setHorizontalAlignment(SwingConstants.LEFT);
+		tab = new TabComponent(className);
 		
 		addJComponents();
 		setupText();
 		
-		tab = new TabComponent(className);
 		
 		addMouseListener(new MouseAdapter() {
 			
@@ -81,6 +85,7 @@ public class Class extends JButton {
 			public void changedUpdate(DocumentEvent arg0) {
 
 				lineNumberComponent.adjustWidth();
+				setEdited(true);
 
 			}
 
@@ -88,13 +93,15 @@ public class Class extends JButton {
 			public void insertUpdate(DocumentEvent arg0) {
 
 				lineNumberComponent.adjustWidth();
-
+				setEdited(true);
+				
 			}
 			
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 
 				lineNumberComponent.adjustWidth();
+				setEdited(true);
 
 			}
 
@@ -114,6 +121,7 @@ public class Class extends JButton {
 	
 	public void setupText() {
 		editorTextArea.setText(FileInput.loadFileAsString(String.format("projects/%s/%s", projectName, className)));
+		setEdited(false);
 	}
 	
 	//Getters and Setters
@@ -171,6 +179,18 @@ public class Class extends JButton {
 
 	public void setTab(TabComponent tab) {
 		this.tab = tab;
+	}
+
+	public boolean isEdited() {
+		return edited;
+	}
+
+	public void setEdited(boolean edited) {
+		this.edited = edited;
+		if(edited)
+			tab.showEdited();
+		else
+			tab.showSaved();
 	}
 	
 }

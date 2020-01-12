@@ -13,6 +13,7 @@ import objects.Class;
 import objects.Project;
 import popup.KeywordCustomizationPopup;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 public class Editor extends Perspective {
@@ -67,8 +68,15 @@ public class Editor extends Perspective {
 	//This method saves the current tab of the editor
 	public void saveCurrentTab(Class currentClass) {
 		
+		if(tabbedPane.getTabCount() == 0) {
+			System.out.println("no tabs");
+			return;
+		}
+		
 		if(tabbedPane.getComponent(tabbedPane.getSelectedIndex()).equals(currentClass.getEditorTextAreaScroll())) {
 			System.out.println("saving class: " + currentClass.getClassName());
+			
+			currentClass.setEdited(false);//Remove asterisk on the tab
 			
 			//Save the text to the file
 			String classText = currentClass.getEditorTextArea().getText();
@@ -97,12 +105,19 @@ public class Editor extends Perspective {
 	//This method saves the current tab of the editor
 	public void saveCurrentTab() {
 		
+		//Return if there are no open tabs
+		if(tabbedPane.getTabCount() == 0) {
+			return;
+		}
+		
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
 				
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					System.out.println("saving class: " + currentClass.getClassName());
+					
+					currentClass.setEdited(false);//Remove asterisk on the tab
 					
 					//Save the text to the file
 					String classText = currentClass.getEditorTextArea().getText();
@@ -123,6 +138,8 @@ public class Editor extends Perspective {
 						System.out.println("class save failed: " + currentClass.getClassName());
 					}
 					
+					return;
+					
 				}
 				
 			}
@@ -134,14 +151,24 @@ public class Editor extends Perspective {
 	//This method saved the classes of all opened tabs
 	public void saveAllTabs() { //NOTE* needs fixing
 		
+		//Return if there are no open tabs
+		if(tabbedPane.getTabCount() == 0) {
+			return;
+		}
+		
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			//System.out.println("Project: " + currentProject.getProjectName());
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
+				//System.out.println("Class: " + currentClass.getClassName());
 				
-				for(int i = 0; i < tabbedPane.getTabCount(); i++) {
+				for(int i = 0; i < tabbedPane.getTabCount() + 1; i++) {
 					
 					if(tabbedPane.getComponent(i).equals(currentClass.getEditorTextAreaScroll())) {
 						System.out.println("saving class: " + currentClass.getClassName());
+						//System.out.println(" i = " + i + " num tabs =" + tabbedPane.getTabCount());
+						
+						currentClass.setEdited(false);//Remove asterisk on the tab
 						
 						//Save the text to the file
 						String classText = currentClass.getEditorTextArea().getText();
@@ -181,6 +208,62 @@ public class Editor extends Perspective {
         }
 	}
 	
+	//This method returns true if an edited tab(s) is opened but returns false otherwise
+	public boolean editedTabsOpen() {
+		
+		//If there are no tabs opened, return false
+		if(tabbedPane.getTabCount() == 0) {
+			return false;
+		}
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				for(int i = 0; i < tabbedPane.getTabCount() + 1; i++) {
+					
+					if(tabbedPane.getComponent(i).equals(currentClass.getEditorTextAreaScroll())) {
+						
+						if(currentClass.isEdited())
+							return true;
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
+	public boolean isCurrentTabEdited() {
+		
+		//If there are no tabs opened, return false
+		if(tabbedPane.getTabCount() == 0) {
+			return false;
+		}
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+					
+					if(currentClass.isEdited())
+						return true;
+					
+				}
+				
+			}
+			
+		}
+		
+		return false;
+	}
+	
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
@@ -198,13 +281,22 @@ public class Editor extends Perspective {
 				
 				if(e.getSource() == classButton.getTab().getCloseButton()) {
 					
-					//saveCurrentTab(classButton); //test saving the tab before its closed
-					saveAllTabs();
-					
-		            int i = tabbedPane.indexOfTabComponent(classButton.getTab());
-		            if (i != -1) {
-		            	tabbedPane.remove(i);
-		            }
+					//If the
+					if(isCurrentTabEdited()) {
+						
+						int option = JOptionPane.showConfirmDialog(ide, "Would you like to save this class, " + classButton.getClassName() + ", before closing");
+						System.out.println("Option = " + option);
+						//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
+						if(option == 0) {
+							saveCurrentTab();
+							removeDeletedClassTab(classButton);
+						} else if(option == 1) {
+							removeDeletedClassTab(classButton);
+						} 
+						
+					} else {
+						removeDeletedClassTab(classButton);
+					}
 		            
 				}
 				
