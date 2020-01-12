@@ -80,6 +80,8 @@ public class Editor extends Perspective {
 		if(tabbedPane.getComponent(tabbedPane.getSelectedIndex()).equals(currentClass.getEditorTextAreaScroll())) {
 			System.out.println("saving class: " + currentClass.getClassName());
 			
+			currentClass.setEdited(false);//Remove asterisk on the tab
+			
 			//Save the text to the file
 			String classText = currentClass.getEditorTextArea().getText();
 			
@@ -114,6 +116,8 @@ public class Editor extends Perspective {
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					System.out.println("saving class: " + currentClass.getClassName());
 					
+					currentClass.setEdited(false);//Remove asterisk on the tab
+					
 					//Save the text to the file
 					String classText = currentClass.getEditorTextArea().getText();
 					
@@ -133,6 +137,8 @@ public class Editor extends Perspective {
 						System.out.println("class save failed: " + currentClass.getClassName());
 					}
 					
+					return;
+					
 				}
 				
 			}
@@ -145,13 +151,18 @@ public class Editor extends Perspective {
 	public void saveAllTabs() { //NOTE* needs fixing
 		
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			//System.out.println("Project: " + currentProject.getProjectName());
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
+				//System.out.println("Class: " + currentClass.getClassName());
 				
-				for(int i = 0; i < tabbedPane.getTabCount(); i++) {
+				for(int i = 0; i < tabbedPane.getTabCount() + 1; i++) {
 					
 					if(tabbedPane.getComponent(i).equals(currentClass.getEditorTextAreaScroll())) {
 						System.out.println("saving class: " + currentClass.getClassName());
+						//System.out.println(" i = " + i + " num tabs =" + tabbedPane.getTabCount());
+						
+						currentClass.setEdited(false);//Remove asterisk on the tab
 						
 						//Save the text to the file
 						String classText = currentClass.getEditorTextArea().getText();
