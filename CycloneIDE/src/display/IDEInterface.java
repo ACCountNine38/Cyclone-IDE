@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 
 import objects.Class;
 import objects.Project;
+import popup.KeywordCustomizationPopup;
+import popup.KeywordOption;
 import utils.FileInput;
 
 public class IDEInterface extends State {
@@ -58,6 +60,9 @@ public class IDEInterface extends State {
 			}
 			
 		});
+		
+		//TEST
+		//new KeywordCustomizationPopup();
 		
 	}
 	
@@ -106,6 +111,8 @@ public class IDEInterface extends State {
 			editor.saveCurrentTab();
 		} else if (e.getSource() ==  getSaveAllTabsOption()) {
 			editor.saveAllTabs();
+		} else if(e.getSource() == getKeywordCustomizationOption()) {
+			new KeywordCustomizationPopup();
 		}
 		
 	}
