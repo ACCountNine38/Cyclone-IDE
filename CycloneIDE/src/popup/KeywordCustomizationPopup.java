@@ -47,6 +47,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		customizePanel.setLayout(new BoxLayout(customizePanel, BoxLayout.Y_AXIS));
 		scroll = new JScrollPane(customizePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setBounds(50, 50, PANEL_WIDTH, PANEL_HEIGHT);
+		scroll.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		add(scroll);
 		
 		//add the title labels for each column
