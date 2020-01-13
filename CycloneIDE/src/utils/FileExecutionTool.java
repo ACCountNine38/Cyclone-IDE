@@ -93,6 +93,7 @@ public class FileExecutionTool {
 		
 		Console.consoleTextArea.setText("");
 		
+		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
 		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
 		
 		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
