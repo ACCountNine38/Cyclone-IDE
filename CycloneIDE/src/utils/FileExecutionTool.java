@@ -111,6 +111,7 @@ public class FileExecutionTool {
         }
         
         JarRunFile.execute();
+        
 		/*
 		Console.consoleTextArea.setText("");
 		
