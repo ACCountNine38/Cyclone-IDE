@@ -3,6 +3,8 @@ package utils;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +19,9 @@ import commands.Input;
 import commands.Print;
 import display.Console;
 import display.Editor;
+import main.Launcher;
 import objects.Variable;
+import test.JarRunFile;
 
 public class FileExecutionTool {
 	
@@ -81,7 +85,34 @@ public class FileExecutionTool {
 	
 	public static void executeFile(File file) {
 		
-		Console.consoleTextPane.setText("");
+		Console.consoleTextArea.setText("");
+		
+		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        System.setOut(printStream);
+        System.setErr(printStream);
+        File jarFile = new File("src/test/JarRunFile.java");
+
+        try {
+            PrintWriter pr = new PrintWriter(jarFile);
+            pr.print(String.format("package test;\npublic class JarRunFile {\n    "
+            		+ "public static void main(String[] args) {\n        "
+            		+ "System.out.println(\"hello world\");\n    }\n"
+            		
+            		+ "public static void execute() {\n" + 
+            		"		\n" + 
+            		"		main(null);\n" + 
+            		"		\n" + 
+            		"	}\n}"));
+            
+            pr.close();
+        } catch (IOException e) {
+            System.out.println("Class file was not created");
+            e.printStackTrace();
+        }
+        
+        JarRunFile.execute();
+		/*
+		Console.consoleTextArea.setText("");
 		
 		userDeclaredVariables.clear();
 		
@@ -237,9 +268,9 @@ public class FileExecutionTool {
 			
 			if(executeSuccessful) {
 				
-				StyledDocument doc = Console.consoleTextPane.getStyledDocument();
-				Style greenStyle = Console.consoleTextPane.addStyle("Green", null);
-				Style blackStyle = Console.consoleTextPane.addStyle("Black", null);
+				StyledDocument doc = Console.consoleTextArea.getStyledDocument();
+				Style greenStyle = Console.consoleTextArea.addStyle("Green", null);
+				Style blackStyle = Console.consoleTextArea.addStyle("Black", null);
 			    StyleConstants.setForeground(greenStyle, Color.GREEN);
 
 			    // Inherits from "Red"; makes text red and underlined
@@ -247,7 +278,7 @@ public class FileExecutionTool {
 			    
 			    try {
 			    	
-			    	if(!Console.consoleTextPane.getText().isEmpty()) {
+			    	if(!Console.consoleTextArea.getText().isEmpty()) {
 			    		
 			    		doc.insertString(doc.getLength(), "\n", greenStyle);
 			    		
@@ -268,6 +299,7 @@ public class FileExecutionTool {
 			e.printStackTrace();
 			
 		}
+		*/
 		
 	}
 	
@@ -278,17 +310,17 @@ public class FileExecutionTool {
 	}
 	
 	public static void terminate(String message) {
-		
-		StyledDocument doc = Console.consoleTextPane.getStyledDocument();
-		Style greenStyle = Console.consoleTextPane.addStyle("Red", null);
-		Style blackStyle = Console.consoleTextPane.addStyle("Black", null);
+		/*
+		StyledDocument doc = Console.consoleTextArea.getStyledDocument();
+		Style greenStyle = Console.consoleTextArea.addStyle("Red", null);
+		Style blackStyle = Console.consoleTextArea.addStyle("Black", null);
 	    StyleConstants.setForeground(greenStyle, Color.RED);
 
 	    // Inherits from "Red"; makes text red and underlined
 	    StyleConstants.setUnderline(greenStyle, true);
 	    
 	    try {
-	    	if(!Console.consoleTextPane.getText().isEmpty()) {
+	    	if(!Console.consoleTextArea.getText().isEmpty()) {
 	    		
 	    		doc.insertString(doc.getLength(), "\n", greenStyle);
 	    		
@@ -300,7 +332,7 @@ public class FileExecutionTool {
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
-		
+		*/
 	}
 	
 	/*

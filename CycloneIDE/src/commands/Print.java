@@ -17,7 +17,7 @@ public class Print {
 		return line;
 		
 	}
-	
+	/*
 	public static void print(String output) {
 		
 		Console.consoleTextPane.setText(Console.consoleTextPane.getText() + output);
@@ -31,7 +31,7 @@ public class Print {
 		else
 			Console.consoleTextPane.setText(output);
 		
-	}
+	}*/
 	/*
 	 * String text = "";
 		

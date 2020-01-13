@@ -15,7 +15,7 @@ public class Console extends Perspective {
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
 	private static int height = (int) (Perspective.screenHeight/3 - 65) - 25;
 	
-	public static JTextPane consoleTextPane = new JTextPane();
+	public static JTextArea consoleTextArea = new JTextArea();
 	
 	public Console() {
 		
@@ -26,10 +26,10 @@ public class Console extends Perspective {
 	}
 	
 	public void addJComponents() {
-		consoleTextPane.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 20));
-		consoleTextPane.setBounds(0, 0, width, height);
-		consoleTextPane.setEditable(false);
-		JScrollPane consoleTextAreaScroll = new JScrollPane(consoleTextPane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		consoleTextArea.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 20));
+		consoleTextArea.setBounds(0, 0, width, height);
+		consoleTextArea.setEditable(false);
+		JScrollPane consoleTextAreaScroll = new JScrollPane(consoleTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		consoleTextAreaScroll.setBounds(0 , 0, width, height);
 		add(consoleTextAreaScroll); 
 		
