@@ -114,6 +114,7 @@ public class FileExecutionTool {
         String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
         String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
         System.setProperty("java.home", jdkPath);
+        System.out.println(System.getProperty("java.home")); //Java home path
         
         System.out.println(jarFile.getAbsolutePath());
         
