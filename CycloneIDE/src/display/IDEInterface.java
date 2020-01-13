@@ -17,6 +17,7 @@ import objects.Class;
 import objects.Project;
 import popup.KeywordCustomizationPopup;
 import popup.KeywordOption;
+import popup.UtilityCustomizationPopup;
 import utils.FileInput;
 
 public class IDEInterface extends State {
@@ -113,6 +114,8 @@ public class IDEInterface extends State {
 			editor.saveAllTabs();
 		} else if(e.getSource() == getKeywordCustomizationOption()) {
 			new KeywordCustomizationPopup();
+		} else if(e.getSource() == getUtilityCustomizationOption()) {
+			new UtilityCustomizationPopup();
 		}
 		
 	}

@@ -1,6 +1,5 @@
 package utils;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,20 +12,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 
-import commands.Input;
-import commands.Print;
 import display.Console;
-import display.Editor;
-import main.Launcher;
 import objects.Variable;
 
 public class FileExecutionTool {
@@ -171,8 +162,6 @@ public class FileExecutionTool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-        //JarRunFile.execute();
 		
 		/*
 		Console.consoleTextArea.setText("");
