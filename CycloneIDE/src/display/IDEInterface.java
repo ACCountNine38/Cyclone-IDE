@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 
 import objects.Class;
 import objects.Project;
+import popup.KeywordCustomizationPopup;
 import utils.FileInput;
 
 public class IDEInterface extends State {
@@ -58,6 +59,9 @@ public class IDEInterface extends State {
 			}
 			
 		});
+		
+		//TEST
+		//new KeywordCustomizationPopup();
 		
 	}
 	

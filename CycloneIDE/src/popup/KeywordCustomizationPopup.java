@@ -44,7 +44,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		setLayout(null);
 		setFocusable(true);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(new Color(225, 225, 225));
 
 		// set frame to appear on screen
