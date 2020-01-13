@@ -95,9 +95,9 @@ public class FileExecutionTool {
 		
 		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
 		
-//		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-//        System.setOut(printStream);
-//        System.setErr(printStream);
+		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        System.setOut(printStream);
+        System.setErr(printStream);
         File jarFile = new File("src/JarRunFile.java");
 
         try {
@@ -146,7 +146,7 @@ public class FileExecutionTool {
 
 			Method method;
 			try {
-				System.out.println("Executing x.main");
+				System.out.println("Executing JarRunFile.main");
 				method = cls.getMethod("main", String[].class);
 				method.invoke(null, (Object) params);
 			} catch (NoSuchMethodException e) {
