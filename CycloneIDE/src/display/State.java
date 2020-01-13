@@ -36,6 +36,7 @@ public class State extends JFrame implements ActionListener {
 	private JMenuItem exitOption = new JMenuItem("Exit IDE");
 	private JMenu editMenu = new JMenu("Edit");
 	private JMenu windowMenu = new JMenu("Window");
+	private JMenuItem keywordCustomizationOption = new JMenuItem("Customize Keywords");
 	private JMenu runMenu = new JMenu("Run");
 	private JMenuItem runOption = new JMenuItem("Run Project");
 	private JMenu helpMenu = new JMenu("Help");
@@ -101,7 +102,10 @@ public class State extends JFrame implements ActionListener {
 
 		// create a new menu to make window changes
 		menuBar.add(windowMenu);
-
+		
+		windowMenu.add(keywordCustomizationOption);
+		keywordCustomizationOption.addActionListener(this);
+		
 		// create a new menu to run the project
 		menuBar.add(runMenu);
 
@@ -215,6 +219,14 @@ public class State extends JFrame implements ActionListener {
 
 	public void setWindowMenu(JMenu windowMenu) {
 		this.windowMenu = windowMenu;
+	}
+
+	public JMenuItem getKeywordCustomizationOption() {
+		return keywordCustomizationOption;
+	}
+
+	public void setKeywordCustomizationOption(JMenuItem keywordCustomizationOption) {
+		this.keywordCustomizationOption = keywordCustomizationOption;
 	}
 
 	public JMenu getRunMenu() {
