@@ -85,7 +85,7 @@ public class FileExecutionTool {
 		Console.consoleTextArea.setText("");
 		
 		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
-		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
+		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
 		
 		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
         System.setOut(printStream);
@@ -109,6 +109,11 @@ public class FileExecutionTool {
             System.out.println("Class file was not created");
             e.printStackTrace();
         }
+        
+        //Set to use JDK
+        String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
+        String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
+        System.setProperty("java.home", jdkPath);
         
         System.out.println(jarFile.getAbsolutePath());
         
