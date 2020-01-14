@@ -282,7 +282,19 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		if(e.getSource() == exit) {
+		if(e.getSource() == defaultSettings) {
+			//Change to default settings
+			
+		} else if(e.getSource() == save) {
+			//Save current settings
+			
+			//Change editor font
+			//Change editor font size
+				//Make sure that a valid font size is selected
+			//Change editor tab space size
+				//Make sure that a valid tab size is selected
+			
+		} else if(e.getSource() == exit) {
 			ide.setEnabled(true); //Enable the ide before closing
 			this.dispose();
 		}
