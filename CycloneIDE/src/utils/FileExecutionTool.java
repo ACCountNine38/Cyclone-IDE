@@ -7,7 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -17,7 +20,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import commands.Input;
-import commands.Method;
 import commands.Print;
 
 import javax.tools.JavaCompiler.CompilationTask;
@@ -121,7 +123,7 @@ public class FileExecutionTool {
         try {
         	
             PrintWriter pr = new PrintWriter(jarFile);
-            /*
+            
             pr.print(String.format("public class JarRunFile {\n    "
             		+ "public static void main(String[] args) {\n        "
             		+ "System.out.println(\"hello world\");\n    }\n"
@@ -197,13 +199,15 @@ public class FileExecutionTool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		*/
+		
 		resetCode();
 		Console.consoleTextArea.setText("");
 		
 		userDeclaredVariables.clear();
 		userDeclaredReturnMethods.clear();
+		
+		boolean forLoop = true;
 		
 		try {
 			
@@ -256,6 +260,7 @@ public class FileExecutionTool {
 							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
 								
 								String inputVariable = Input.validateText(line.substring(line.indexOf(key) + key.length() + 1));
+								
 								
 								
 								action = true;
@@ -353,7 +358,7 @@ public class FileExecutionTool {
 						
 						if(methodName.equals("main")) {
 							
-							Method.declareMain();
+							//Method.declareMain();
 							break;
 							
 						} 
@@ -402,7 +407,7 @@ public class FileExecutionTool {
 			
 			printer.println(translatedCode);
 			//System.out.println(translatedCode);
-			Console.consoleTextArea.setText(translatedCode);
+			//Console.consoleTextArea.setText(translatedCode);
 			
 			printer.close();
 			
