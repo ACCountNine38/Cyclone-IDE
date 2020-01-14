@@ -3,6 +3,8 @@ package display;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -25,7 +27,7 @@ public class Editor extends Perspective {
 	
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	
-	IDEInterface ide; //IDEInterface is passed into the editor
+	private IDEInterface ide; //IDEInterface is passed into the editor
 	
 	public Editor(IDEInterface ide) {
 		
@@ -44,6 +46,7 @@ public class Editor extends Perspective {
 	public void addJComponents() {
 		
 		tabbedPane.setBounds(0, 0, width, height);
+		
 		add(tabbedPane);
 		
 	}
@@ -69,12 +72,12 @@ public class Editor extends Perspective {
 	public void saveCurrentTab(Class currentClass) {
 		
 		if(tabbedPane.getTabCount() == 0) {
-			System.out.println("no tabs");
+			//System.out.println("no tabs");
 			return;
 		}
 		
 		if(tabbedPane.getComponent(tabbedPane.getSelectedIndex()).equals(currentClass.getEditorTextAreaScroll())) {
-			System.out.println("saving class: " + currentClass.getClassName());
+			//System.out.println("saving class: " + currentClass.getClassName());
 			
 			currentClass.setEdited(false);//Remove asterisk on the tab
 			
@@ -87,14 +90,14 @@ public class Editor extends Perspective {
 				PrintWriter pr = new PrintWriter(classFile);
 				pr.print(classText);
 				
-				System.out.println("class saved: " + currentClass.getClassName());
+				//System.out.println("class saved: " + currentClass.getClassName());
 				
 				pr.close();
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.out.println("class save failed: " + currentClass.getClassName());
+				//System.out.println("class save failed: " + currentClass.getClassName());
 				
 			}
 			

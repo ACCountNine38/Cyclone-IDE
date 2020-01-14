@@ -1,1 +1,7 @@
-p: 
+main{ 
+	a = 7 	
+	a + 4 + 3 	
+	b = 'c' 	
+	p: "aweaew"
+	pl: "value" + a
+}

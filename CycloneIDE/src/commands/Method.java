@@ -3,6 +3,7 @@ package commands;
 import java.util.ArrayList;
 
 import objects.Variable;
+import utils.FileExecutionTool;
 
 public class Method {
 	
@@ -15,7 +16,9 @@ public class Method {
 	// 
 	public Method(String name, String datatype, String parameters) {
 		
-		
+		this.name = name;
+		this.datatype = datatype;
+		breakDownParameters(parameters);
 		
 	}
 	
@@ -25,5 +28,18 @@ public class Method {
 		
 		
 	}
-
+	
+	public static void declareMain() {
+		
+		FileExecutionTool.translatedCode += "\n"
+				+ "public static void main(String[] args) {";
+		return;
+		
+	}
+	
+	private void toJava() {
+		
+		
+	}
+	
 }

@@ -1,20 +1,25 @@
 package utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+
+import commands.Input;
+import commands.Method;
+import commands.Print;
+
 import javax.tools.JavaCompiler.CompilationTask;
 
 import display.Console;
@@ -26,13 +31,34 @@ public class FileExecutionTool {
 	public static HashMap<String, String> userDatatypes = new HashMap<String, String>();
 	
 	public static ArrayList<Variable> userDeclaredVariables = new ArrayList<Variable>();
+	public static ArrayList<Method> userDeclaredReturnMethods = new ArrayList<Method>();
 	
 	public static boolean executeSuccessful;
+	
+	public static String translatedCode = "";
+	
+	public static PrintWriter printer;
 	
 	public FileExecutionTool() {
 		
 		updateCommands();
 		updateDatatypes();
+		resetCode();
+		
+		try {
+			printer = new PrintWriter("src/JarRunFile.java");
+			//printer = new PrintWriter(
+			//		new BufferedWriter(new FileWriter("src/JarRunFile.java", true)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void resetCode() {
+		
+		translatedCode = "public class JarRunFile { ";
 		
 	}
 	
@@ -81,7 +107,7 @@ public class FileExecutionTool {
 	}
 	
 	public static void executeFile(File file) {
-		
+		/*
 		Console.consoleTextArea.setText("");
 		
 		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
@@ -93,7 +119,9 @@ public class FileExecutionTool {
         File jarFile = new File("src/JarRunFile.java");
 
         try {
+        	
             PrintWriter pr = new PrintWriter(jarFile);
+            /*
             pr.print(String.format("public class JarRunFile {\n    "
             		+ "public static void main(String[] args) {\n        "
             		+ "System.out.println(\"hello world\");\n    }\n"
@@ -105,6 +133,7 @@ public class FileExecutionTool {
             		"	}\n}"));
             
             pr.close();
+            
         } catch (IOException e) {
             System.out.println("Class file was not created");
             e.printStackTrace();
@@ -163,10 +192,12 @@ public class FileExecutionTool {
 			e.printStackTrace();
 		}
 		
-		/*
+		*/
+		resetCode();
 		Console.consoleTextArea.setText("");
 		
 		userDeclaredVariables.clear();
+		userDeclaredReturnMethods.clear();
 		
 		try {
 			
@@ -194,7 +225,7 @@ public class FileExecutionTool {
 							
 							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
 								
-								line = Print.validateText(line.substring(line.indexOf(key) + key.length() + 1));
+								line = line.substring(line.indexOf(key) + key.length() + 1);
 								Print.print(line);
 								
 								action = true;
@@ -202,7 +233,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
 								
-								line = Print.validateText(line.substring(line.indexOf(key) + key.length() + 1));
+								line = line.substring(line.indexOf(key) + key.length() + 1);
 								Print.printLine(line);
 								
 								action = true;
@@ -263,9 +294,10 @@ public class FileExecutionTool {
 							|| line.charAt(i) == '/' || line.charAt(i) == '^' || line.charAt(i) == '%' 
 							|| line.charAt(i) == '~') {
 						
-						char operator = line.charAt(i);
+						//char operator = line.charAt(i);
 						String variable = line.substring(0, i).trim();
-						String value = line.substring(i+1, line.length()).trim();
+						String calculation = line.substring(i, line.length());
+						//String value = line.substring(i+1, line.length()).trim();
 						
 						Variable operatingVariable = null;
 						
@@ -289,7 +321,7 @@ public class FileExecutionTool {
 							return;
 							
 						}
-						
+						/*
 						boolean valueFound = false;
 						
 						for(Variable var: userDeclaredVariables) {
@@ -305,12 +337,24 @@ public class FileExecutionTool {
 							}
 							
 						}
+						*/
+						operatingVariable.calculate(calculation);
+						break;
 						
-						if(!valueFound) {
+					} else if(line.charAt(i) == '{') {
+						
+						String methodName = line.substring(0, i);
+						
+						if(methodName.equals("main")) {
 							
-							operatingVariable.calculate(operator, value);
+							Method.declareMain();
+							break;
 							
-						}
+						} 
+						
+					} else if(line.charAt(i) == '}') {
+						
+						translatedCode += "\n}";
 						
 					}
 					
@@ -318,6 +362,7 @@ public class FileExecutionTool {
 				
 			}
 			
+			/*
 			if(executeSuccessful) {
 				
 				StyledDocument doc = Console.consoleTextArea.getStyledDocument();
@@ -345,13 +390,69 @@ public class FileExecutionTool {
 				}
 			    
 			} 
+			*/
+			
+			translatedCode += "\n}";
+			
+			printer.println(translatedCode);
+			//System.out.println(translatedCode);
+			Console.consoleTextArea.setText(translatedCode);
+			
+			printer.close();
 			
 		} catch (FileNotFoundException e) {
 			
 			e.printStackTrace();
 			
 		}
-		*/
+		
+		
+	}
+	
+	public static int insertTabs(String codeblock) {
+		
+		int requiredTabs = 0;
+		Scanner input = new Scanner(codeblock);
+		
+		while(true) {
+			
+			try {
+				
+				String line = input.nextLine();
+				
+				if(line.length() > 1) {
+					
+					for(int i = 1; i < line.length(); i++) {
+						if(line.charAt(i) == '{' && line.charAt(i) != '\\') {
+							
+							requiredTabs++;
+							
+						} else if(line.charAt(i) == '}' && line.charAt(i) != '\\') {
+							
+							requiredTabs--;
+							
+						} 
+					}
+					
+				} else {
+					
+					if(line.equals("}") && requiredTabs > 0) {
+						
+						requiredTabs--;
+						
+					}
+					
+				}
+				
+			} catch(NoSuchElementException error) {
+				
+				break;
+				
+			}
+			
+		}
+		
+		return requiredTabs;
 		
 	}
 	

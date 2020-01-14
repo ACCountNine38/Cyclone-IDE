@@ -17,23 +17,41 @@ public class Print {
 		return line;
 		
 	}
-	/*
+	
 	public static void print(String output) {
-		
-		Console.consoleTextPane.setText(Console.consoleTextPane.getText() + output);
+		//Console.consoleTextArea.setText(Console.consoleTextArea.getText() + output);
+		/*
+		for(Variable variable: FileExecutionTool.userDeclaredVariables) {
+			if(variable.getName().equals(output.trim())) {
+				FileExecutionTool.translatedCode += "\nSystem.out.print(" + output + ");";
+				return;
+			}
+		}
+		*/
+		FileExecutionTool.translatedCode += "\nSystem.out.print(" + output + ");";
 		
 	}
 	
 	public static void printLine(String output) {
-		
-		if(!Console.consoleTextPane.getText().equals(""))
-			Console.consoleTextPane.setText(Console.consoleTextPane.getText() + "\n" + output);
+		/*
+		if(!Console.consoleTextArea.getText().equals(""))
+			Console.consoleTextArea.setText(Console.consoleTextArea.getText() + "\n" + output);
 		else
-			Console.consoleTextPane.setText(output);
+			Console.consoleTextArea.setText(output);
+			*/
+		/*
+		for(Variable variable: FileExecutionTool.userDeclaredVariables) {
+			if(variable.getName().equals(output.trim())) {
+				FileExecutionTool.translatedCode += "\nSystem.out.println(" + output + ");";
+				return;
+			}
+		}
+		*/
+		FileExecutionTool.translatedCode += "\nSystem.out.println(" + output + ");";
 		
-	}*/
+	}
 	/*
-	 * String text = "";
+	 String text = "";
 		
 		int numQuotation = 0;
 		

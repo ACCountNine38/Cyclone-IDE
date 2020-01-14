@@ -2,6 +2,8 @@ package objects;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -15,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import assets.Images;
 import display.Perspective;
 import display.ProjectExplorer;
+import utils.FileExecutionTool;
 import utils.FileInput;
 import utils.LineNumberComponent;
 import utils.LineNumberModelImpl;
@@ -79,6 +82,41 @@ public class Class extends JButton {
 		editorTextArea.setLineWrap(true);
 		editorTextArea.setWrapStyleWord(true);
 		editorTextArea.setTabSize(2);
+		editorTextArea.addKeyListener(new KeyListener() {            
+			
+			@Override
+	        public void keyPressed(KeyEvent e) {
+				
+	            if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+	            	int currentPosition = editorTextArea.getCaretPosition();
+	            	editorTextArea.insert("\n", editorTextArea.getCaretPosition());
+	            	
+	            	int requiredTabs = FileExecutionTool.insertTabs(editorTextArea.getText().substring(0, editorTextArea.getCaretPosition()));
+	            	
+	            	for(int i = 0; i < requiredTabs; i++) {
+	            		
+	            		editorTextArea.insert("\t", editorTextArea.getCaretPosition());
+	            		
+	            	}
+	            	
+	            	editorTextArea.setCaretPosition(currentPosition);
+	            	
+	            }
+	            
+	        }
+	            
+			@Override
+			public void keyTyped(KeyEvent e) {
+	            
+	        }
+
+	        @Override
+	        public void keyReleased(KeyEvent e) {
+	            // TODO Auto-generated method stub      
+	        }
+	        
+	    });
+		
 		editorTextArea.getDocument().addDocumentListener(new DocumentListener(){
 
 			@Override

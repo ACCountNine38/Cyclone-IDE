@@ -45,7 +45,7 @@ public class IDEInterface extends State {
 				
 				if(editor.editedTabsOpen()) {
 					int option = JOptionPane.showConfirmDialog(IDEInterface.this, "Would you like to save edited tabs before closing");
-					System.out.println("Option = " + option);
+					//System.out.println("Option = " + option);
 					//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
 					if(option == 0) {
 						editor.saveAllTabs();
@@ -121,7 +121,7 @@ public class IDEInterface extends State {
 	private void createProject() {
 		
 		String projectName = JOptionPane.showInputDialog("Enter a project name:").trim();
-		System.out.println(projectName);
+		//System.out.println(projectName);
 		
 		boolean validName = true;
 		
@@ -160,10 +160,10 @@ public class IDEInterface extends State {
 			boolean directoryCreated = file.mkdir();
 
 			if(directoryCreated) {
-				System.out.println("Project folder created");
+				//System.out.println("Project folder created");
 				projectExplorer.addNewProject(projectName); //add the project to the project explorer
 			} else {
-				System.out.println("Project folder was not created");
+				//System.out.println("Project folder was not created");
 			}
 			
 		}
@@ -176,7 +176,7 @@ public class IDEInterface extends State {
     	//Select the project
         String selectedProject = (String) JOptionPane.showInputDialog(null, "Choose a project to create a class in:", "Menu", JOptionPane.PLAIN_MESSAGE, null, 
         		projectExplorer.getProjectDirectories().toArray(), projectExplorer.getProjectDirectories().get(0));
-        System.out.println("Creating class within: " + selectedProject);
+        //System.out.println("Creating class within: " + selectedProject);
         
         //Return from the method if nothing was entered
         if(selectedProject == null)
@@ -184,7 +184,7 @@ public class IDEInterface extends State {
         
         //Enter a class name
 		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
-		System.out.println(className);
+		//System.out.println(className);
 		
 		boolean validName = true;
 		
@@ -203,7 +203,7 @@ public class IDEInterface extends State {
 				project = currentProject;
 				break;
 			}
-			System.out.println(currentProject.getProjectName());
+			//System.out.println(currentProject.getProjectName());
 		}
 		
 		for(File currentClass: project.getFilepath().listFiles()) {
@@ -235,11 +235,11 @@ public class IDEInterface extends State {
 
 			try {
 				file.createNewFile();
-				System.out.println("Class file was created");
+				//System.out.println("Class file was created");
 				//projectExplorer.addNewClass(className);
 				projectExplorer.addNewClass(selectedProject, className);
 			} catch (IOException e) {
-				System.out.println("Class file was not created");
+				//System.out.println("Class file was not created");
 				e.printStackTrace();
 			}
 			
@@ -261,7 +261,7 @@ public class IDEInterface extends State {
     	//Select the project
         String selectedProject = (String) JOptionPane.showInputDialog(null, "Choose a project to create a class in:", "Menu", JOptionPane.PLAIN_MESSAGE, null, 
         		projectExplorer.getProjectDirectories().toArray(), projectExplorer.getProjectDirectories().get(index));
-        System.out.println("Creating class within: " + selectedProject);
+       // System.out.println("Creating class within: " + selectedProject);
         
         //Return from the method if nothing was entered
         if(selectedProject == null)
@@ -269,7 +269,7 @@ public class IDEInterface extends State {
         
         //Enter a class name
 		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
-		System.out.println(className);
+		//System.out.println(className);
 		
 		boolean validName = true;
 		
@@ -288,7 +288,7 @@ public class IDEInterface extends State {
 				project = currentProject;
 				break;
 			}
-			System.out.println(currentProject.getProjectName());
+			//System.out.println(currentProject.getProjectName());
 		}
 		
 		for(File currentClass: project.getFilepath().listFiles()) {
@@ -320,11 +320,11 @@ public class IDEInterface extends State {
 
 			try {
 				file.createNewFile();
-				System.out.println("Class file was created");
+				//System.out.println("Class file was created");
 				//projectExplorer.addNewClass(className);
 				projectExplorer.addNewClass(selectedProject, className);
 			} catch (IOException e) {
-				System.out.println("Class file was not created");
+				//System.out.println("Class file was not created");
 				e.printStackTrace();
 			}
 			

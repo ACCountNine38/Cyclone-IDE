@@ -132,8 +132,8 @@ public class State extends JFrame implements ActionListener {
 								currentFile = new File(String.format("projects/%s/%s", 
 										currentClass.getProjectName(), currentClass.getClassName()));
 								
-								System.out.println(String.format("current file set to: projects/%s/%s", 
-										currentClass.getProjectName(), currentClass.getClassName()));
+								//System.out.println(String.format("current file set to: projects/%s/%s", 
+								//		currentClass.getProjectName(), currentClass.getClassName()));
 								
 							}
 							

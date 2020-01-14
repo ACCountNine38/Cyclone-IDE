@@ -3,6 +3,8 @@ package display;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -29,6 +31,7 @@ public class Console extends Perspective {
 		consoleTextArea.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 20));
 		consoleTextArea.setBounds(0, 0, width, height);
 		consoleTextArea.setEditable(false);
+
 		JScrollPane consoleTextAreaScroll = new JScrollPane(consoleTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		consoleTextAreaScroll.setBounds(0 , 0, width, height);
 		add(consoleTextAreaScroll); 

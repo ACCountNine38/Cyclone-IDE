@@ -1,9 +1,1 @@
-<<<<<<< HEAD
-p: test sdsafsdasf
-=======
-a = 0
-a+ 4
 p: hi
-p: a
->>>>>>> refs/remotes/origin/master
-xx

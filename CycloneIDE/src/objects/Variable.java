@@ -17,11 +17,19 @@ public class Variable {
 		
 		datatype = getDatatype(value);
 		
+		toJava();
+		
+	}
+	
+	public void calculate(String calculation) {
+		
+		FileExecutionTool.translatedCode += "\n" + name + " = " + name + calculation + ";";
+		
 	}
 	
 	public void calculate(char operation, String input) {
 		
-		if(datatype.equals("long") && getDatatype(input).equals("long")) {
+		if(datatype.equals("int") && getDatatype(input).equals("int")) {
 			
 			if(operation == '+') {
 				
@@ -215,6 +223,10 @@ public class Variable {
 
 	public String getDatatype(String variable) {
 		
+		if(variable.equals("true") || variable.equals("false")) {
+			return "boolean";
+		}
+		
 		try {
 			long testValue = Long.parseLong(variable);
 			return "long";
@@ -225,12 +237,25 @@ public class Variable {
 			return "double";
 		} catch (NumberFormatException e) { }
 		
-		try {
-			boolean testValue = Boolean.parseBoolean(variable);
-			datatype = "boolean";
-		} catch (NumberFormatException e) { }
+		if(variable.charAt(0) == '"' && variable.charAt(variable.length()-1) == '"') {
+			value = variable.substring(1, variable.length()-1);
+			return "String";
+		} 
 		
-		return "String";
+		else if(variable.charAt(0) == '\'' && variable.charAt(variable.length()-1) == '\'' && variable.length() == 3) {
+			value = variable.substring(1, variable.length()-1);
+			return "char";
+		}
+		
+		for(Variable existingVariable: FileExecutionTool.userDeclaredVariables) {
+			if(existingVariable.getName().equals(variable)) {
+				
+				return existingVariable.getDatatype(existingVariable.getValue());
+				
+			}
+		}
+		
+		return null;
 		
 	}
 
@@ -272,10 +297,40 @@ public class Variable {
 			
 			this.value = value;
 			
+		} else if(getDatatype(value).equals("char") && datatype.equals("char")) {
+			
+			this.value = value;
+			
 		} else {
 			
 			FileExecutionTool.executeSuccessful = false;
 			FileExecutionTool.terminate("Input Mismatch Exception");
+			
+		}
+		
+	}
+	
+	public void toJava() {
+		
+		if(datatype.equals("long")) {
+			
+			FileExecutionTool.translatedCode += "\nlong " + name + " = " + value + ";";
+		
+		} else if(datatype.equals("double")) {
+			
+			FileExecutionTool.translatedCode += "\ndouble " + name + " = " + value + ";";
+		
+		} else if(datatype.equals("boolean")) {
+			
+			FileExecutionTool.translatedCode += "\nboolean " + name + " = " + value + ";";
+		
+		} else if(datatype.equals("char")) {
+			
+			FileExecutionTool.translatedCode += "\nchar " + name + " = \'" + value + "\';";
+		
+		} else {
+			
+			FileExecutionTool.translatedCode += "\nString " + name + " = \"" + value + "\";";
 			
 		}
 		
