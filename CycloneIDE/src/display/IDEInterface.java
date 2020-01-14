@@ -113,9 +113,11 @@ public class IDEInterface extends State {
 		} else if (e.getSource() ==  getSaveAllTabsOption()) {
 			editor.saveAllTabs();
 		} else if(e.getSource() == getKeywordCustomizationOption()) {
-			new KeywordCustomizationPopup();
+			this.setEnabled(false);
+			new KeywordCustomizationPopup(this);
 		} else if(e.getSource() == getUtilityCustomizationOption()) {
-			new UtilityCustomizationPopup();
+			this.setEnabled(false);
+			new UtilityCustomizationPopup(this);
 		}
 		
 	}
