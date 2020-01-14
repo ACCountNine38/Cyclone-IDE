@@ -19,6 +19,9 @@ public class Console extends Perspective {
 	
 	public static JTextArea consoleTextArea = new JTextArea();
 	
+	public static Font consoleFont = new Font("Consolas", Font.PLAIN, 22);
+	public static int consoleTabSize = 2;
+	
 	public Console() {
 		
 		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, new Color(243, 243, 243));
@@ -28,9 +31,10 @@ public class Console extends Perspective {
 	}
 	
 	public void addJComponents() {
-		consoleTextArea.setFont(new Font("Gill Sans MT Condensed", Font.PLAIN, 20));
+		consoleTextArea.setFont(consoleFont);
 		consoleTextArea.setBounds(0, 0, width, height);
 		consoleTextArea.setEditable(false);
+		consoleTextArea.setTabSize(consoleTabSize);
 
 		JScrollPane consoleTextAreaScroll = new JScrollPane(consoleTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		consoleTextAreaScroll.setBounds(0 , 0, width, height);

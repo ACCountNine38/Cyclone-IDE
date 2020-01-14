@@ -1,13 +1,16 @@
 package display;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,6 +33,8 @@ public class IDEInterface extends State {
 	private JLabel background = new JLabel();
 	
 	public IDEInterface() {
+		
+		loadFontSettings();
 		
 		addPerspectives();
 		
@@ -335,6 +340,26 @@ public class IDEInterface extends State {
 			
 		}
         
+    }
+    
+    //This method loads the font settings and the dark and light mode settings
+    private void loadFontSettings() {
+    	
+		try {
+			
+			Scanner input = new Scanner(new File("settings/fonts"));
+			
+			Class.editorFont = new Font(input.next(), Font.PLAIN, input.nextInt());
+			Class.editorTabSize = input.nextInt();
+			Console.consoleFont = new Font(input.next(), Font.PLAIN, input.nextInt());
+			Console.consoleTabSize = input.nextInt();
+			
+			input.close();
+			
+		} catch(FileNotFoundException e) {
+			
+		}
+    	
     }
     
 	public Console getConsole() {

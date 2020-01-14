@@ -6,19 +6,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.text.NumberFormat;
+import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.text.NumberFormatter;
 
+import display.Console;
 import display.IDEInterface;
+import objects.Class;
+import objects.Project;
 
 public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, ActionListener {
 	
@@ -37,18 +47,18 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	private JLabel editorFontLabel = new JLabel("Editor Font");
 	private JComboBox<String> editorFontComboBox = new JComboBox<String>();
 	private JLabel editorFontSizeLabel = new JLabel("Editor Font Size");
-	private JTextField editorFontSizeField = new JTextField();
+	private JFormattedTextField editorFontSizeField;
 	private JLabel editorIndentSpaceLabel = new JLabel("Editor Indent Space Size");
-	private JTextField editorIndentSpaceField = new JTextField();
+	private JFormattedTextField editorIndentSpaceField;
 	
 	private JPanel consolePanel = new JPanel();
 	private JLabel consoleTitleLabel = new JLabel("Console Settings");
 	private JLabel consoleFontLabel = new JLabel("Console Font");
 	private JComboBox<String> consoleFontComboBox = new JComboBox<String>();
 	private JLabel consoleFontSizeLabel = new JLabel("Console Font Size");
-	private JTextField consoleFontSizeField = new JTextField();
+	private JFormattedTextField consoleFontSizeField;
 	private JLabel consoleIndentSpaceLabel = new JLabel("Console Indent Space Size");
-	private JTextField consoleIndentSpaceField = new JTextField();
+	private JFormattedTextField consoleIndentSpaceField;
 	
 	private JLabel darkThemeLabel = new JLabel("Dark Theme:");
 	private JRadioButton onButton = new JRadioButton("On");
@@ -64,6 +74,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		addJComponents();
 		frameSetup();
 		addFontOptions();
+		readCurrentFont();
 		
 		addWindowListener(new WindowAdapter() {
 			
@@ -132,6 +143,13 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	//This method sets put he editor panel
 	private void setupEditorPanel() {
 		
+	    NumberFormat format = NumberFormat.getInstance();
+	    format.setGroupingUsed(false);
+	    NumberFormatter formatter = new NumberFormatter(format);
+	    formatter.setValueClass(Integer.class);
+	    formatter.setMinimum(1);
+	    formatter.setMaximum(Integer.MAX_VALUE);
+		
 		//set up the editor panel
 		editorPanel.setLayout(null);
 		editorPanel.setBounds(50, 75, WIDTH, PANEL_HEIGHT); 
@@ -163,6 +181,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		editorFontSizeLabel.setBounds(0, PANEL_HEIGHT / 4 * 2, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorFontSizeLabel);
 		
+		editorFontSizeField = new JFormattedTextField(formatter);
 		editorFontSizeField.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorFontSizeField.setHorizontalAlignment(SwingConstants.CENTER);
 		editorFontSizeField.setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -176,6 +195,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		editorIndentSpaceLabel.setBounds(0, PANEL_HEIGHT / 4 * 3, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorIndentSpaceLabel);
 		
+		editorIndentSpaceField = new JFormattedTextField(formatter);
 		editorIndentSpaceField.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorIndentSpaceField.setHorizontalAlignment(SwingConstants.CENTER);
 		editorIndentSpaceField.setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -186,6 +206,13 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	
 	//This method sets up the console panel
 	private void setupConsolePanel() {
+		
+	    NumberFormat format = NumberFormat.getInstance();
+	    format.setGroupingUsed(false);
+	    NumberFormatter formatter = new NumberFormatter(format);
+	    formatter.setValueClass(Integer.class);
+	    formatter.setMinimum(1);
+	    formatter.setMaximum(Integer.MAX_VALUE);
 		
 		//set up the console panel
 		consolePanel.setLayout(null);
@@ -218,6 +245,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		consoleFontSizeLabel.setBounds(0, PANEL_HEIGHT / 4 * 2, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleFontSizeLabel);
 		
+		consoleFontSizeField = new JFormattedTextField(formatter);
 		consoleFontSizeField.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleFontSizeField.setHorizontalAlignment(SwingConstants.CENTER);
 		consoleFontSizeField.setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -231,6 +259,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		consoleIndentSpaceLabel.setBounds(0, PANEL_HEIGHT / 4 * 3, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleIndentSpaceLabel);
 		
+		consoleIndentSpaceField = new JFormattedTextField(formatter);
 		consoleIndentSpaceField.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleIndentSpaceField.setHorizontalAlignment(SwingConstants.CENTER);
 		consoleIndentSpaceField.setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -277,22 +306,126 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		consoleFontComboBox.addItem("Letter Gothic Std");
 		
 	}
+	
+	private void readCurrentFont() {
+		
+		try {
+			
+			Scanner input = new Scanner(new File("settings/fonts"));
+			
+			editorFontComboBox.setSelectedItem(input.next());
+			editorFontSizeField.setText(input.next());
+			editorIndentSpaceField.setText(input.next());
+			consoleFontComboBox.setSelectedItem(input.next());
+			consoleFontSizeField.setText(input.next());
+			consoleIndentSpaceField.setText(input.next());
+			
+			String theme = input.next();
+			
+			if(theme.equals("light")) {
+				offButton.setSelected(true);
+			} else if(theme.equals("dark")) {
+				onButton.setSelected(true);
+			}
+			
+			input.close();
+			
+		} catch(FileNotFoundException e) {
+			
+		}
+		
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
 		if(e.getSource() == defaultSettings) {
-			//Change to default settings
+			
+			//Change editor and console settings to default settings
+			editorFontComboBox.setSelectedItem("Consolas");
+			editorFontSizeField.setText("22");
+			editorIndentSpaceField.setText("2");
+			
+			consoleFontComboBox.setSelectedItem("Consolas");
+			consoleFontSizeField.setText("22");
+			consoleIndentSpaceField.setText("2");
 			
 		} else if(e.getSource() == save) {
-			//Save current settings
 			
-			//Change editor font
-			//Change editor font size
-				//Make sure that a valid font size is selected
-			//Change editor tab space size
-				//Make sure that a valid tab size is selected
+			if(editorFontSizeField.getText().equals("")) {
+				editorFontSizeField.setText("1");
+			} else if(editorIndentSpaceField.getText().equals("")) {
+				editorIndentSpaceField.setText("1");
+			} else if(consoleFontSizeField.getText().equals("")) {
+				consoleFontSizeField.setText("1");
+			} else if(consoleIndentSpaceField.getText().equals("")) {
+				consoleIndentSpaceField.setText("1");
+			} 
+			
+			//Save current settings to the file
+			try {
+				
+				PrintWriter pr = new PrintWriter(new File("settings/fonts"));
+
+				pr.println(editorFontComboBox.getSelectedItem() + " " + Integer.parseInt(editorFontSizeField.getText()) + " " + Integer.parseInt(editorIndentSpaceField.getText()));
+				pr.println(consoleFontComboBox.getSelectedItem() + " " + Integer.parseInt(consoleFontSizeField.getText()) + " " + Integer.parseInt(consoleIndentSpaceField.getText()));
+
+				if(onButton.isSelected()) {
+					pr.println("dark");
+				} else {
+					pr.println("light");
+				}
+
+				pr.close();
+
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			String theme = "";
+			
+			//Read and apply the saved settings
+			try {
+				
+				Scanner input = new Scanner(new File("settings/fonts"));
+				
+				Class.editorFont = new Font(input.next(), Font.PLAIN, input.nextInt());
+				Class.editorTabSize = input.nextInt();
+				Console.consoleFont = new Font(input.next(), Font.PLAIN, input.nextInt());
+				Console.consoleTabSize = input.nextInt();
+				
+				theme = input.next();
+				
+				input.close();
+				
+			} catch(FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			//Apply changes to all editor text areas
+			for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+				for(Class currentClass: currentProject.getFileButtons()) {
+					
+					currentClass.getEditorTextArea().setFont(Class.editorFont); //Change editor font
+					currentClass.getEditorTextArea().setTabSize(Class.editorTabSize); //Change editor font size
+					
+				}
+			}
+			
+			Console.consoleTextArea.setFont(Console.consoleFont); //Change the console font
+			Console.consoleTextArea.setTabSize(Console.consoleTabSize); //Change the console tab size
+			
+			//Apply dark theme changes
+			if(theme.equals("light")) {
+				
+			} else if(theme.equals("dark")) {
+				
+			}
+			
+			ide.setEnabled(true); //Enable the ide before closing
+			this.dispose();
 			
 		} else if(e.getSource() == exit) {
 			ide.setEnabled(true); //Enable the ide before closing
