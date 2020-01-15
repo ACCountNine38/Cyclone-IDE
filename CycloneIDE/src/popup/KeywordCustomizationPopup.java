@@ -145,7 +145,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 			
 			while(input.hasNextLine()) {
 				
-				KeywordOption keywordOption = new KeywordOption(input.next(), input.next() + ":");
+				KeywordOption keywordOption = new KeywordOption(input.next(), input.next());
 				options.add(keywordOption);
 				customizePanel.add(keywordOption.getCustomizePanel());
 				
