@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 
 import objects.Class;
 import objects.Project;
+import popup.GettingStartedPopup;
 import popup.KeywordCustomizationPopup;
 import popup.UtilityCustomizationPopup;
 
@@ -132,6 +133,9 @@ public class IDEInterface extends State {
 			editor.generateMainMethod();
 		} else if (e.getSource() ==  getGenerateForOption()) {
 			editor.generateForLoop();
+		} else if (e.getSource() ==  getGettingStartedOption()) {
+			this.setEnabled(false);
+			new GettingStartedPopup(this);
 		} 
 		
 	}

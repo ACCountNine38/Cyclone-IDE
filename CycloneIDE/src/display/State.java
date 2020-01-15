@@ -46,6 +46,7 @@ public class State extends JFrame implements ActionListener {
 	private JMenu runMenu = new JMenu("Run");
 	private JMenuItem runOption = new JMenuItem("Run Project");
 	private JMenu helpMenu = new JMenu("Help");
+	private JMenuItem gettingStartedOption = new JMenuItem("Getting Started");
 	
 	public State() {
 
@@ -170,6 +171,8 @@ public class State extends JFrame implements ActionListener {
 
 		// create a new menu to show help commands
 		menuBar.add(helpMenu);
+		helpMenu.add(gettingStartedOption);
+		gettingStartedOption.addActionListener(this);
 
 	}
 
@@ -307,6 +310,14 @@ public class State extends JFrame implements ActionListener {
 
 	public void setHelpMenu(JMenu helpMenu) {
 		this.helpMenu = helpMenu;
+	}
+
+	public JMenuItem getGettingStartedOption() {
+		return gettingStartedOption;
+	}
+
+	public void setGettingStartedOption(JMenuItem gettingStartedOption) {
+		this.gettingStartedOption = gettingStartedOption;
 	}
 
 	@Override
