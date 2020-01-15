@@ -242,8 +242,8 @@ public class IDEInterface extends State {
 				className.contains(":") || className.contains("*") || 
 				className.contains("?") || className.contains("\"") || 
 				className.contains("<") || className.contains(">") || 
-				className.contains("|")) {
-			JOptionPane.showMessageDialog(null, "A filename can't contain any of the following characters:\n\\/:*?\"<>|","INVALID", JOptionPane.WARNING_MESSAGE);
+				className.contains("|") || className.contains(" ")) {
+			JOptionPane.showMessageDialog(null, "A class name can't contain any of the following characters:\n\\/:*?\"<>| or spaces","INVALID", JOptionPane.WARNING_MESSAGE);
 			validName = false;
 		}
 		

@@ -35,7 +35,7 @@ public class State extends JFrame implements ActionListener {
 	private JMenuItem saveCurrentTabOption = new JMenuItem("Save Current Tab");
 	private JMenuItem saveAllTabsOption = new JMenuItem("Save All Tabs");
 	private JMenuItem setJDKFilepathOption = new JMenuItem("Set JDK Filepath");
-	private JMenuItem exportJavaFileOption = new JMenuItem("Save All Tabs");
+	private JMenuItem exportJavaFileOption = new JMenuItem("Export as .java file");
 	private JMenuItem exitOption = new JMenuItem("Exit IDE");
 	private JMenu editMenu = new JMenu("Edit");
 	private JMenuItem keywordCustomizationOption = new JMenuItem("Customize Keywords");
