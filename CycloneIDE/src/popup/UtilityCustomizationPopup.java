@@ -410,6 +410,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 					
 					currentClass.getEditorTextArea().setFont(Class.editorFont); //Change editor font
 					currentClass.getEditorTextArea().setTabSize(Class.editorTabSize); //Change editor font size
+					currentClass.getLineNumberComponent().adjustWidth(); //Adjust line number size
 					
 				}
 			}

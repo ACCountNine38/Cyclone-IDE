@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
 
 import javax.swing.JViewport;
 
-
+import objects.Class;
 
 /**
 
@@ -43,11 +43,7 @@ public class LineNumberComponent extends JComponent{
 
 	private static final int VERTICAL_PADDING = 3;
 
-	
-
 	private int alignment = LEFT_ALIGNMENT;
-
-	
 
 	private LineNumberModel lineNumberModel;
 
@@ -217,7 +213,8 @@ public class LineNumberComponent extends JComponent{
 
 			}
 
-			g2d.setFont(new Font("serif", Font.ITALIC, 26));
+			//g2d.setFont(new Font("serif", Font.ITALIC, 26));
+			g2d.setFont(Class.editorFont);
 			g2d.setColor(Color.GRAY);
 			g2d.drawString(String.valueOf(i+1) + " ", xPosition, yPosition);
 
