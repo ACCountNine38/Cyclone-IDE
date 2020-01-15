@@ -317,7 +317,7 @@ public class Editor extends Perspective {
 					}
 					
 					//currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++", i, highest));
-					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++ :", i, highest));
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++", i, highest));
 					
 				}
 				
