@@ -131,7 +131,7 @@ public class IDEInterface extends State {
 		} else if (e.getSource() ==  getGenerateMainOption()) {
 			editor.generateMainMethod();
 		} else if (e.getSource() ==  getGenerateForOption()) {
-			
+			editor.generateForLoop();
 		} 
 		
 	}

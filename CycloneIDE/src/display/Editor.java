@@ -301,9 +301,23 @@ public class Editor extends Perspective {
 				
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					
-					//Give the user the option
+					//Give the user the option for the initial variable value
+					Integer i = null;
+					while(i == null) {
+						try {
+							i = Integer.parseInt(JOptionPane.showInputDialog("Starting value:"));
+						} catch (NumberFormatException e) {	}
+					}
 					
-					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + "");
+					Integer highest = null;
+					while(highest == null) {
+						try {
+							highest = Integer.parseInt(JOptionPane.showInputDialog("Greatest counter value:")) + 1;
+						} catch (NumberFormatException e) {	}
+					}
+					
+					//currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++", i, highest));
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++ {\n\n}", i, highest));
 					
 				}
 				
