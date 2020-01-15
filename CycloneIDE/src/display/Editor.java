@@ -279,7 +279,7 @@ public class Editor extends Perspective {
 				
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					
-					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + "\nmain{\n\n}");
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + "\nmain:");
 					
 				}
 				
@@ -317,7 +317,7 @@ public class Editor extends Perspective {
 					}
 					
 					//currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++", i, highest));
-					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++ {\n\n}", i, highest));
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++ :", i, highest));
 					
 				}
 				
