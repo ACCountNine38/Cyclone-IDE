@@ -133,6 +133,10 @@ public class State extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				if(State.this instanceof IDEInterface && ((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedIndex() == -1) {
+					return;
+				}
+				
 				//Set the current file based on the selected tab
 				if(State.this instanceof IDEInterface && ((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedIndex() != -1) {
 					
