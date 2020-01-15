@@ -390,7 +390,7 @@ public class FileExecutionTool {
 			
 			//printer.println(translatedCode);
 			//System.out.println(translatedCode);
-			//Console.consoleTextArea.setText(translatedCode);
+			Console.consoleTextArea.setText(translatedCode);
 			
 			//JarRunFile.execute();
 			
