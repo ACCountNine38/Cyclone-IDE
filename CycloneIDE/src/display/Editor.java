@@ -267,6 +267,66 @@ public class Editor extends Perspective {
 		return false;
 	}
 	
+	public void generateMainMethod() {
+		
+		if(tabbedPane.getTabCount() == 0) {
+			return;
+		}
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+					
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + "\nmain{\n\n}");
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	public void generateForLoop() {
+		
+		if(tabbedPane.getTabCount() == 0) {
+			return;
+		}
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+					
+					//Give the user the option for the initial variable value
+					Integer i = null;
+					while(i == null) {
+						try {
+							i = Integer.parseInt(JOptionPane.showInputDialog("Starting value:"));
+						} catch (NumberFormatException e) {	}
+					}
+					
+					Integer highest = null;
+					while(highest == null) {
+						try {
+							highest = Integer.parseInt(JOptionPane.showInputDialog("Greatest counter value:")) + 1;
+						} catch (NumberFormatException e) {	}
+					}
+					
+					//currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++", i, highest));
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++ {\n\n}", i, highest));
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}

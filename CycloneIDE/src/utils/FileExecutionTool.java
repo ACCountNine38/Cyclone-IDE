@@ -30,6 +30,7 @@ import commands.While;
 import javax.tools.JavaCompiler.CompilationTask;
 
 import display.Console;
+import display.State;
 
 public class FileExecutionTool {
 	
@@ -117,7 +118,9 @@ public class FileExecutionTool {
 	}
 	
 	public static void executeFile(File file) {
-		
+
+		Console.consoleTextArea.setText("");
+
 		resetCode();
 		Console.consoleTextArea.setText("");
 		
@@ -399,13 +402,13 @@ public class FileExecutionTool {
 			
 		}
 	
-		
 		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
 		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
+		System.setProperty("java.home", State.JDKFilepath);
 		
-		//PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-        //System.setOut(printStream);
-        //System.setErr(printStream);
+		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        System.setOut(printStream);
+        System.setErr(printStream);
         File jarFile = new File("src/JarRunFile.java");
 
         try {
@@ -422,18 +425,17 @@ public class FileExecutionTool {
         }
         
         //Set to use JDK
-        //String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
-        //String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
-        //System.setProperty("java.home", "/Users/account-nine38/git/CycloneIDE/CycloneIDE/jdk/jdk1.8.0_181");
-        //System.out.println(System.getProperty("java.home")); //Java home path
+//        String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
+//        String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
+//        System.setProperty("java.home", jdkPath);
+        System.out.println(System.getProperty("java.home")); //Java home path
         
-        //System.out.println(jarFile.getAbsolutePath());
+        System.out.println(jarFile.getAbsolutePath());
         
         String regex = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
         String binPath = jarFile.getAbsolutePath().replaceAll(regex, "bin");
-        binPath = "/Users/account-nine38/git/CycloneIDE/CycloneIDE/bin";
         
-        //System.out.println(binPath);
+        System.out.println(binPath);
         
 		//SOURCE: https://stackoverflow.com/questions/2028193/specify-output-path-for-dynamic-compilation/7532171
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
@@ -456,7 +458,7 @@ public class FileExecutionTool {
 
 			Method method;
 			try {
-				//System.out.println("Executing JarRunFile.main");
+				System.out.println("Executing JarRunFile.main");
 				method = cls.getMethod("main", String[].class);
 				method.invoke(null, (Object) params);
 			} catch (NoSuchMethodException e) {

@@ -26,6 +26,7 @@ public class State extends JFrame implements ActionListener {
 	public static boolean darkTheme = false;
 	
 	public static File currentFile = new File("tabs/testFile");
+	public static String JDKFilepath;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
@@ -33,14 +34,19 @@ public class State extends JFrame implements ActionListener {
 	private JMenuItem newClassOption = new JMenuItem("New Class");
 	private JMenuItem saveCurrentTabOption = new JMenuItem("Save Current Tab");
 	private JMenuItem saveAllTabsOption = new JMenuItem("Save All Tabs");
+	private JMenuItem setJDKFilepathOption = new JMenuItem("Set JDK Filepath");
+	private JMenuItem exportJavaFileOption = new JMenuItem("Export as .java file");
 	private JMenuItem exitOption = new JMenuItem("Exit IDE");
 	private JMenu editMenu = new JMenu("Edit");
-	private JMenu windowMenu = new JMenu("Window");
 	private JMenuItem keywordCustomizationOption = new JMenuItem("Customize Keywords");
 	private JMenuItem utilityCustomizationOption = new JMenuItem("Utility Customizations");
+	private JMenu sourceMenu = new JMenu("Source");
+	private JMenuItem generateMainOption = new JMenuItem("Generate Main Method");
+	private JMenuItem generateForOption = new JMenuItem("Generate For Loop");
 	private JMenu runMenu = new JMenu("Run");
 	private JMenuItem runOption = new JMenuItem("Run Project");
 	private JMenu helpMenu = new JMenu("Help");
+	private JMenuItem gettingStartedOption = new JMenuItem("Getting Started");
 	
 	public State() {
 
@@ -95,7 +101,10 @@ public class State extends JFrame implements ActionListener {
 		saveCurrentTabOption.addActionListener(this);
 		fileMenu.add(saveAllTabsOption);
 		saveAllTabsOption.addActionListener(this);
-		
+		fileMenu.add(exportJavaFileOption);
+		exportJavaFileOption.addActionListener(this);
+		fileMenu.add(setJDKFilepathOption);
+		setJDKFilepathOption.addActionListener(this);
 		fileMenu.add(exitOption);
 
 		// create a new menu for settings
@@ -107,7 +116,12 @@ public class State extends JFrame implements ActionListener {
 		utilityCustomizationOption.addActionListener(this);
 
 		// create a new menu to make window changes
-		menuBar.add(windowMenu);
+		menuBar.add(sourceMenu);
+		
+		sourceMenu.add(generateMainOption);
+		generateMainOption.addActionListener(this);
+		sourceMenu.add(generateForOption);
+		generateForOption.addActionListener(this);
 		
 		// create a new menu to run the project
 		menuBar.add(runMenu);
@@ -157,6 +171,8 @@ public class State extends JFrame implements ActionListener {
 
 		// create a new menu to show help commands
 		menuBar.add(helpMenu);
+		helpMenu.add(gettingStartedOption);
+		gettingStartedOption.addActionListener(this);
 
 	}
 
@@ -200,6 +216,22 @@ public class State extends JFrame implements ActionListener {
 		this.saveAllTabsOption = saveAllTabsOption;
 	}
 
+	public JMenuItem getExportJavaFileOption() {
+		return exportJavaFileOption;
+	}
+
+	public void setExportJavaFileOption(JMenuItem exportJavaFileOption) {
+		this.exportJavaFileOption = exportJavaFileOption;
+	}
+
+	public JMenuItem getSetJDKFilepathOption() {
+		return setJDKFilepathOption;
+	}
+
+	public void setSetJDKFilepathOption(JMenuItem setJDKFilepathOption) {
+		this.setJDKFilepathOption = setJDKFilepathOption;
+	}
+
 	public JMenuItem getExitOption() {
 		return exitOption;
 	}
@@ -216,6 +248,14 @@ public class State extends JFrame implements ActionListener {
 		this.editMenu = editMenu;
 	}
 
+	public JMenuItem getKeywordCustomizationOption() {
+		return keywordCustomizationOption;
+	}
+
+	public void setKeywordCustomizationOption(JMenuItem keywordCustomizationOption) {
+		this.keywordCustomizationOption = keywordCustomizationOption;
+	}
+	
 	public JMenuItem getUtilityCustomizationOption() {
 		return utilityCustomizationOption;
 	}
@@ -224,20 +264,28 @@ public class State extends JFrame implements ActionListener {
 		this.utilityCustomizationOption = utilityCustomizationOption;
 	}
 
-	public JMenu getWindowMenu() {
-		return windowMenu;
+	public JMenu getSourceMenu() {
+		return sourceMenu;
 	}
 
-	public void setWindowMenu(JMenu windowMenu) {
-		this.windowMenu = windowMenu;
+	public void setSourceMenu(JMenu sourceMenu) {
+		this.sourceMenu = sourceMenu;
 	}
 
-	public JMenuItem getKeywordCustomizationOption() {
-		return keywordCustomizationOption;
+	public JMenuItem getGenerateMainOption() {
+		return generateMainOption;
 	}
 
-	public void setKeywordCustomizationOption(JMenuItem keywordCustomizationOption) {
-		this.keywordCustomizationOption = keywordCustomizationOption;
+	public void setGenerateMainOption(JMenuItem generateMainOption) {
+		this.generateMainOption = generateMainOption;
+	}
+
+	public JMenuItem getGenerateForOption() {
+		return generateForOption;
+	}
+
+	public void setGenerateForOption(JMenuItem generateForOption) {
+		this.generateForOption = generateForOption;
 	}
 
 	public JMenu getRunMenu() {
@@ -262,6 +310,14 @@ public class State extends JFrame implements ActionListener {
 
 	public void setHelpMenu(JMenu helpMenu) {
 		this.helpMenu = helpMenu;
+	}
+
+	public JMenuItem getGettingStartedOption() {
+		return gettingStartedOption;
+	}
+
+	public void setGettingStartedOption(JMenuItem gettingStartedOption) {
+		this.gettingStartedOption = gettingStartedOption;
 	}
 
 	@Override

@@ -27,6 +27,9 @@ public class Class extends JButton {
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
 	private static int height = (int) (Perspective.screenHeight/3*2 - 25);
 	
+	public static Font editorFont = new Font("Consolas", Font.PLAIN, 22);
+	public static int editorTabSize = 2;
+	
 	private JTextArea editorTextArea = new JTextArea();
 	private JScrollPane editorTextAreaScroll = new JScrollPane(editorTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	private LineNumberModelImpl lineNumberModel = new LineNumberModelImpl(editorTextArea);
@@ -77,11 +80,11 @@ public class Class extends JButton {
 		setContentAreaFilled(false);
 		setBorderPainted(false);
 		
-		editorTextArea.setFont(new Font("serif", Font.PLAIN, 22));
+		editorTextArea.setFont(editorFont);
 		editorTextArea.setBounds(0, 0, width, height);
 		editorTextArea.setLineWrap(true);
 		editorTextArea.setWrapStyleWord(true);
-		editorTextArea.setTabSize(2);
+		editorTextArea.setTabSize(editorTabSize);
 		editorTextArea.addKeyListener(new KeyListener() {            
 			
 			@Override
