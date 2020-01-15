@@ -1,5 +1,17 @@
+true t
+false f
 print p
 printl pl
 input in
 for f
+while w
 main main
+break b
+continue c
+if if
+else_if eif
+else else
+method(int) int
+method(double) doub
+method(boolean) bool
+method(String) str

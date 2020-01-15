@@ -1,9 +1,4 @@
-Integer int
-Double doub
-Float flt
-String str
-Character char
-Boolean bool
 Long long
-Short short
-Byte byte
+Double doub
+String str
+Boolean bool

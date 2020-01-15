@@ -1,4 +1,4 @@
-package objects;
+package commands;
 
 import java.math.BigInteger;
 
@@ -10,14 +10,16 @@ public class Variable {
 	private String name;
 	private String value;
 	
-	public Variable(String name, String value) {
+	public Variable(String name, String value, boolean imbeded) {
 		
 		this.name = name;
 		this.value = value;
 		
 		datatype = getDatatype(value);
 		
-		toJava();
+		if(imbeded) {
+			toJava();
+		}
 		
 	}
 	
@@ -179,25 +181,7 @@ public class Variable {
 				double answer = Double.parseDouble(value) % Double.parseDouble(input);
 				value = answer + "";
 				
-			} else if(operation == '^') {
-				
-				BigInteger bigInt = new BigInteger(value).pow(Integer.parseInt(input));
-				if(bigInt.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-					FileExecutionTool.executeSuccessful = false;
-					FileExecutionTool.terminate("Value Limit Exceeded Exception");
-					return;
-					
-				}
-				
-				double answer = Math.pow(Double.parseDouble(value), Double.parseDouble(input));
-				value = answer + "";
-				
-			} else if(operation == '~') {
-				
-				double answer = Math.pow((double)Long.parseLong(value), (double)1/Long.parseLong(input));
-				value = answer + "";
-				
-			}
+			} 
 			
 		} else if(datatype.equals("boolean")) {
 			
@@ -223,7 +207,7 @@ public class Variable {
 
 	public String getDatatype(String variable) {
 		
-		if(variable.equals("true") || variable.equals("false")) {
+		if(variable.equals(FileExecutionTool.userCommands.get("true")) || variable.equals(FileExecutionTool.userCommands.get("false"))) {
 			return "boolean";
 		}
 		
@@ -282,24 +266,29 @@ public class Variable {
 		if(getDatatype(value).equals("long") && datatype.equals("long")) {
 			long testValue = Long.parseLong(value);
 			this.value = testValue + "";
+			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else if(getDatatype(value).equals("double") && datatype.equals("double")) {
 			
 			double testValue = Double.parseDouble(value);
 			this.value = testValue + "";
+			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else if(getDatatype(value).equals("boolean") && datatype.equals("boolean")) {
 			
 			boolean testValue = Boolean.parseBoolean(value);
 			this.value = testValue + "";
+			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else if(getDatatype(value).equals("String") && datatype.equals("String")) {
 			
 			this.value = value;
+			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else if(getDatatype(value).equals("char") && datatype.equals("char")) {
 			
 			this.value = value;
+			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else {
 			
@@ -322,8 +311,11 @@ public class Variable {
 		
 		} else if(datatype.equals("boolean")) {
 			
-			FileExecutionTool.translatedCode += "\nboolean " + name + " = " + value + ";";
-		
+			if(value.equals(FileExecutionTool.userCommands.get("true")))
+				FileExecutionTool.translatedCode += "\nboolean " + name + " = " + "true;";
+			else
+				FileExecutionTool.translatedCode += "\nboolean " + name + " = " + "false;";
+			
 		} else if(datatype.equals("char")) {
 			
 			FileExecutionTool.translatedCode += "\nchar " + name + " = \'" + value + "\';";

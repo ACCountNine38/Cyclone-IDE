@@ -19,13 +19,17 @@ import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import commands.ControlStructures;
+import commands.For;
+import commands.Function;
 import commands.Input;
 import commands.Print;
+import commands.Variable;
+import commands.While;
 
 import javax.tools.JavaCompiler.CompilationTask;
 
 import display.Console;
-import objects.Variable;
 
 public class FileExecutionTool {
 	
@@ -40,6 +44,8 @@ public class FileExecutionTool {
 	public static String translatedCode = "";
 	
 	public static PrintWriter printer;
+	
+	public static int previousTabNumber = 0, currentTabNumber = 0;
 	
 	public FileExecutionTool() {
 		
@@ -60,6 +66,8 @@ public class FileExecutionTool {
 	
 	public static void resetCode() {
 		
+		previousTabNumber = 0;
+		currentTabNumber = 0;
 		translatedCode = "public class JarRunFile { ";
 		
 	}
@@ -109,105 +117,12 @@ public class FileExecutionTool {
 	}
 	
 	public static void executeFile(File file) {
-		/*
-		Console.consoleTextArea.setText("");
 		
-		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
-		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
-		
-		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-        System.setOut(printStream);
-        System.setErr(printStream);
-        File jarFile = new File("src/JarRunFile.java");
-
-        try {
-        	
-            PrintWriter pr = new PrintWriter(jarFile);
-            
-            pr.print(String.format("public class JarRunFile {\n    "
-            		+ "public static void main(String[] args) {\n        "
-            		+ "System.out.println(\"hello world\");\n    }\n"
-            		
-            		+ "public static void execute() {\n" + 
-            		"		\n" + 
-            		"		main(null);\n" + 
-            		"		\n" + 
-            		"	}\n}"));
-            
-            pr.close();
-            
-        } catch (IOException e) {
-            System.out.println("Class file was not created");
-            e.printStackTrace();
-        }
-        
-        //Set to use JDK
-        String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
-        String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
-        System.setProperty("java.home", jdkPath);
-        System.out.println(System.getProperty("java.home")); //Java home path
-        
-        System.out.println(jarFile.getAbsolutePath());
-        
-        String regex = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
-        String binPath = jarFile.getAbsolutePath().replaceAll(regex, "bin");
-        
-        System.out.println(binPath);
-        
-		//SOURCE: https://stackoverflow.com/questions/2028193/specify-output-path-for-dynamic-compilation/7532171
-		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-		StandardJavaFileManager sjfm = javaCompiler.getStandardFileManager(null, null, null); 
-
-		String[] options = new String[] { "-d", binPath };
-		File[] javaFiles = new File[] { new File("src/JarRunFile.java") };
-
-		CompilationTask compilationTask = javaCompiler.getTask(null, null, null,
-		        Arrays.asList(options),
-		        null,
-		        sjfm.getJavaFileObjects(javaFiles)
-		);
-		compilationTask.call();
-		
-		try {
-			
-			String[] params = null;
-			Class<?> cls = Class.forName("JarRunFile");
-
-			Method method;
-			try {
-				System.out.println("Executing JarRunFile.main");
-				method = cls.getMethod("main", String[].class);
-				method.invoke(null, (Object) params);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		} catch( ClassNotFoundException e ) { 
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		 
 		resetCode();
 		Console.consoleTextArea.setText("");
 		
 		userDeclaredVariables.clear();
 		userDeclaredReturnMethods.clear();
-		
-		boolean forLoop = true;
 		
 		try {
 			
@@ -221,56 +136,117 @@ public class FileExecutionTool {
 					return;
 				}
 				
+				previousTabNumber = currentTabNumber;
 				String line = input.nextLine();
+				
+				if(line.trim().length() > 0) {
+					
+					int numTabs = 0;
+					for(int i = 0; i < line.length(); i++) {
+						if(line.charAt(i) == '\t') {
+							numTabs++;
+						}
+					}
+					
+					currentTabNumber = numTabs;
+					
+					if(currentTabNumber < previousTabNumber) {
+						translatedCode += "\n}\n";
+					}
+				
+				}
 				
 				for(int i = 0; i < line.length(); i++) {
 					
 					if(line.charAt(i) == ':') {
 						
 						String key = line.substring(0, i).trim();
+						String action = line.substring(line.indexOf(key) + key.length() + 1);
 						
-						boolean action = false;
+						boolean actionPerformed = false;
 						
 						for(HashMap.Entry<String, String> command : userCommands.entrySet()) {
 							
 							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
 								
-								line = line.substring(line.indexOf(key) + key.length() + 1);
+								line = action;
 								Print.print(line);
 								
-								action = true;
+								actionPerformed = true;
 								break;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
 								
-								line = line.substring(line.indexOf(key) + key.length() + 1);
+								line = action;
 								Print.printLine(line);
 								
-								action = true;
+								actionPerformed = true;
 								break;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
 								
-								String inputVariable = Input.validateText(line.substring(line.indexOf(key) + key.length() + 1));
+								String inputVariable = Input.validateText(action);
 								Input.readVariable(inputVariable);
 								
-								action = true;
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && (command.getKey().equals("if") || 
+									command.getKey().equals("else_if") || 
+									command.getKey().equals("else"))) {
+								
+								ControlStructures.initialize(action, command.getKey());
+								actionPerformed = true;
 								break;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
 								
-								String inputVariable = Input.validateText(line.substring(line.indexOf(key) + key.length() + 1));
+								For.initialize(action);
+								actionPerformed = true;
+								break;
 								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("while")) {
 								
+								While.initialize(action);
+								actionPerformed = true;
+								break;
 								
-								action = true;
+							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
+								
+								translatedCode += "\nbreak;";
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("main")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("int")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("doub")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("bool")) {
+							
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("str")) {
+								
+								Function.declareMain();
 								break;
 								
 							}
 							
 						}
 						
-						if(action) {
+						if(actionPerformed) {
 							break;
 						}
 						
@@ -297,13 +273,12 @@ public class FileExecutionTool {
 						
 						if(!found) {
 							
-							userDeclaredVariables.add(new Variable(variable, value));
+							userDeclaredVariables.add(new Variable(variable, value, true));
 							
 						}
 						
 					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
-							|| line.charAt(i) == '/' || line.charAt(i) == '^' || line.charAt(i) == '%' 
-							|| line.charAt(i) == '~') {
+							|| line.charAt(i) == '/' || line.charAt(i) == '%') {
 						
 						//char operator = line.charAt(i);
 						String variable = line.substring(0, i).trim();
@@ -323,7 +298,7 @@ public class FileExecutionTool {
 							}
 							
 						}
-						
+						/*
 						if(operatingVariable == null) {
 							
 							executeSuccessful = false;
@@ -332,7 +307,7 @@ public class FileExecutionTool {
 							return;
 							
 						}
-						/*
+						
 						boolean valueFound = false;
 						
 						for(Variable var: userDeclaredVariables) {
@@ -352,13 +327,15 @@ public class FileExecutionTool {
 						operatingVariable.calculate(calculation);
 						break;
 						
-					} else if(line.charAt(i) == '{') {
+					} 
+					/*
+					else if(line.charAt(i) == '{') {
 						
-						String methodName = line.substring(0, i);
+						String methodName = line.substring(0, i).trim();
 						
 						if(methodName.equals("main")) {
 							
-							//Method.declareMain();
+							Function.declareMain();
 							break;
 							
 						} 
@@ -368,10 +345,12 @@ public class FileExecutionTool {
 						translatedCode += "\n}";
 						
 					}
-					
+					*/
 				}
 				
 			}
+			
+			translatedCode += "\n}\n";
 			
 			/*
 			if(executeSuccessful) {
@@ -391,7 +370,7 @@ public class FileExecutionTool {
 			    		doc.insertString(doc.getLength(), "\n", greenStyle);
 			    		
 			    	} 
-			    		
+			    	
 			    	doc.insertString(doc.getLength(), "BUILD SUCCESSFUL", greenStyle);
 					StyleConstants.setForeground(blackStyle, Color.black);
 					StyleConstants.setUnderline(blackStyle, false);
@@ -403,20 +382,104 @@ public class FileExecutionTool {
 			} 
 			*/
 			
-			translatedCode += "\n}";
+			translatedCode += "\n\npublic static void execute() {\n"+ 
+					"main(null);\n}\n}";
 			
-			printer.println(translatedCode);
+			//printer.println(translatedCode);
 			//System.out.println(translatedCode);
-			//Console.consoleTextArea.setText(translatedCode);
+			Console.consoleTextArea.setText(translatedCode);
 			
-			printer.close();
+			//JarRunFile.execute();
+			
+			//printer.close();
 			
 		} catch (FileNotFoundException e) {
 			
 			e.printStackTrace();
 			
 		}
+	
 		
+		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
+		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
+		
+		//PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        //System.setOut(printStream);
+        //System.setErr(printStream);
+        File jarFile = new File("src/JarRunFile.java");
+
+        try {
+        	
+            PrintWriter pr = new PrintWriter(jarFile);
+            
+            pr.print(translatedCode);
+            
+            pr.close();
+            
+        } catch (IOException e) {
+            System.out.println("Class file was not created");
+            e.printStackTrace();
+        }
+        
+        //Set to use JDK
+        //String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
+        //String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
+        //System.setProperty("java.home", "/Users/account-nine38/git/CycloneIDE/CycloneIDE/jdk/jdk1.8.0_181");
+        //System.out.println(System.getProperty("java.home")); //Java home path
+        
+        //System.out.println(jarFile.getAbsolutePath());
+        
+        String regex = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
+        String binPath = jarFile.getAbsolutePath().replaceAll(regex, "bin");
+        binPath = "/Users/account-nine38/git/CycloneIDE/CycloneIDE/bin";
+        
+        //System.out.println(binPath);
+        
+		//SOURCE: https://stackoverflow.com/questions/2028193/specify-output-path-for-dynamic-compilation/7532171
+		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
+		StandardJavaFileManager sjfm = javaCompiler.getStandardFileManager(null, null, null); 
+
+		String[] options = new String[] { "-d", binPath };
+		File[] javaFiles = new File[] { new File("src/JarRunFile.java") };
+
+		CompilationTask compilationTask = javaCompiler.getTask(null, null, null,
+		        Arrays.asList(options),
+		        null,
+		        sjfm.getJavaFileObjects(javaFiles)
+		);
+		compilationTask.call();
+		
+		try {
+			
+			String[] params = null;
+			Class<?> cls = Class.forName("JarRunFile");
+
+			Method method;
+			try {
+				//System.out.println("Executing JarRunFile.main");
+				method = cls.getMethod("main", String[].class);
+				method.invoke(null, (Object) params);
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		} catch( ClassNotFoundException e ) { 
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
