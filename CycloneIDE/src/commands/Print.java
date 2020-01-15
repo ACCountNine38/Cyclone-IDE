@@ -1,7 +1,6 @@
 package commands;
 
 import display.Console;
-import objects.Variable;
 import utils.FileExecutionTool;
 
 public class Print {

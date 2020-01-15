@@ -19,14 +19,18 @@ import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import commands.ControlStructures;
+import commands.For;
+import commands.Function;
 import commands.Input;
 import commands.Print;
+import commands.Variable;
+import commands.While;
 
 import javax.tools.JavaCompiler.CompilationTask;
 
 import display.Console;
 import display.State;
-import objects.Variable;
 
 public class FileExecutionTool {
 	
@@ -41,6 +45,8 @@ public class FileExecutionTool {
 	public static String translatedCode = "";
 	
 	public static PrintWriter printer;
+	
+	public static int previousTabNumber = 0, currentTabNumber = 0;
 	
 	public FileExecutionTool() {
 		
@@ -61,6 +67,8 @@ public class FileExecutionTool {
 	
 	public static void resetCode() {
 		
+		previousTabNumber = 0;
+		currentTabNumber = 0;
 		translatedCode = "public class JarRunFile { ";
 		
 	}
@@ -110,9 +118,290 @@ public class FileExecutionTool {
 	}
 	
 	public static void executeFile(File file) {
-		
+
+		Console.consoleTextArea.setText("");
+
+		resetCode();
 		Console.consoleTextArea.setText("");
 		
+		userDeclaredVariables.clear();
+		userDeclaredReturnMethods.clear();
+		
+		try {
+			
+			Scanner input = new Scanner(file);
+			
+			executeSuccessful = true;
+			
+			while(input.hasNext()) {
+				
+				if(!executeSuccessful) {
+					return;
+				}
+				
+				previousTabNumber = currentTabNumber;
+				String line = input.nextLine();
+				
+				if(line.trim().length() > 0) {
+					
+					int numTabs = 0;
+					for(int i = 0; i < line.length(); i++) {
+						if(line.charAt(i) == '\t') {
+							numTabs++;
+						}
+					}
+					
+					currentTabNumber = numTabs;
+					
+					if(currentTabNumber < previousTabNumber) {
+						translatedCode += "\n}\n";
+					}
+				
+				}
+				
+				for(int i = 0; i < line.length(); i++) {
+					
+					if(line.charAt(i) == ':') {
+						
+						String key = line.substring(0, i).trim();
+						String action = line.substring(line.indexOf(key) + key.length() + 1);
+						
+						boolean actionPerformed = false;
+						
+						for(HashMap.Entry<String, String> command : userCommands.entrySet()) {
+							
+							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
+								
+								line = action;
+								Print.print(line);
+								
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
+								
+								line = action;
+								Print.printLine(line);
+								
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
+								
+								String inputVariable = Input.validateText(action);
+								Input.readVariable(inputVariable);
+								
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && (command.getKey().equals("if") || 
+									command.getKey().equals("else_if") || 
+									command.getKey().equals("else"))) {
+								
+								ControlStructures.initialize(action, command.getKey());
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
+								
+								For.initialize(action);
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("while")) {
+								
+								While.initialize(action);
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
+								
+								translatedCode += "\nbreak;";
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("main")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("int")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("doub")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("bool")) {
+							
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("str")) {
+								
+								Function.declareMain();
+								break;
+								
+							}
+							
+						}
+						
+						if(actionPerformed) {
+							break;
+						}
+						
+					} else if(line.charAt(i) == '=') {
+						
+						String variable = line.substring(0, i).trim();
+						String value = line.substring(i+1, line.length()).trim();
+						
+						boolean found = false;
+						
+						for(Variable var: userDeclaredVariables) {
+							
+							if(var.getName().equals(variable)) {
+								
+								found = true;
+								
+								var.setValue(value);
+								
+								break;
+								
+							}
+							
+						}
+						
+						if(!found) {
+							
+							userDeclaredVariables.add(new Variable(variable, value, true));
+							
+						}
+						
+					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
+							|| line.charAt(i) == '/' || line.charAt(i) == '%') {
+						
+						//char operator = line.charAt(i);
+						String variable = line.substring(0, i).trim();
+						String calculation = line.substring(i, line.length());
+						//String value = line.substring(i+1, line.length()).trim();
+						
+						Variable operatingVariable = null;
+						
+						for(Variable var: userDeclaredVariables) {
+							
+							if(var.getName().equals(variable)) {
+								
+								operatingVariable = var;
+								
+								break;
+								
+							}
+							
+						}
+						/*
+						if(operatingVariable == null) {
+							
+							executeSuccessful = false;
+							terminate("Variable Not Found Exception");
+							
+							return;
+							
+						}
+						
+						boolean valueFound = false;
+						
+						for(Variable var: userDeclaredVariables) {
+							
+							if(var.getName().equals(value)) {
+								
+								valueFound = true;
+								
+								operatingVariable.calculate(operator, var.getValue());
+								
+								break;
+								
+							}
+							
+						}
+						*/
+						operatingVariable.calculate(calculation);
+						break;
+						
+					} 
+					/*
+					else if(line.charAt(i) == '{') {
+						
+						String methodName = line.substring(0, i).trim();
+						
+						if(methodName.equals("main")) {
+							
+							Function.declareMain();
+							break;
+							
+						} 
+						
+					} else if(line.charAt(i) == '}') {
+						
+						translatedCode += "\n}";
+						
+					}
+					*/
+				}
+				
+			}
+			
+			translatedCode += "\n}\n";
+			
+			/*
+			if(executeSuccessful) {
+				
+				StyledDocument doc = Console.consoleTextArea.getStyledDocument();
+				Style greenStyle = Console.consoleTextArea.addStyle("Green", null);
+				Style blackStyle = Console.consoleTextArea.addStyle("Black", null);
+			    StyleConstants.setForeground(greenStyle, Color.GREEN);
+
+			    // Inherits from "Red"; makes text red and underlined
+			    StyleConstants.setUnderline(greenStyle, true);
+			    
+			    try {
+			    	
+			    	if(!Console.consoleTextArea.getText().isEmpty()) {
+			    		
+			    		doc.insertString(doc.getLength(), "\n", greenStyle);
+			    		
+			    	} 
+			    	
+			    	doc.insertString(doc.getLength(), "BUILD SUCCESSFUL", greenStyle);
+					StyleConstants.setForeground(blackStyle, Color.black);
+					StyleConstants.setUnderline(blackStyle, false);
+					doc.insertString(doc.getLength(), " ", blackStyle);
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			    
+			} 
+			*/
+			
+			translatedCode += "\n\npublic static void execute() {\n"+ 
+					"main(null);\n}\n}";
+			
+			//printer.println(translatedCode);
+			//System.out.println(translatedCode);
+			Console.consoleTextArea.setText(translatedCode);
+			
+			//JarRunFile.execute();
+			
+			//printer.close();
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+			
+		}
+	
 		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
 		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
 		System.setProperty("java.home", State.JDKFilepath);
@@ -126,15 +415,7 @@ public class FileExecutionTool {
         	
             PrintWriter pr = new PrintWriter(jarFile);
             
-            pr.print(String.format("public class JarRunFile {\n    "
-            		+ "public static void main(String[] args) {\n        "
-            		+ "System.out.println(\"hello world\");\n    }\n"
-            		
-            		+ "public static void execute() {\n" + 
-            		"		\n" + 
-            		"		main(null);\n" + 
-            		"		\n" + 
-            		"	}\n}"));
+            pr.print(translatedCode);
             
             pr.close();
             
@@ -201,224 +482,6 @@ public class FileExecutionTool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		 
-//		resetCode();
-//		Console.consoleTextArea.setText("");
-//		
-//		userDeclaredVariables.clear();
-//		userDeclaredReturnMethods.clear();
-//		
-//		boolean forLoop = true;
-//		
-//		try {
-//			
-//			Scanner input = new Scanner(file);
-//			
-//			executeSuccessful = true;
-//			
-//			while(input.hasNext()) {
-//				
-//				if(!executeSuccessful) {
-//					return;
-//				}
-//				
-//				String line = input.nextLine();
-//				
-//				for(int i = 0; i < line.length(); i++) {
-//					
-//					if(line.charAt(i) == ':') {
-//						
-//						String key = line.substring(0, i).trim();
-//						
-//						boolean action = false;
-//						
-//						for(HashMap.Entry<String, String> command : userCommands.entrySet()) {
-//							
-//							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
-//								
-//								line = line.substring(line.indexOf(key) + key.length() + 1);
-//								Print.print(line);
-//								
-//								action = true;
-//								break;
-//								
-//							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
-//								
-//								line = line.substring(line.indexOf(key) + key.length() + 1);
-//								Print.printLine(line);
-//								
-//								action = true;
-//								break;
-//								
-//							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
-//								
-//								String inputVariable = Input.validateText(line.substring(line.indexOf(key) + key.length() + 1));
-//								Input.readVariable(inputVariable);
-//								
-//								action = true;
-//								break;
-//								
-//							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
-//								
-//								String inputVariable = Input.validateText(line.substring(line.indexOf(key) + key.length() + 1));
-//								
-//								
-//								
-//								action = true;
-//								break;
-//								
-//							}
-//							
-//						}
-//						
-//						if(action) {
-//							break;
-//						}
-//						
-//					} else if(line.charAt(i) == '=') {
-//						
-//						String variable = line.substring(0, i).trim();
-//						String value = line.substring(i+1, line.length()).trim();
-//						
-//						boolean found = false;
-//						
-//						for(Variable var: userDeclaredVariables) {
-//							
-//							if(var.getName().equals(variable)) {
-//								
-//								found = true;
-//								
-//								var.setValue(value);
-//								
-//								break;
-//								
-//							}
-//							
-//						}
-//						
-//						if(!found) {
-//							
-//							userDeclaredVariables.add(new Variable(variable, value));
-//							
-//						}
-//						
-//					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
-//							|| line.charAt(i) == '/' || line.charAt(i) == '^' || line.charAt(i) == '%' 
-//							|| line.charAt(i) == '~') {
-//						
-//						//char operator = line.charAt(i);
-//						String variable = line.substring(0, i).trim();
-//						String calculation = line.substring(i, line.length());
-//						//String value = line.substring(i+1, line.length()).trim();
-//						
-//						Variable operatingVariable = null;
-//						
-//						for(Variable var: userDeclaredVariables) {
-//							
-//							if(var.getName().equals(variable)) {
-//								
-//								operatingVariable = var;
-//								
-//								break;
-//								
-//							}
-//							
-//						}
-//						
-//						if(operatingVariable == null) {
-//							
-//							executeSuccessful = false;
-//							terminate("Variable Not Found Exception");
-//							
-//							return;
-//							
-//						}
-//						/*
-//						boolean valueFound = false;
-//						
-//						for(Variable var: userDeclaredVariables) {
-//							
-//							if(var.getName().equals(value)) {
-//								
-//								valueFound = true;
-//								
-//								operatingVariable.calculate(operator, var.getValue());
-//								
-//								break;
-//								
-//							}
-//							
-//						}
-//						*/
-//						operatingVariable.calculate(calculation);
-//						break;
-//						
-//					} else if(line.charAt(i) == '{') {
-//						
-//						String methodName = line.substring(0, i);
-//						
-//						if(methodName.equals("main")) {
-//							
-//							//Method.declareMain();
-//							break;
-//							
-//						} 
-//						
-//					} else if(line.charAt(i) == '}') {
-//						
-//						translatedCode += "\n}";
-//						
-//					}
-//					
-//				}
-//				
-//			}
-//			
-//			/*
-//			if(executeSuccessful) {
-//				
-//				StyledDocument doc = Console.consoleTextArea.getStyledDocument();
-//				Style greenStyle = Console.consoleTextArea.addStyle("Green", null);
-//				Style blackStyle = Console.consoleTextArea.addStyle("Black", null);
-//			    StyleConstants.setForeground(greenStyle, Color.GREEN);
-//
-//			    // Inherits from "Red"; makes text red and underlined
-//			    StyleConstants.setUnderline(greenStyle, true);
-//			    
-//			    try {
-//			    	
-//			    	if(!Console.consoleTextArea.getText().isEmpty()) {
-//			    		
-//			    		doc.insertString(doc.getLength(), "\n", greenStyle);
-//			    		
-//			    	} 
-//			    		
-//			    	doc.insertString(doc.getLength(), "BUILD SUCCESSFUL", greenStyle);
-//					StyleConstants.setForeground(blackStyle, Color.black);
-//					StyleConstants.setUnderline(blackStyle, false);
-//					doc.insertString(doc.getLength(), " ", blackStyle);
-//				} catch (BadLocationException e) {
-//					e.printStackTrace();
-//				}
-//			    
-//			} 
-//			*/
-//			
-//			translatedCode += "\n}";
-//			
-//			printer.println(translatedCode);
-//			//System.out.println(translatedCode);
-//			//Console.consoleTextArea.setText(translatedCode);
-//			
-//			printer.close();
-//			
-//		} catch (FileNotFoundException e) {
-//			
-//			e.printStackTrace();
-//			
-//		}
-		
 		
 	}
 	

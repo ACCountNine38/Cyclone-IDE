@@ -2,7 +2,6 @@ package commands;
 
 import javax.swing.JOptionPane;
 
-import objects.Variable;
 import utils.FileExecutionTool;
 
 public class Input {
