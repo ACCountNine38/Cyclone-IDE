@@ -1,17 +1,19 @@
 package display;
 
 import java.awt.Color;
+import java.awt.FileDialog;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,9 +21,7 @@ import javax.swing.JOptionPane;
 import objects.Class;
 import objects.Project;
 import popup.KeywordCustomizationPopup;
-import popup.KeywordOption;
 import popup.UtilityCustomizationPopup;
-import utils.FileInput;
 
 public class IDEInterface extends State {
 	
@@ -34,6 +34,7 @@ public class IDEInterface extends State {
 	
 	public IDEInterface() {
 		
+		readJDKFilepath();
 		loadFontSettings();
 		
 		addPerspectives();
@@ -117,13 +118,21 @@ public class IDEInterface extends State {
 			editor.saveCurrentTab();
 		} else if (e.getSource() ==  getSaveAllTabsOption()) {
 			editor.saveAllTabs();
+		} else if (e.getSource() ==  getExportJavaFileOption()) {
+			
+		} else if (e.getSource() ==  getSetJDKFilepathOption()) {
+			setJDKFilepath();
 		} else if(e.getSource() == getKeywordCustomizationOption()) {
 			this.setEnabled(false);
 			new KeywordCustomizationPopup(this);
 		} else if(e.getSource() == getUtilityCustomizationOption()) {
 			this.setEnabled(false);
 			new UtilityCustomizationPopup(this);
-		}
+		} else if (e.getSource() ==  getGenerateMainOption()) {
+			editor.generateMainMethod();
+		} else if (e.getSource() ==  getGenerateForOption()) {
+			
+		} 
 		
 	}
 	
@@ -362,6 +371,141 @@ public class IDEInterface extends State {
     	
     }
     
+	//This allows the user to export the project as a .java file
+	private void exportProject() {
+		
+		//Return if there are no open tabs
+		if(editor.getTabbedPane().getTabCount() == 0) {
+			return;
+		}
+		
+		//Set the current file based on the selected tab
+		if(editor.getTabbedPane().getSelectedIndex() != -1) {
+			
+			for(Project currentProject: projectExplorer.getProjects()) {
+				
+				for(Class currentClass: currentProject.getFileButtons()) {
+					
+					if(editor.getTabbedPane().getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+						
+						//Save the current tab
+						editor.saveCurrentTab();
+						
+						//Set the current file
+						currentFile = new File(String.format("projects/%s/%s", 
+								currentClass.getProjectName(), currentClass.getClassName()));
+						
+					}
+					
+				}
+			
+			}
+			
+		}
+		
+		
+		
+		//Open a file dialog and use it to decide where to save the file to
+		FileDialog fileDialog = new FileDialog((Frame) null, "Select Where to Save the File");
+		fileDialog.setMode(FileDialog.SAVE);
+		fileDialog.setVisible(true);
+		String file = fileDialog.getDirectory() + fileDialog.getFile() + "java";
+		File filepath = new File(file);
+
+		//Make sure that the file path is not a directory
+		if(!filepath.isDirectory()) {
+
+			try {
+
+				//Write data to a file
+				PrintWriter pr = new PrintWriter(file);
+				
+				//File execution save method - FileExecution.saveAsJava(currentFile);
+
+				pr.close();
+
+			} catch (FileNotFoundException e) {
+				System.out.println("Save Failed");
+			}
+
+		} else {
+			System.out.println("Invalid Filepath");
+		}
+
+	}
+    
+	//This allows the user to export the project as a .java file
+	private void setJDKFilepath() {
+		
+		//Find the current file path for the JDK
+		String currentFilepath = "";
+		
+		try {
+			//Write data to a file
+			Scanner input = new Scanner(new File("settings/jdkFilepath"));
+			if(input.hasNextLine())
+				currentFilepath = input.nextLine();
+			input.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Save Failed");
+		}
+		
+		//Open a file chooser and use it to set the JDK folder file path
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setCurrentDirectory(new File("."));
+        fileChooser.setDialogTitle(String.format("Select the JDK folder, jdk1.8.0_181 (Current filepath: %s)", currentFilepath));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+        	System.out.println("getCurrentDirectory(): " +  fileChooser.getCurrentDirectory());
+        	System.out.println("getSelectedFile() : " +  fileChooser.getSelectedFile().getAbsolutePath());
+        	JOptionPane.showMessageDialog(this, String.format("JDK Filepath set to: %s", fileChooser.getSelectedFile().getAbsolutePath()));
+        } else {
+        	System.out.println("No Selection ");
+        }
+        
+        String file = fileChooser.getSelectedFile().getAbsolutePath();
+	    File filepath = new File(file);
+	    
+	    //Make sure that the file path is a directory
+		if(filepath.isDirectory()) {
+			
+			try {
+				
+				//Write data to a file
+				PrintWriter pr = new PrintWriter(new File("settings/jdkFilepath"));
+				pr.println(file);
+				pr.close();
+				
+				//Save JDK file path
+		        JDKFilepath = file;
+
+			} catch (FileNotFoundException e) {
+				System.out.println("Save Failed");
+			}
+
+		} else {
+			System.out.println("Invalid Filepath");
+		}
+	    
+	}
+	
+	//This method reads the JDK filepath when the program is run
+	private void readJDKFilepath() {
+		
+		try {
+			//Write data to a file
+			Scanner input = new Scanner(new File("settings/jdkFilepath"));
+			if(input.hasNextLine())
+				JDKFilepath = input.nextLine();
+			input.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Save Failed");
+		}
+		
+	}
+	
 	public Console getConsole() {
 		return console;
 	}

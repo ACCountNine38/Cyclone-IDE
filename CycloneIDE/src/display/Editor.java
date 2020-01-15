@@ -267,6 +267,52 @@ public class Editor extends Perspective {
 		return false;
 	}
 	
+	public void generateMainMethod() {
+		
+		if(tabbedPane.getTabCount() == 0) {
+			return;
+		}
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+					
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + "\nmain{\n\n}");
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	public void generateForLoop() {
+		
+		if(tabbedPane.getTabCount() == 0) {
+			return;
+		}
+		
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+					
+					//Give the user the option
+					
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + "");
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
