@@ -19,4 +19,3 @@ main:
 
 	a + 4 + 3 + 2 
 	pl: "value " + a
-

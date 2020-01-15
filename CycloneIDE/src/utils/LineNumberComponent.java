@@ -223,7 +223,6 @@ public class LineNumberComponent extends JComponent{
 
 		}
 
-		
 
 	}
 
