@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-public class JarRunFile {
-    public static void main(String[] args) {
-        System.out.println("hello world");
-    }
-public static void execute() {
-		
-		main(null);
-		
-	}
-=======
 public class JarRunFile { 
 public static void main(String[] args) {
 long a = 7;
@@ -43,5 +32,5 @@ System.out.println( "value " + a);
 public static void execute() {
 main(null);
 }
->>>>>>> refs/remotes/origin/master
+
 }
