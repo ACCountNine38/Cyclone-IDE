@@ -371,7 +371,7 @@ public class FileExecutionTool {
 			    	if(!Console.consoleTextArea.getText().isEmpty()) {
 			    		
 			    		doc.insertString(doc.getLength(), "\n", greenStyle);
-			    		
+			    		 
 			    	} 
 			    	
 			    	doc.insertString(doc.getLength(), "BUILD SUCCESSFUL", greenStyle);
