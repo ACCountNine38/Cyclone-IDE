@@ -37,12 +37,14 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	
 	private static final int PANEL_HEIGHT = HEIGHT / 2 - 10;
 	
+	//Title and buttons
 	private JLabel titleLabel = new JLabel("Utility Customization");
 	private JButton defaultSettings = new JButton("SET TO DEFAULT");
 	private JButton save = new JButton("SAVE CHANGES");
 	private JButton exit = new JButton("EXIT");
 	
-	private JPanel editorPanel = new JPanel(); //Main panel
+	//Editor Settings
+	private JPanel editorPanel = new JPanel(); 
 	private JLabel editorTitleLabel = new JLabel("Editor Settings");
 	private JLabel editorFontLabel = new JLabel("Editor Font");
 	private JComboBox<String> editorFontComboBox = new JComboBox<String>();
@@ -51,6 +53,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	private JLabel editorIndentSpaceLabel = new JLabel("Editor Indent Space Size");
 	private JFormattedTextField editorIndentSpaceField;
 	
+	//Console settings
 	private JPanel consolePanel = new JPanel();
 	private JLabel consoleTitleLabel = new JLabel("Console Settings");
 	private JLabel consoleFontLabel = new JLabel("Console Font");
@@ -60,13 +63,15 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	private JLabel consoleIndentSpaceLabel = new JLabel("Console Indent Space Size");
 	private JFormattedTextField consoleIndentSpaceField;
 	
-	private JLabel darkThemeLabel = new JLabel("Dark Theme:");
+	//Light/dark theme
+	private JLabel darkThemeLabel = new JLabel("<html><center>Dark<br>Theme:</center></html>");
 	private JRadioButton onButton = new JRadioButton("On");
 	private JRadioButton offButton = new JRadioButton("Off");
 	private ButtonGroup radioButtonGroup = new ButtonGroup();
 	
 	private IDEInterface ide;
 	
+	//Constructor Method
 	public UtilityCustomizationPopup(IDEInterface ide) {
 		
 		this.ide = ide;
@@ -87,9 +92,11 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 	}
 	
+	//This method adds the required JComponents to the frame
 	@Override
 	public void addJComponents() {
 		
+		//Set up the editor and console panels
 		setupEditorPanel();
 		setupConsolePanel();
 		
@@ -99,26 +106,23 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(titleLabel);
 		
-		//set up the dark theme label and radio buttons
+		//Set up the dark theme label and radio buttons
 		darkThemeLabel.setFont(new Font("Dialog", Font.BOLD, 24));
-		darkThemeLabel.setBounds(50, 75 + HEIGHT + 10, 150, 75);
+		darkThemeLabel.setBounds(50, 75 + HEIGHT + 10, 85, 75);
 		darkThemeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		//darkThemeLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		add(darkThemeLabel);
 		
 		radioButtonGroup.add(onButton);
 		radioButtonGroup.add(offButton);
 		
-		onButton.setBounds(220, 75 + HEIGHT + 10, 80, 75);
+		onButton.setBounds(150, 75 + HEIGHT + 10, 60, 75);
 		onButton.setFont(new Font("Dialog", Font.BOLD, 24));
 		onButton.addActionListener(this);
-		//onButton.setSelected(true);
 		add(onButton);
 		
-		offButton.setBounds(300, 75 + HEIGHT + 10, 80, 75);
+		offButton.setBounds(210, 75 + HEIGHT + 10, 60, 75);
 		offButton.setFont(new Font("Dialog", Font.BOLD, 24));
 		offButton.addActionListener(this);
-		//offButton.setSelected(true);
 		add(offButton);
 		
 		//Setup the buttons
@@ -126,15 +130,15 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		exit.addActionListener(this);
 		add(exit);
 		
-		save.setBounds(POPUP_WIDTH - 400, POPUP_HEIGHT - 100, 150, 50);
+		save.setBounds(POPUP_WIDTH - 375, POPUP_HEIGHT - 100, 150, 50);
 		save.addActionListener(this);
 		add(save);
 		
-		defaultSettings.setBounds(POPUP_WIDTH - 600, POPUP_HEIGHT - 100, 150, 50);
+		defaultSettings.setBounds(POPUP_WIDTH - 550, POPUP_HEIGHT - 100, 150, 50);
 		defaultSettings.addActionListener(this);
 		add(defaultSettings);
 		
-		//add the panels to the frame
+		//Add the panels to the frame
 		add(editorPanel);
 		add(consolePanel);
 		
@@ -143,6 +147,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	//This method sets put he editor panel
 	private void setupEditorPanel() {
 		
+		//Number formatter for formatted text fields
 	    NumberFormat format = NumberFormat.getInstance();
 	    format.setGroupingUsed(false);
 	    NumberFormatter formatter = new NumberFormatter(format);
@@ -150,12 +155,12 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	    formatter.setMinimum(1);
 	    formatter.setMaximum(Integer.MAX_VALUE);
 		
-		//set up the editor panel
+		//Set up the editor panel
 		editorPanel.setLayout(null);
 		editorPanel.setBounds(50, 75, WIDTH, PANEL_HEIGHT); 
 		editorPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		
-		//set up the panel title label
+		//Set up the panel title label
 		editorTitleLabel.setFont(new Font("Dialog", Font.BOLD, 28));
 		editorTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		editorTitleLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
@@ -207,6 +212,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	//This method sets up the console panel
 	private void setupConsolePanel() {
 		
+		//Number formatter for formatted text fields
 	    NumberFormat format = NumberFormat.getInstance();
 	    format.setGroupingUsed(false);
 	    NumberFormatter formatter = new NumberFormatter(format);
@@ -268,19 +274,18 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 	}
 	
-	// method that sets up the popup
+	//This method sets up the frame
 	@Override
 	public void frameSetup() {
 		// set the name and size of the frame, and now allowing user to resize
-		setTitle("Keyword Customization");
+		setTitle("Utility Customization");
 		setSize(POPUP_WIDTH, POPUP_HEIGHT);
 		setResizable(false);
 
-		// disables auto layout, center program, exit frame when program closes
+		// disables auto layout, center program
 		setLayout(null);
 		setFocusable(true);
 		setLocationRelativeTo(null);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(new Color(225, 225, 225));
 
 		// set frame to appear on screen
@@ -291,6 +296,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	//This method adds the fonts to the combo boxes
 	private void addFontOptions() {
 		
+		//Add fonts to editor options
 		editorFontComboBox.addItem("Consolas");
 		editorFontComboBox.addItem("Monospaced");
 		editorFontComboBox.addItem("Serif");
@@ -298,6 +304,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		editorFontComboBox.addItem("Lucida Console");
 		editorFontComboBox.addItem("Letter Gothic Std");
 		
+		//Add fonts to console options
 		consoleFontComboBox.addItem("Consolas");
 		consoleFontComboBox.addItem("Monospaced");
 		consoleFontComboBox.addItem("Serif");
@@ -307,12 +314,14 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 	}
 	
+	//This method reads the current settings of the IDE and displays them in the combo boxes and text fields
 	private void readCurrentFont() {
 		
 		try {
 			
 			Scanner input = new Scanner(new File("settings/fonts"));
 			
+			//Display settings to respective components on screen
 			editorFontComboBox.setSelectedItem(input.next());
 			editorFontSizeField.setText(input.next());
 			editorIndentSpaceField.setText(input.next());
@@ -331,7 +340,8 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 			input.close();
 			
 		} catch(FileNotFoundException e) {
-			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
@@ -339,7 +349,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if(e.getSource() == defaultSettings) {
+		if(e.getSource() == defaultSettings) { //Reset the settings to default
 			
 			//Change editor and console settings to default settings
 			editorFontComboBox.setSelectedItem("Consolas");
@@ -349,6 +359,8 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 			consoleFontComboBox.setSelectedItem("Consolas");
 			consoleFontSizeField.setText("22");
 			consoleIndentSpaceField.setText("2");
+			
+			offButton.setSelected(true);
 			
 		} else if(e.getSource() == save) {
 			
@@ -395,6 +407,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 					
 					currentClass.getEditorTextArea().setFont(Class.editorFont); //Change editor font
 					currentClass.getEditorTextArea().setTabSize(Class.editorTabSize); //Change editor font size
+					currentClass.getLineNumberComponent().adjustWidth(); //Adjust line number size
 					
 				}
 			}
@@ -409,10 +422,11 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 				
 			}
 			
+			//Close the popup
 			ide.setEnabled(true); //Enable the ide before closing
 			this.dispose();
 			
-		} else if(e.getSource() == exit) {
+		} else if(e.getSource() == exit) { //Close the popup
 			ide.setEnabled(true); //Enable the ide before closing
 			this.dispose();
 		}

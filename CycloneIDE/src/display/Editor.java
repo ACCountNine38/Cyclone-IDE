@@ -22,6 +22,7 @@ public class Editor extends Perspective {
 	
 	private IDEInterface ide; //IDEInterface is passed into the editor
 	
+	//Constructor method
 	public Editor(IDEInterface ide) {
 		
 		this.ide = ide;
@@ -30,16 +31,12 @@ public class Editor extends Perspective {
 		
 		addJComponents();
 		
-		//Important methods
-		//tabbedPane.getSelectedComponent();
-		//tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
-		
 	}
 	
+	//This method adds the tabbed pane to the editor panel
 	public void addJComponents() {
 		
 		tabbedPane.setBounds(0, 0, width, height);
-		
 		add(tabbedPane);
 		
 	}
@@ -48,7 +45,6 @@ public class Editor extends Perspective {
 	public void addTab(Class classButton) {
 		
 		tabbedPane.addTab(classButton.getClassName(), classButton.getEditorTextAreaScroll());
-		//tabbedPane.setSelectedIndex(tabbedPane.indexOfTabComponent(tabTextAreaScroll));
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 		
 		//Set up the tab button
@@ -58,43 +54,6 @@ public class Editor extends Perspective {
 		
 		classButton.getTab().getCloseButton().addActionListener(this);
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, classButton.getTab());
-		
-	}
-	
-	//This method saves the current tab of the editor
-	public void saveCurrentTab(Class currentClass) {
-		
-		if(tabbedPane.getTabCount() == 0) {
-			//System.out.println("no tabs");
-			return;
-		}
-		
-		if(tabbedPane.getComponent(tabbedPane.getSelectedIndex()).equals(currentClass.getEditorTextAreaScroll())) {
-			//System.out.println("saving class: " + currentClass.getClassName());
-			
-			currentClass.setEdited(false);//Remove asterisk on the tab
-			
-			//Save the text to the file
-			String classText = currentClass.getEditorTextArea().getText();
-			
-			File classFile = new File(String.format("projects/%s/%s", currentClass.getProjectName(), currentClass.getClassName()));
-			try {
-				
-				PrintWriter pr = new PrintWriter(classFile);
-				pr.print(classText);
-				
-				//System.out.println("class saved: " + currentClass.getClassName());
-				
-				pr.close();
-				
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				//System.out.println("class save failed: " + currentClass.getClassName());
-				
-			}
-			
-		}
 		
 	}
 	
@@ -113,7 +72,7 @@ public class Editor extends Perspective {
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					System.out.println("saving class: " + currentClass.getClassName());
 					
-					currentClass.setEdited(false);//Remove asterisk on the tab
+					currentClass.setEdited(false); //Remove asterisk on the tab
 					
 					//Save the text to the file
 					String classText = currentClass.getEditorTextArea().getText();
@@ -129,8 +88,6 @@ public class Editor extends Perspective {
 						pr.close();
 						
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 						System.out.println("class save failed: " + currentClass.getClassName());
 					}
 					
@@ -153,16 +110,13 @@ public class Editor extends Perspective {
 		}
 		
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
-			//System.out.println("Project: " + currentProject.getProjectName());
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
-				//System.out.println("Class: " + currentClass.getClassName());
 				
 				for(int i = 0; i < tabbedPane.getTabCount() + 1; i++) {
 					
 					if(tabbedPane.getComponent(i).equals(currentClass.getEditorTextAreaScroll())) {
 						System.out.println("saving class: " + currentClass.getClassName());
-						//System.out.println(" i = " + i + " num tabs =" + tabbedPane.getTabCount());
 						
 						currentClass.setEdited(false);//Remove asterisk on the tab
 						
@@ -180,8 +134,6 @@ public class Editor extends Perspective {
 							pr.close();
 							
 						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 							System.out.println("class save failed: " + currentClass.getClassName());
 						}
 						
@@ -282,8 +234,10 @@ public class Editor extends Perspective {
 		
 	}
 	
+	//This method generates a for loop given the user's specifications
 	public void generateForLoop() {
 		
+		//Return if no tabs are opened in the editor
 		if(tabbedPane.getTabCount() == 0) {
 			return;
 		}
@@ -302,6 +256,7 @@ public class Editor extends Perspective {
 						} catch (NumberFormatException e) {	}
 					}
 					
+					//Enter the highest value that the variable can reach
 					Integer highest = null;
 					while(highest == null) {
 						try {
@@ -309,8 +264,8 @@ public class Editor extends Perspective {
 						} catch (NumberFormatException e) {	}
 					}
 					
-					//currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++", i, highest));
-					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("for: i = %d : i < %d : i++ :", i, highest));
+					//Output the for loop to the editor
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("f: i = %d : i < %d : i++", i, highest));
 					
 				}
 				

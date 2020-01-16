@@ -27,6 +27,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 	private static final int PANEL_WIDTH = DisplayPopups.POPUP_WIDTH - 100;
 	private static final int PANEL_HEIGHT = DisplayPopups.POPUP_HEIGHT - 200;
 	
+	//Title and buttons
 	private JLabel titleLabel = new JLabel("Key Customization");
 	private JButton defaultSettings = new JButton("SET TO DEFAULT");
 	private JButton save = new JButton("SAVE CHANGES");
@@ -35,7 +36,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 	private JPanel customizePanel = new JPanel(); //Main panel
 	private JScrollPane scroll;
 	
-	private ArrayList<KeywordOption> options = new ArrayList<KeywordOption>();
+	private ArrayList<KeywordOption> options = new ArrayList<KeywordOption>(); //List of keyword options
 	
 	private IDEInterface ide;
 	
@@ -58,17 +59,18 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 	}
 	
+	//This method adds the required JComponents to the frame
 	@Override
 	public void addJComponents() {
 		
-		//set up the main panel
+		//Set up the main panel
 		customizePanel.setLayout(new BoxLayout(customizePanel, BoxLayout.Y_AXIS));
 		scroll = new JScrollPane(customizePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setBounds(50, 75, PANEL_WIDTH, PANEL_HEIGHT);
 		scroll.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		add(scroll);
 		
-		//add the title labels for each column
+		//Create a panel for the title labels
 		JPanel titlePanel = new JPanel();
 		titlePanel.setLayout(null);
 		titlePanel.setSize(KeywordOption.WIDTH * 2, KeywordOption.HEIGHT);
@@ -76,7 +78,8 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		titlePanel.setMaximumSize(titlePanel.getSize());
 		titlePanel.setMinimumSize(titlePanel.getSize());
 		
-		JLabel functionTitleLabel = new JLabel("<html><center><font color='black'>Existing Keywords/Functions</font></center></html>");
+		//Add the title labels for each column
+		JLabel functionTitleLabel = new JLabel("<html><center>Existing Keywords/Functions</center></html>");
 		functionTitleLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		functionTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		functionTitleLabel.setBounds(0, 0, KeywordOption.WIDTH, KeywordOption.HEIGHT);
@@ -86,7 +89,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		functionTitleLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		titlePanel.add(functionTitleLabel);
 		
-		JLabel keywordTitleLabel = new JLabel("<html><center><font color='black'>User Defined Keywords/Functions</font></center></html>");
+		JLabel keywordTitleLabel = new JLabel("<html><center>User Defined Keywords/Functions</center></html>");
 		keywordTitleLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		keywordTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		keywordTitleLabel.setBounds(KeywordOption.WIDTH, 0, KeywordOption.WIDTH, KeywordOption.HEIGHT);
@@ -96,6 +99,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		keywordTitleLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		titlePanel.add(keywordTitleLabel);
 		
+		//Add the title panel to the main panel
 		customizePanel.add(titlePanel);
 		
 		//Add a title label to the frame
@@ -118,19 +122,19 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		add(defaultSettings);
 	}
 
-	// method that sets up the popup
+	//This method sets up the frame
 	@Override
 	public void frameSetup() {
+		
 		// set the name and size of the frame, and now allowing user to resize
 		setTitle("Keyword Customization");
 		setSize(POPUP_WIDTH, POPUP_HEIGHT);
 		setResizable(false);
 
-		// disables auto layout, center program, exit frame when program closes
+		// disables auto layout, center program
 		setLayout(null);
 		setFocusable(true);
 		setLocationRelativeTo(null);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(new Color(225, 225, 225));
 
 		// set frame to appear on screen
@@ -138,16 +142,20 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 	}
 	
+	//This method adds all current keyword options to the main panel
 	private void addKeywordOptions() {
 		
 		try {
+			
 			Scanner input = new Scanner(new File("commands/userCommands"));
 			
+			//Read the commands and current keywords and display them
 			while(input.hasNextLine()) {
 				
+				//Create a keyword option based on the command and keyword
 				KeywordOption keywordOption = new KeywordOption(input.next(), input.next());
-				options.add(keywordOption);
-				customizePanel.add(keywordOption.getCustomizePanel());
+				options.add(keywordOption); //Add option to the array list
+				customizePanel.add(keywordOption.getCustomizePanel()); //Add panel to the main panel
 				
 			}
 			
@@ -158,13 +166,10 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 			e.printStackTrace();
 		}
 		
-		//KeywordOption option = new KeywordOption();
-		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
 		if(e.getSource() == exit) {
 			ide.setEnabled(true); //Enable the ide before closing
