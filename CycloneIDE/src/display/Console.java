@@ -24,14 +24,18 @@ public class Console extends Perspective {
 	
 	public Console() {
 		
-		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, new Color(243, 243, 243));
+		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, State.utilityColor);
 		
 		addJComponents();
 		
 	}
 	
 	public void addJComponents() {
+		
 		consoleTextArea.setFont(consoleFont);
+		consoleTextArea.setForeground(State.textColor);
+		consoleTextArea.setBackground(State.utilityColor);
+		consoleTextArea.setOpaque(true);
 		consoleTextArea.setBounds(0, 0, width, height);
 		consoleTextArea.setEditable(false);
 		consoleTextArea.setTabSize(consoleTabSize);

@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import assets.Images;
 import display.Perspective;
 import display.ProjectExplorer;
+import display.State;
 
 public class Project {
 	
@@ -68,8 +69,10 @@ public class Project {
 		projectButton.setMaximumSize(projectButton.getSize());
 		projectButton.setMinimumSize(projectButton.getSize());
 		projectButton.setPreferredSize(projectButton.getSize());
+		projectButton.setBackground(State.utilityColor);
+		projectButton.setForeground(State.textColor);
+		projectButton.setOpaque(true);
 		projectButton.setText(projectName);
-		projectButton.setOpaque(false);
 		projectButton.setContentAreaFilled(false);
 		projectButton.setBorderPainted(false);
 		projectButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -92,7 +95,8 @@ public class Project {
 		
 		//Setup the file panel
 		filePanel.setLayout(null);
-		filePanel.setBackground(Color.white);
+		filePanel.setBackground(State.utilityColor);
+		filePanel.setOpaque(true);
 		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
 		//filePanel.setBorder(BorderFactory.createLineBorder(Color.green, 5));
 		projectPanel.add(filePanel);
@@ -111,6 +115,8 @@ public class Project {
 		projectPanel.setMaximumSize(projectPanel.getSize());
 		projectPanel.setMinimumSize(projectPanel.getSize());
 		projectPanel.setPreferredSize(projectPanel.getSize());
+		projectPanel.setBackground(State.utilityColor);
+		projectPanel.setForeground(State.textColor);
 		
 		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
 		
@@ -123,9 +129,10 @@ public class Project {
 			fileButton.setMaximumSize(fileButton.getSize());
 			fileButton.setMinimumSize(fileButton.getSize());
 			fileButton.setPreferredSize(fileButton.getSize());
+			fileButton.setBackground(State.utilityColor);
+			fileButton.setForeground(State.textColor);
 			filePanel.add(fileButton);
 			fileButtons.add(fileButton);
-			
 			
 		}
 		

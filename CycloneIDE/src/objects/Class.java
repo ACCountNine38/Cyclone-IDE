@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import assets.Images;
 import display.Perspective;
 import display.ProjectExplorer;
+import display.State;
 import utils.FileExecutionTool;
 import utils.FileInput;
 import utils.LineNumberComponent;
@@ -75,12 +76,14 @@ public class Class extends JButton {
 	public void addJComponents() {
 		
 		setIcon(Images.classImage);
-		setBackground(Color.white);
 		setOpaque(false);
 		setContentAreaFilled(false);
 		setBorderPainted(false);
 		
 		editorTextArea.setFont(editorFont);
+		editorTextArea.setForeground(State.textColor);
+		editorTextArea.setBackground(State.utilityColor);
+		editorTextArea.setOpaque(true);
 		editorTextArea.setBounds(0, 0, width, height);
 		editorTextArea.setLineWrap(true);
 		editorTextArea.setWrapStyleWord(true);
