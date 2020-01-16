@@ -1,6 +1,7 @@
 main:
 	a = 7
-	b = t
-	c = a
+	b = true
+	c = 5
 	
-	pl: "awd" + a+a
+	if: a = 7
+		pl: "if worked"
