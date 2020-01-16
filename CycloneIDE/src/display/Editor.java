@@ -4,9 +4,11 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 import objects.Class;
 import objects.Project;
+import popup.KeywordOption;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -224,7 +226,7 @@ public class Editor extends Perspective {
 				
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					
-					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + "\nmain:");
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("\n%s:", getKeyword("main")));
 					
 				}
 				
@@ -265,13 +267,40 @@ public class Editor extends Perspective {
 					}
 					
 					//Output the for loop to the editor
-					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("f: i = %d : i < %d : i++", i, highest));
+					currentClass.getEditorTextArea().setText(currentClass.getEditorTextArea().getText() + String.format("\n%s: i = %d : i < %d : i++", getKeyword("for"), i, highest));
 					
 				}
 				
 			}
 			
 		}
+		
+	}
+	
+	//This method returns the keyword for a for loop
+	private String getKeyword(String keyword) {
+		
+		try {
+			
+			Scanner input = new Scanner(new File("commands/userCommands"));
+			
+			//Read the commands and current keywords and display them
+			while(input.hasNextLine()) {
+				
+				if(input.next().equals(keyword)) {
+					return input.next();
+				}
+				
+			}
+			
+			input.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "";
 		
 	}
 	

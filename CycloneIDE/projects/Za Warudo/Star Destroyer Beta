@@ -1,4 +1,5 @@
 awea = 0
+
 main:
 	a = 7
 	b = t

@@ -1,5 +1,7 @@
 package utils;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -448,7 +450,7 @@ public class FileExecutionTool {
 		        sjfm.getJavaFileObjects(javaFiles)
 		);
 		compilationTask.call();
-		
+
 		try {
 			
 			String[] params = null;
@@ -480,6 +482,228 @@ public class FileExecutionTool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public static void exportFile(File file) {
+
+		Console.consoleTextArea.setText("");
+
+		resetCode();
+		Console.consoleTextArea.setText("");
+		
+		userDeclaredVariables.clear();
+		userDeclaredReturnMethods.clear();
+		
+		try {
+			
+			Scanner input = new Scanner(file);
+			
+			executeSuccessful = true;
+			
+			while(input.hasNext()) {
+				
+				if(!executeSuccessful) {
+					return;
+				}
+				
+				previousTabNumber = currentTabNumber;
+				String line = input.nextLine();
+				
+				if(line.trim().length() > 0) {
+					
+					int numTabs = 0;
+					for(int i = 0; i < line.length(); i++) {
+						if(line.charAt(i) == '\t') {
+							numTabs++;
+						}
+					}
+					
+					currentTabNumber = numTabs;
+					
+					if(currentTabNumber < previousTabNumber) {
+						translatedCode += "\n}\n";
+					}
+				
+				}
+				
+				for(int i = 0; i < line.length(); i++) {
+					
+					if(line.charAt(i) == ':') {
+						
+						String key = line.substring(0, i).trim();
+						String action = line.substring(line.indexOf(key) + key.length() + 1);
+						
+						boolean actionPerformed = false;
+						
+						for(HashMap.Entry<String, String> command : userCommands.entrySet()) {
+							
+							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
+								
+								line = action;
+								Print.print(line);
+								
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
+								
+								line = action;
+								Print.printLine(line);
+								
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
+								
+								String inputVariable = Input.validateText(action);
+								Input.readVariable(inputVariable);
+								
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && (command.getKey().equals("if") || 
+									command.getKey().equals("else_if") || 
+									command.getKey().equals("else"))) {
+								
+								ControlStructures.initialize(action, command.getKey());
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
+								
+								For.initialize(action);
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("while")) {
+								
+								While.initialize(action);
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
+								
+								translatedCode += "\nbreak;";
+								actionPerformed = true;
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("main")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("int")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("doub")) {
+								
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("bool")) {
+							
+								Function.declareMain();
+								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("str")) {
+								
+								Function.declareMain();
+								break;
+								
+							}
+							
+						}
+						
+						if(actionPerformed) {
+							break;
+						}
+						
+					} else if(line.charAt(i) == '=') {
+						
+						String variable = line.substring(0, i).trim();
+						String value = line.substring(i+1, line.length()).trim();
+						
+						boolean found = false;
+						
+						for(Variable var: userDeclaredVariables) {
+							
+							if(var.getName().equals(variable)) {
+								
+								found = true;
+								
+								var.setValue(value);
+								
+								break;
+								
+							}
+							
+						}
+						
+						if(!found) {
+							
+							userDeclaredVariables.add(new Variable(variable, value, true));
+							
+						}
+						
+					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
+							|| line.charAt(i) == '/' || line.charAt(i) == '%') {
+						
+						//char operator = line.charAt(i);
+						String variable = line.substring(0, i).trim();
+						String calculation = line.substring(i, line.length());
+						//String value = line.substring(i+1, line.length()).trim();
+						
+						Variable operatingVariable = null;
+						
+						for(Variable var: userDeclaredVariables) {
+							
+							if(var.getName().equals(variable)) {
+								
+								operatingVariable = var;
+								
+								break;
+								
+							}
+							
+						}
+						
+						operatingVariable.calculate(calculation);
+						break;
+						
+					} 
+
+				}
+				
+			}
+			
+			translatedCode += "\n}\n}";
+			
+			Console.consoleTextArea.setText(translatedCode);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		//Open a file dialog and use it to decide where to save the file to
+	    FileDialog fileDialog = new FileDialog((Frame) null, "Select Where to Save the File");
+	    fileDialog.setMode(FileDialog.SAVE);
+	    fileDialog.setVisible(true);
+	    String fileLocation = fileDialog.getDirectory() + fileDialog.getFile() + ".java";
+	    File jarFile = new File(fileLocation);
+
+        //Print the java code to the specified file
+        try {
+        	
+            PrintWriter pr = new PrintWriter(jarFile);
+            pr.print(translatedCode);
+            pr.close();
+            
+        } catch (IOException e) {
+            System.out.println("Class file was not created");
+        }
 		
 	}
 	
@@ -535,6 +759,8 @@ public class FileExecutionTool {
 		
 		
 	}
+	
+	
 	
 	public static void terminate(String message) {
 		/*

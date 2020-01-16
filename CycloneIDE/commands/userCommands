@@ -1,5 +1,5 @@
-true t
-false f
+true true
+false false
 print p
 printl pl
 input in
