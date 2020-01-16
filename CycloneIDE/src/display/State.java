@@ -51,6 +51,7 @@ public class State extends JFrame implements ActionListener {
 	private JMenuItem runOption = new JMenuItem("Run Project");
 	private JMenu helpMenu = new JMenu("Help");
 	private JMenuItem gettingStartedOption = new JMenuItem("Getting Started");
+	private JMenuItem codingInCycloneOption = new JMenuItem("Coding in Cyclone");
 	
 	public State() {
 
@@ -183,7 +184,9 @@ public class State extends JFrame implements ActionListener {
 		menuBar.add(helpMenu);
 		helpMenu.add(gettingStartedOption);
 		gettingStartedOption.addActionListener(this);
-
+		helpMenu.add(codingInCycloneOption);
+		codingInCycloneOption.addActionListener(this);
+		
 	}
 
 	public JMenu getFileMenu() {
@@ -328,6 +331,14 @@ public class State extends JFrame implements ActionListener {
 
 	public void setGettingStartedOption(JMenuItem gettingStartedOption) {
 		this.gettingStartedOption = gettingStartedOption;
+	}
+
+	public JMenuItem getCodingInCycloneOption() {
+		return codingInCycloneOption;
+	}
+
+	public void setCodingInCycloneOption(JMenuItem codingInCycloneOption) {
+		this.codingInCycloneOption = codingInCycloneOption;
 	}
 
 	@Override
