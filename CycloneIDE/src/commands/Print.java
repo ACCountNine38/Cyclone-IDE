@@ -1,6 +1,5 @@
 package commands;
 
-import display.Console;
 import utils.FileExecutionTool;
 
 public class Print {
@@ -17,36 +16,25 @@ public class Print {
 		
 	}
 	
-	public static void print(String output) {
-		//Console.consoleTextArea.setText(Console.consoleTextArea.getText() + output);
-		/*
-		for(Variable variable: FileExecutionTool.userDeclaredVariables) {
-			if(variable.getName().equals(output.trim())) {
-				FileExecutionTool.translatedCode += "\nSystem.out.print(" + output + ");";
-				return;
-			}
-		}
-		*/
+	public static void print(String output, int lineNumber) {
+		
+		FileExecutionTool.translatedCode += "\n try {";
+				
 		FileExecutionTool.translatedCode += "\nSystem.out.print(" + output + ");";
+		
+		FileExecutionTool.translatedCode += "\n } catch(java.lang.RuntimeException error) { "
+				+ "\nSystem.out.println(\"RuntimeException(print): \" + " + lineNumber + ");\n}";
 		
 	}
 	
-	public static void printLine(String output) {
-		/*
-		if(!Console.consoleTextArea.getText().equals(""))
-			Console.consoleTextArea.setText(Console.consoleTextArea.getText() + "\n" + output);
-		else
-			Console.consoleTextArea.setText(output);
-			*/
-		/*
-		for(Variable variable: FileExecutionTool.userDeclaredVariables) {
-			if(variable.getName().equals(output.trim())) {
-				FileExecutionTool.translatedCode += "\nSystem.out.println(" + output + ");";
-				return;
-			}
-		}
-		*/
+	public static void printLine(String output, int lineNumber) {
+		
+		FileExecutionTool.translatedCode += "\n try {";
+		
 		FileExecutionTool.translatedCode += "\nSystem.out.println(" + output + ");";
+		
+		FileExecutionTool.translatedCode += "\n } catch(java.lang.RuntimeException error) { "
+				+ "\nSystem.out.println(\"RuntimeException(print line): \" + " + lineNumber + ");\n}";
 		
 	}
 	/*

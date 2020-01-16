@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import javax.swing.text.Style;
+import javax.swing.text.StyledDocument;
 import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
@@ -118,7 +120,7 @@ public class FileExecutionTool {
 	}
 	
 	public static void executeFile(File file) {
-
+		
 		Console.consoleTextArea.setText("");
 
 		resetCode();
@@ -129,6 +131,7 @@ public class FileExecutionTool {
 		
 		try {
 			
+			int lineNumber = 0;
 			Scanner input = new Scanner(file);
 			
 			executeSuccessful = true;
@@ -141,6 +144,7 @@ public class FileExecutionTool {
 				
 				previousTabNumber = currentTabNumber;
 				String line = input.nextLine();
+				lineNumber++;
 				
 				if(line.trim().length() > 0) {
 					
@@ -173,7 +177,7 @@ public class FileExecutionTool {
 							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
 								
 								line = action;
-								Print.print(line);
+								Print.print(line, lineNumber);
 								
 								actionPerformed = true;
 								break;
@@ -181,7 +185,7 @@ public class FileExecutionTool {
 							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
 								
 								line = action;
-								Print.printLine(line);
+								Print.printLine(line, lineNumber);
 								
 								actionPerformed = true;
 								break;
@@ -189,7 +193,7 @@ public class FileExecutionTool {
 							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
 								
 								String inputVariable = Input.validateText(action);
-								Input.readVariable(inputVariable);
+								Input.readVariable(inputVariable, lineNumber);
 								
 								actionPerformed = true;
 								break;
@@ -204,7 +208,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
 								
-								For.initialize(action);
+								For.initialize(action, lineNumber);
 								actionPerformed = true;
 								break;
 								
@@ -266,7 +270,7 @@ public class FileExecutionTool {
 								
 								found = true;
 								
-								var.setValue(value);
+								var.setValue(value, lineNumber);
 								
 								break;
 								
@@ -276,7 +280,7 @@ public class FileExecutionTool {
 						
 						if(!found) {
 							
-							userDeclaredVariables.add(new Variable(variable, value, true));
+							userDeclaredVariables.add(new Variable(variable, value, true, lineNumber));
 							
 						}
 						
@@ -301,36 +305,16 @@ public class FileExecutionTool {
 							}
 							
 						}
-						/*
-						if(operatingVariable == null) {
-							
-							executeSuccessful = false;
-							terminate("Variable Not Found Exception");
-							
-							return;
-							
-						}
 						
-						boolean valueFound = false;
-						
-						for(Variable var: userDeclaredVariables) {
-							
-							if(var.getName().equals(value)) {
-								
-								valueFound = true;
-								
-								operatingVariable.calculate(operator, var.getValue());
-								
-								break;
-								
-							}
-							
-						}
-						*/
 						operatingVariable.calculate(calculation);
 						break;
 						
 					} 
+					
+					if(!executeSuccessful) {
+						return;
+					}
+					
 					/*
 					else if(line.charAt(i) == '{') {
 						
@@ -349,6 +333,10 @@ public class FileExecutionTool {
 						
 					}
 					*/
+				}
+				
+				if(!executeSuccessful) {
+					return;
 				}
 				
 			}
@@ -401,14 +389,14 @@ public class FileExecutionTool {
 			e.printStackTrace();
 			
 		}
-	
+		
 		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
 		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
 		System.setProperty("java.home", State.JDKFilepath);
 		
-		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-        System.setOut(printStream);
-        System.setErr(printStream);
+		//PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        //System.setOut(printStream);
+        //System.setErr(printStream);
         File jarFile = new File("src/JarRunFile.java");
 
         try {
@@ -428,6 +416,7 @@ public class FileExecutionTool {
 //        String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
 //        String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
 //        System.setProperty("java.home", jdkPath);
+        /*
         System.out.println(System.getProperty("java.home")); //Java home path
         
         System.out.println(jarFile.getAbsolutePath());
@@ -450,6 +439,10 @@ public class FileExecutionTool {
 		        sjfm.getJavaFileObjects(javaFiles)
 		);
 		compilationTask.call();
+
+
+=======
+		*/
 
 		try {
 			
@@ -487,205 +480,9 @@ public class FileExecutionTool {
 	
 	public static void exportFile(File file) {
 
-		Console.consoleTextArea.setText("");
 
-		resetCode();
-		Console.consoleTextArea.setText("");
-		
-		userDeclaredVariables.clear();
-		userDeclaredReturnMethods.clear();
-		
-		try {
 			
-			Scanner input = new Scanner(file);
-			
-			executeSuccessful = true;
-			
-			while(input.hasNext()) {
-				
-				if(!executeSuccessful) {
-					return;
-				}
-				
-				previousTabNumber = currentTabNumber;
-				String line = input.nextLine();
-				
-				if(line.trim().length() > 0) {
-					
-					int numTabs = 0;
-					for(int i = 0; i < line.length(); i++) {
-						if(line.charAt(i) == '\t') {
-							numTabs++;
-						}
-					}
-					
-					currentTabNumber = numTabs;
-					
-					if(currentTabNumber < previousTabNumber) {
-						translatedCode += "\n}\n";
-					}
-				
-				}
-				
-				for(int i = 0; i < line.length(); i++) {
-					
-					if(line.charAt(i) == ':') {
-						
-						String key = line.substring(0, i).trim();
-						String action = line.substring(line.indexOf(key) + key.length() + 1);
-						
-						boolean actionPerformed = false;
-						
-						for(HashMap.Entry<String, String> command : userCommands.entrySet()) {
-							
-							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
-								
-								line = action;
-								Print.print(line);
-								
-								actionPerformed = true;
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
-								
-								line = action;
-								Print.printLine(line);
-								
-								actionPerformed = true;
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
-								
-								String inputVariable = Input.validateText(action);
-								Input.readVariable(inputVariable);
-								
-								actionPerformed = true;
-								break;
-								
-							} else if(key.equals(command.getValue()) && (command.getKey().equals("if") || 
-									command.getKey().equals("else_if") || 
-									command.getKey().equals("else"))) {
-								
-								ControlStructures.initialize(action, command.getKey());
-								actionPerformed = true;
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
-								
-								For.initialize(action);
-								actionPerformed = true;
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("while")) {
-								
-								While.initialize(action);
-								actionPerformed = true;
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
-								
-								translatedCode += "\nbreak;";
-								actionPerformed = true;
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("main")) {
-								
-								Function.declareMain();
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("int")) {
-								
-								Function.declareMain();
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("doub")) {
-								
-								Function.declareMain();
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("bool")) {
-							
-								Function.declareMain();
-								break;
-								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("str")) {
-								
-								Function.declareMain();
-								break;
-								
-							}
-							
-						}
-						
-						if(actionPerformed) {
-							break;
-						}
-						
-					} else if(line.charAt(i) == '=') {
-						
-						String variable = line.substring(0, i).trim();
-						String value = line.substring(i+1, line.length()).trim();
-						
-						boolean found = false;
-						
-						for(Variable var: userDeclaredVariables) {
-							
-							if(var.getName().equals(variable)) {
-								
-								found = true;
-								
-								var.setValue(value);
-								
-								break;
-								
-							}
-							
-						}
-						
-						if(!found) {
-							
-							userDeclaredVariables.add(new Variable(variable, value, true));
-							
-						}
-						
-					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
-							|| line.charAt(i) == '/' || line.charAt(i) == '%') {
-						
-						//char operator = line.charAt(i);
-						String variable = line.substring(0, i).trim();
-						String calculation = line.substring(i, line.length());
-						//String value = line.substring(i+1, line.length()).trim();
-						
-						Variable operatingVariable = null;
-						
-						for(Variable var: userDeclaredVariables) {
-							
-							if(var.getName().equals(variable)) {
-								
-								operatingVariable = var;
-								
-								break;
-								
-							}
-							
-						}
-						
-						operatingVariable.calculate(calculation);
-						break;
-						
-					} 
 
-				}
-				
-			}
-			
-			translatedCode += "\n}\n}";
-			
-			Console.consoleTextArea.setText(translatedCode);
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 		
 		//Open a file dialog and use it to decide where to save the file to
 	    FileDialog fileDialog = new FileDialog((Frame) null, "Select Where to Save the File");
@@ -763,6 +560,11 @@ public class FileExecutionTool {
 	
 	
 	public static void terminate(String message) {
+		
+		System.out.println(message);
+		executeSuccessful = false;
+		
+		
 		/*
 		StyledDocument doc = Console.consoleTextArea.getStyledDocument();
 		Style greenStyle = Console.consoleTextArea.addStyle("Red", null);
@@ -773,12 +575,7 @@ public class FileExecutionTool {
 	    StyleConstants.setUnderline(greenStyle, true);
 	    
 	    try {
-	    	if(!Console.consoleTextArea.getText().isEmpty()) {
-	    		
-	    		doc.insertString(doc.getLength(), "\n", greenStyle);
-	    		
-	    	} 
-			doc.insertString(doc.getLength(), message + "\nBUILD FAILED", greenStyle);
+	    	
 			StyleConstants.setForeground(blackStyle, Color.black);
 			StyleConstants.setUnderline(blackStyle, false);
 			doc.insertString(doc.getLength(), " ", blackStyle);
