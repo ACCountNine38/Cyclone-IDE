@@ -71,7 +71,7 @@ public class FileExecutionTool {
 		
 		previousTabNumber = 0;
 		currentTabNumber = 0;
-		translatedCode = "public class JarRunFile { ";
+		translatedCode = String.format("public class JarRunFile%d { ", State.numExecutions);
 		
 	}
 	
@@ -397,7 +397,7 @@ public class FileExecutionTool {
 		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
         System.setOut(printStream);
         System.setErr(printStream);
-        File jarFile = new File("src/JarRunFile.java");
+        File jarFile = new File(String.format("src/JarRunFile%d.java", State.numExecutions));
 
         try {
         	
@@ -421,7 +421,7 @@ public class FileExecutionTool {
         
         System.out.println(jarFile.getAbsolutePath());
         
-        String regex = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
+        String regex = String.format("\\s*\\bsrc\\\\JarRunFile%d.java\\b\\s*", State.numExecutions);
         String binPath = jarFile.getAbsolutePath().replaceAll(regex, "bin");
         
         System.out.println(binPath);
@@ -431,7 +431,7 @@ public class FileExecutionTool {
 		StandardJavaFileManager sjfm = javaCompiler.getStandardFileManager(null, null, null); 
 
 		String[] options = new String[] { "-d", binPath };
-		File[] javaFiles = new File[] { new File("src/JarRunFile.java") };
+		File[] javaFiles = new File[] { new File(String.format("src/JarRunFile%d.java", State.numExecutions)) };
 
 		CompilationTask compilationTask = javaCompiler.getTask(null, null, null,
 		        Arrays.asList(options),
@@ -444,11 +444,11 @@ public class FileExecutionTool {
 		try {
 			
 			String[] params = null;
-			Class<?> cls = Class.forName("JarRunFile");
+			Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions));
 
 			Method method;
 			try {
-				System.out.println("Executing JarRunFile.main");
+				System.out.println(String.format("Executing JarRunFile%d.main", State.numExecutions));
 				method = cls.getMethod("main", String[].class);
 				method.invoke(null, (Object) params);
 			} catch (NoSuchMethodException e) {
@@ -472,6 +472,8 @@ public class FileExecutionTool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		State.numExecutions++;
 		
 	}
 	

@@ -31,6 +31,7 @@ public class State extends JFrame implements ActionListener {
 	
 	public static File currentFile = new File("tabs/testFile");
 	public static String JDKFilepath;
+	public static int numExecutions = 0;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
@@ -97,7 +98,8 @@ public class State extends JFrame implements ActionListener {
 			// method handles the current button's actions
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				
+				deleteExecutionFiles();
 				System.exit(1);
 
 			}
@@ -186,6 +188,33 @@ public class State extends JFrame implements ActionListener {
 		gettingStartedOption.addActionListener(this);
 		helpMenu.add(codingInCycloneOption);
 		codingInCycloneOption.addActionListener(this);
+		
+	}
+	
+	private void deleteExecutionFiles() {
+		
+		System.out.println("numExecutions: " + numExecutions);
+		
+		for(int i = 0; i < numExecutions; i++) {
+			String javaFile = String.format("src/JavaRunFile%d.java", i);
+			File javaFilepath = new File(javaFile);
+			String classFile = String.format("bin/JavaRunFile%d.class", i);
+			File classFilepath = new File(classFile);
+
+			if(javaFilepath.exists()) {
+				System.out.println(String.format("JavaRunFile%d.java was deleted", i));
+				javaFilepath.delete();
+			} else {
+				System.out.println("Couldn't delete java file");
+			}
+			
+			if(classFilepath.exists()) {
+				System.out.println(String.format("JavaRunFile%d.class was deleted", i));
+				classFilepath.delete();
+			} else {
+				System.out.println("Couldn't delete class file");
+			}
+		}
 		
 	}
 
