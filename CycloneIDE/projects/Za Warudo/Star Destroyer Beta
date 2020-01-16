@@ -1,12 +1,10 @@
-awea = 0
 main:
-	a = 7
+	a! = 7
 	b = t
 	c = a
-	
 	in: a
 	if: a == 6
-		pl: "a is 6"
+		pl: "a is 6" 
 	eif: a == 5
 		pl: "a is 5"
 	else:
@@ -15,9 +13,9 @@ main:
 	f: i = 0: i < 5: i++
 		pl: "hi"
 	
-	w: t
+	w: true
 		pl: "while worked"
 		b:
 
 	a + 4 + 3 + 2 
-	pl: "value " + a
+	pl: "value" 
