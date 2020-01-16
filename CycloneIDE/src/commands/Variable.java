@@ -24,10 +24,10 @@ public class Variable {
 		this.name = name;
 		this.value = value;
 		
-		datatype = getDatatype(value);
+		datatype = getDatatype(value, lineNumber);
 		
 		if(isCounterVariable) {
-			toJava();
+			toJava(lineNumber);
 		}
 		
 	}
@@ -38,7 +38,7 @@ public class Variable {
 		
 	}
 
-	public String getDatatype(String variable) {
+	public static String getDatatype(String variable, int lineNumber) {
 		
 		if(variable.equals(FileExecutionTool.userCommands.get("true")) || variable.equals(FileExecutionTool.userCommands.get("false"))) {
 			return "boolean";
@@ -55,16 +55,21 @@ public class Variable {
 		} catch (NumberFormatException e) { }
 		
 		if(variable.charAt(0) == '"' && variable.charAt(variable.length()-1) == '"') {
-			value = variable.substring(1, variable.length()-1);
 			return "String";
 		} 
 		
 		for(Variable existingVariable: FileExecutionTool.userDeclaredVariables) {
 			if(existingVariable.getName().equals(variable)) {
 				
-				return existingVariable.getDatatype(existingVariable.getValue());
+				return Variable.getDatatype(existingVariable.getValue(), lineNumber);
 				
 			}
+		}
+		
+		if(FileExecutionTool.executeSuccessful) {
+			
+			FileExecutionTool.terminate("Unrecongnizable Datatype: Line " + lineNumber);
+			
 		}
 		
 		return "String";
@@ -91,31 +96,31 @@ public class Variable {
 
 	public void setValue(String value, int lineNumber) {
 		
-		if(getDatatype(value) == null) {
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value));
+		if(getDatatype(value, lineNumber) == null) {
+			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber));
 			return;
 		}
 		
 		//FileExecutionTool.translatedCode += "\ntry { ";
 		
-		if(getDatatype(value) != null && getDatatype(value).equals("int") && datatype.equals("int")) {
+		if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("int") && datatype.equals("int")) {
 			int testValue = Integer.parseInt(value);
 			this.value = testValue + "";
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
-		} else if(getDatatype(value) != null && getDatatype(value).equals("double") && datatype.equals("double")) {
+		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("double") && datatype.equals("double")) {
 			
 			double testValue = Double.parseDouble(value);
 			this.value = testValue + "";
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
-		} else if(getDatatype(value) != null && getDatatype(value).equals("boolean") && datatype.equals("boolean")) {
+		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("boolean") && datatype.equals("boolean")) {
 			
 			boolean testValue = Boolean.parseBoolean(value);
 			this.value = testValue + "";
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
-		} else if(getDatatype(value) != null && getDatatype(value).equals("String") && datatype.equals("String")) {
+		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("String") && datatype.equals("String")) {
 			
 			this.value = value;
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
@@ -123,7 +128,7 @@ public class Variable {
 		} else {
 			
 			FileExecutionTool.executeSuccessful = false;
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value));
+			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber));
 			
 		}
 		
@@ -132,17 +137,17 @@ public class Variable {
 		
 	}
 	
-	public void toJava() {
+	public void toJava(int lineNumber) {
 		
-		if(getDatatype(value) != null && datatype.equals("int")) {
+		if(getDatatype(value, lineNumber) != null && datatype.equals("int")) {
 			
 			FileExecutionTool.translatedCode += "\nint " + name + " = " + value + ";";
 		
-		} else if(getDatatype(value) != null && datatype.equals("double")) {
+		} else if(getDatatype(value, lineNumber) != null && datatype.equals("double")) {
 			
 			FileExecutionTool.translatedCode += "\ndouble " + name + " = " + value + ";";
 		
-		} else if(getDatatype(value) != null && datatype.equals("boolean")) {
+		} else if(getDatatype(value, lineNumber) != null && datatype.equals("boolean")) {
 			
 			if(value.equals(FileExecutionTool.userCommands.get("true")))
 				FileExecutionTool.translatedCode += "\nboolean " + name + " = " + "true;";

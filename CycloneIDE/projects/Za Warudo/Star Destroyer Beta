@@ -1,6 +1,10 @@
 main:
+<<<<<<< HEAD
 	
+=======
+>>>>>>> refs/remotes/origin/master
 	a = 7
+<<<<<<< HEAD
 	b = t
 	
 	if: a == 6
@@ -19,3 +23,10 @@ main:
 		b:
 
 	
+=======
+	b = true
+	c = 5
+
+	if: a = 7
+		pl: "if worked"
+>>>>>>> refs/remotes/origin/master
