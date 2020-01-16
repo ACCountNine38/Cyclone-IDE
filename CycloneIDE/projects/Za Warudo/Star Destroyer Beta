@@ -3,4 +3,4 @@ main:
 	b = t
 	c = a
 	
-	pl: adw 4#a + a
+	pl: "awd" + a+a

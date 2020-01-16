@@ -1,1 +1,2 @@
-p: hi
+main:
+	pl: "hi d"

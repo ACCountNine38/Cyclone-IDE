@@ -56,8 +56,8 @@ public class Print {
 			if(!variableFound) {
 				
 				if(token.charAt(0) == '"' && token.charAt(token.length() - 1) == '"') {
-					
-					output += token;
+
+					printList.add(token);
 					
 				} else {
 					
@@ -128,7 +128,7 @@ public class Print {
 			
 			if(token.charAt(0) == '"' && token.charAt(token.length() - 1) == '"') {
 				
-				if(printList.size() > 1) {
+				if(printList.size() >= 1) {
 					
 					output += token + " + ";
 					
@@ -140,13 +140,13 @@ public class Print {
 				
 			} else {
 				
-				if(printList.size() > 1) {
+				if(printList.size() >= 1) {
 					
-					output += token + "\"\" + ";
+					output += token + " + \"\" + ";
 					
 				} else {
 					
-					output += token + "\"\"";
+					output += token;
 					
 				}
 				

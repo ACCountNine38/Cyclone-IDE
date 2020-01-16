@@ -23,6 +23,7 @@ import objects.Project;
 import popup.GettingStartedPopup;
 import popup.KeywordCustomizationPopup;
 import popup.UtilityCustomizationPopup;
+import utils.FileExecutionTool;
 
 public class IDEInterface extends State {
 	
@@ -123,7 +124,7 @@ public class IDEInterface extends State {
 		} else if (e.getSource() ==  getSaveAllTabsOption()) {
 			editor.saveAllTabs();
 		} else if (e.getSource() ==  getExportJavaFileOption()) {
-			
+			exportProject();
 		} else if (e.getSource() ==  getSetJDKFilepathOption()) {
 			setJDKFilepath();
 		} else if(e.getSource() == getKeywordCustomizationOption()) {
@@ -154,7 +155,7 @@ public class IDEInterface extends State {
 		if(projectName.isEmpty()) {
 			validName = false;
 			//Display error message
-			//JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
 		}
 		
 		for(Project currentProject: projectExplorer.getProjects()) {
@@ -470,34 +471,8 @@ public class IDEInterface extends State {
 			
 		}
 		
-		
-		
-		//Open a file dialog and use it to decide where to save the file to
-		FileDialog fileDialog = new FileDialog((Frame) null, "Select Where to Save the File");
-		fileDialog.setMode(FileDialog.SAVE);
-		fileDialog.setVisible(true);
-		String file = fileDialog.getDirectory() + fileDialog.getFile() + "java";
-		File filepath = new File(file);
-
-		//Make sure that the file path is not a directory
-		if(!filepath.isDirectory()) {
-
-			try {
-
-				//Write data to a file
-				PrintWriter pr = new PrintWriter(file);
-				
-				//File execution save method - FileExecution.saveAsJava(currentFile);
-
-				pr.close();
-
-			} catch (FileNotFoundException e) {
-				System.out.println("Save Failed");
-			}
-
-		} else {
-			System.out.println("Invalid Filepath");
-		}
+		//Export the current class
+		FileExecutionTool.exportFile(currentFile);
 
 	}
     

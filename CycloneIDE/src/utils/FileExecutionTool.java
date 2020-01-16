@@ -1,5 +1,7 @@
 package utils;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -437,8 +439,10 @@ public class FileExecutionTool {
 		        sjfm.getJavaFileObjects(javaFiles)
 		);
 		compilationTask.call();
+
+
+=======
 		*/
-        
 		try {
 			
 			String[] params = null;
@@ -470,6 +474,32 @@ public class FileExecutionTool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public static void exportFile(File file) {
+
+
+			
+
+		
+		//Open a file dialog and use it to decide where to save the file to
+	    FileDialog fileDialog = new FileDialog((Frame) null, "Select Where to Save the File");
+	    fileDialog.setMode(FileDialog.SAVE);
+	    fileDialog.setVisible(true);
+	    String fileLocation = fileDialog.getDirectory() + fileDialog.getFile() + ".java";
+	    File jarFile = new File(fileLocation);
+
+        //Print the java code to the specified file
+        try {
+        	
+            PrintWriter pr = new PrintWriter(jarFile);
+            pr.print(translatedCode);
+            pr.close();
+            
+        } catch (IOException e) {
+            System.out.println("Class file was not created");
+        }
 		
 	}
 	
@@ -525,6 +555,8 @@ public class FileExecutionTool {
 		
 		
 	}
+	
+	
 	
 	public static void terminate(String message) {
 		
