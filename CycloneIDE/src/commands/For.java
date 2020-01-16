@@ -19,18 +19,18 @@ public class For {
 	 * 
 	 * }
 	 */
-	public static void initialize(String conditions) {
-		breakDownConditions(conditions);
+	public static void initialize(String conditions, int lineNumber) {
+		breakDownConditions(conditions, lineNumber);
 
 	}
 
-	private static void breakDownConditions(String conditions) {
+	private static void breakDownConditions(String conditions, int lineNumber) {
 		String loopProperties = conditions;
 		String initializedVariables = loopProperties.substring(0, loopProperties.indexOf(":") + 1).trim();
 		Variable counterVariable = new Variable(
 				initializedVariables.substring(0, initializedVariables.indexOf("=")).trim(), initializedVariables
 						.substring(initializedVariables.indexOf("=") + 1, initializedVariables.indexOf(":")).trim(),
-				false);
+				false, lineNumber);
 
 		loopProperties = loopProperties.substring(loopProperties.indexOf(":") + 1);
 		String condition = loopProperties.substring(0, loopProperties.indexOf(":")).trim();

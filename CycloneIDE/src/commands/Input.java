@@ -18,14 +18,14 @@ public class Input {
 		
 	}
 	
-	public static void readVariable(String variable) {
+	public static void readVariable(String variable, int lineNumber) {
 		
 		for(Variable currentVariable: FileExecutionTool.userDeclaredVariables) {
 			
 			if(currentVariable.getName().equals(variable)) {
 				
 				String inputValue = JOptionPane.showInputDialog("Enter input for variable " + variable);
-				currentVariable.setValue(inputValue);
+				currentVariable.setValue(inputValue, lineNumber);
 				
 			}
 			

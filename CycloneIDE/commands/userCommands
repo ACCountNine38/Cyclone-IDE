@@ -1,5 +1,3 @@
-true t
-false f
 print p
 printl pl
 input in
@@ -15,3 +13,5 @@ method(int) int
 method(double) doub
 method(boolean) bool
 method(String) str
+true true
+false false
