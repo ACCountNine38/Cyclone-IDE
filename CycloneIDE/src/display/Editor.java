@@ -15,12 +15,13 @@ import javax.swing.JTabbedPane;
 
 public class Editor extends Perspective {
 	
+	//Panel dimensions and position
 	private static int orginX = (int) (Perspective.screenWidth/4 + 25);
 	private static int orginY = 25;
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
 	private static int height = (int) (Perspective.screenHeight/3*2 - 25);
 	
-	private JTabbedPane tabbedPane = new JTabbedPane();
+	private JTabbedPane tabbedPane = new JTabbedPane(); //Tabbed pane
 	
 	private IDEInterface ide; //IDEInterface is passed into the editor
 	
@@ -46,6 +47,7 @@ public class Editor extends Perspective {
 	//This method creates a new tab for a class file
 	public void addTab(Class classButton) {
 		
+		//Add the text area to the tabbed pane and select the new tab
 		tabbedPane.addTab(classButton.getClassName(), classButton.getEditorTextAreaScroll());
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 		
@@ -54,6 +56,7 @@ public class Editor extends Perspective {
 		if(classButton.getTab().getCloseButton().getActionListeners().length > 0)
 			classButton.getTab().getCloseButton().removeActionListener(classButton.getTab().getCloseButton().getActionListeners()[0]);
 		
+		//Add the action listener and set up the tab component that allows the user to close the tab
 		classButton.getTab().getCloseButton().addActionListener(this);
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, classButton.getTab());
 		
@@ -67,26 +70,22 @@ public class Editor extends Perspective {
 			return;
 		}
 		
+		//Locate the currently selected class
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
 				
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
-					System.out.println("saving class: " + currentClass.getClassName());
 					
 					currentClass.setEdited(false); //Remove asterisk on the tab
 					
 					//Save the text to the file
 					String classText = currentClass.getEditorTextArea().getText();
-					
 					File classFile = new File(String.format("projects/%s/%s", currentClass.getProjectName(), currentClass.getClassName()));
 					try {
 						
 						PrintWriter pr = new PrintWriter(classFile);
 						pr.print(classText);
-						
-						System.out.println("class saved: " + currentClass.getClassName());
-						
 						pr.close();
 						
 					} catch (FileNotFoundException e) {
@@ -111,6 +110,7 @@ public class Editor extends Perspective {
 			return;
 		}
 		
+		//Locate the all of the currently opened classes
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
@@ -124,15 +124,11 @@ public class Editor extends Perspective {
 						
 						//Save the text to the file
 						String classText = currentClass.getEditorTextArea().getText();
-						
 						File classFile = new File(String.format("projects/%s/%s", currentClass.getProjectName(), currentClass.getClassName()));
 						try {
 							
 							PrintWriter pr = new PrintWriter(classFile);
 							pr.print(classText);
-							
-							System.out.println("class saved: " + currentClass.getClassName());
-							
 							pr.close();
 							
 						} catch (FileNotFoundException e) {
@@ -147,10 +143,9 @@ public class Editor extends Perspective {
 			
 		}
 		
-		System.out.println("All tabs saved");
-		
 	}
 	
+	//The method removes the text areas of the deleted class that is passed in
 	public void removeDeletedClassTab(Class currentClass) {
         int i = tabbedPane.indexOfTabComponent(currentClass.getTab());
         if (i != -1) {
@@ -166,6 +161,7 @@ public class Editor extends Perspective {
 			return false;
 		}
 		
+		//Locate the currently opened classes and test if each opened class has been edited
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {

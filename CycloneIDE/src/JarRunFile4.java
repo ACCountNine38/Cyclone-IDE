@@ -1,4 +1,4 @@
-public class JarRunFile0 { 
+public class JarRunFile4 { 
 public static void main(String[] args) {
 int a = 7;
 String b = "t";

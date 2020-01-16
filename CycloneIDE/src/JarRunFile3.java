@@ -1,4 +1,4 @@
-public class JarRunFile0 { 
+public class JarRunFile3 { 
 public static void main(String[] args) {
 int a = 7;
 String b = "t";
@@ -22,6 +22,10 @@ System.out.println("hi");
 while(true) {
 System.out.println("while worked");
 break;
+}
+
+a = a+ 999999;
+System.out.println("dafdga" + a + "" + a);
 }
 
 
