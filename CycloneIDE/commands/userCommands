@@ -15,3 +15,5 @@ method(boolean) bool
 method(String) str
 true true
 false false
+and and
+or or

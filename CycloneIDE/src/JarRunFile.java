@@ -1,13 +1,11 @@
 public class JarRunFile { 
 public static void main(String[] args) {
 int a = 7;
-String b = "t";
-int c = a;
-System.out.println("awd" + a + "" + a);
+boolean b = true;
+int c = 5;
+if(a == 7 && a == 5) {
+System.out.println("if worked");
 }
 
-
-public static void execute() {
-main(null);
 }
 }

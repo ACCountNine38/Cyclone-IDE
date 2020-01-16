@@ -12,8 +12,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
@@ -135,6 +138,7 @@ public class FileExecutionTool {
 			Scanner input = new Scanner(file);
 			
 			executeSuccessful = true;
+			Stack<String> loopContainer = new Stack<String>();
 			
 			while(input.hasNext()) {
 				
@@ -159,6 +163,15 @@ public class FileExecutionTool {
 					
 					if(currentTabNumber < previousTabNumber) {
 						translatedCode += "\n}\n";
+						
+						if(!(line.substring(0, line.indexOf(":")-1).equals(userCommands.get("else_if")) || 
+								line.substring(0, line.indexOf(":")-1).equals(userCommands.get("else"))) && 
+								loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
+							
+							loopContainer.pop();
+							
+						}
+						
 					}
 				
 				}
@@ -198,13 +211,31 @@ public class FileExecutionTool {
 								actionPerformed = true;
 								break;
 								
-							} else if(key.equals(command.getValue()) && (command.getKey().equals("if") || 
-									command.getKey().equals("else_if") || 
-									command.getKey().equals("else"))) {
+							} else if(key.equals(command.getValue()) && (command.getKey().equals("if"))) {
 								
-								ControlStructures.initialize(action, command.getKey());
+								loopContainer.push("if");
+								
+								ControlStructures.initialize(action, command.getKey(), lineNumber);
 								actionPerformed = true;
 								break;
+								
+							} else if(key.equals(command.getValue()) && (command.getKey().equals("else_if") || 
+									command.getKey().equals("else"))) {
+								//System.out.println("here + "  + 1);
+								if(!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
+									//System.out.println("here + "  + 2);
+									ControlStructures.initialize(action, command.getKey(), lineNumber);
+									actionPerformed = true;
+									break;
+									
+								}
+								
+								else {
+									
+									terminate("Invalid Control Structure(check structure and placement): Line " + lineNumber);
+									return;
+									
+								}
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
 								
@@ -315,24 +346,6 @@ public class FileExecutionTool {
 						return;
 					}
 					
-					/*
-					else if(line.charAt(i) == '{') {
-						
-						String methodName = line.substring(0, i).trim();
-						
-						if(methodName.equals("main")) {
-							
-							Function.declareMain();
-							break;
-							
-						} 
-						
-					} else if(line.charAt(i) == '}') {
-						
-						translatedCode += "\n}";
-						
-					}
-					*/
 				}
 				
 				if(!executeSuccessful) {
@@ -373,8 +386,12 @@ public class FileExecutionTool {
 			} 
 			*/
 			
-			translatedCode += "\n\npublic static void execute() {\n"+ 
-					"main(null);\n}\n}";
+			while(!loopContainer.isEmpty()) {
+				translatedCode += "\n}";
+				loopContainer.pop();
+			}
+			
+			translatedCode += "\n}";
 			
 			//printer.println(translatedCode);
 			//System.out.println(translatedCode);
@@ -478,10 +495,6 @@ public class FileExecutionTool {
 	}
 	
 	public static void exportFile(File file) {
-
-
-			
-
 		
 		//Open a file dialog and use it to decide where to save the file to
 	    FileDialog fileDialog = new FileDialog((Frame) null, "Select Where to Save the File");
@@ -560,7 +573,11 @@ public class FileExecutionTool {
 	
 	public static void terminate(String message) {
 		
-		System.out.println(message);
+		if(executeSuccessful) {
+			
+			System.out.println(message);
+			
+		}
 		executeSuccessful = false;
 		
 		
