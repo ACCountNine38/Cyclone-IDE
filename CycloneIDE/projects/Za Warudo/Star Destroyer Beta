@@ -1,21 +1,6 @@
 main:
-	a! = 7
+	a = 7
 	b = t
 	c = a
-	in: a
-	if: a == 6
-		pl: "a is 6" 
-	eif: a == 5
-		pl: "a is 5"
-	else:
-		pl: "a is 7"
 	
-	f: i = 0: i < 5: i++
-		pl: "hi"
-	
-	w: true
-		pl: "while worked"
-		b:
-
-	a + 4 + 3 + 2 
-	pl: "value" 
+	pl: adw 4#a + a
