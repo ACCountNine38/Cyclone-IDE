@@ -21,7 +21,7 @@ import javax.swing.JViewport;
 import objects.Class;
 
 /**
-
+ * SOURCE: https://www.algosome.com/articles/line-numbers-java-jtextarea-jtable.html
  * JComponent used to draw line numbers. This JComponent should be added as a row header view in a JScrollPane. Based upon the 
  * LineNumberModel provided, this component will draw the line numbers as needed.
  * @author Greg Cope

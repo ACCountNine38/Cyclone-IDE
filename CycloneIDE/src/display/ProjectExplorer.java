@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
 import objects.Class;
 import objects.ClassPopup;
 import objects.Project;
-import utils.ProjectPopup;
+import objects.ProjectPopup;
 
 public class ProjectExplorer extends Perspective {
 	

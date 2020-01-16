@@ -32,23 +32,29 @@ public class Project {
 	private JPanel filePanel = new JPanel(); //Within the main panel and stores buttons for each project file
 	private ArrayList<Class> fileButtons = new ArrayList<Class>(); //Contains buttons for each file within the project
 	
+	//Project name and file variables
 	private String projectName;
 	private File filepath; 
-	private boolean open;
+	private boolean open; //Determines whether the classes are revealed within the project explorer
 	
+	//Constructor method
 	public Project(String projectName) {
 		
+		//Set up the variables
 		this.projectName = projectName;
 		this.filepath = new File(String.format("projects/%s", projectName));
 		open = true;
 		
+		//Set up the components
 		setupJComponents();
 		setupFileButtons();
 		
+		//Collapse the project
 		collapse();
 		
 	}
 	
+	//Empty constructor method
 	public Project() {
 	}
 	
@@ -62,7 +68,6 @@ public class Project {
 		projectPanel.setMinimumSize(projectPanel.getSize());
 		projectPanel.setPreferredSize(projectPanel.getSize());
 		projectPanel.setBackground(Color.white);
-		//projectPanel.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
 		
 		//Setup the folder button
 		projectButton.setSize(width, buttonHeight);
@@ -76,8 +81,7 @@ public class Project {
 		projectButton.setContentAreaFilled(false);
 		projectButton.setBorderPainted(false);
 		projectButton.setHorizontalAlignment(SwingConstants.LEFT);
-		
-		projectButton.addMouseListener(new MouseAdapter() {
+		projectButton.addMouseListener(new MouseAdapter() { //Open a popup when the project button is right clicked
 
 			public void mouseClicked(MouseEvent e) {
 				

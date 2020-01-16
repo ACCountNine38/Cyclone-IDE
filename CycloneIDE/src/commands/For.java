@@ -38,7 +38,7 @@ public class For {
 		loopProperties = loopProperties.substring(loopProperties.indexOf(":") + 1);
 		String incrementation = loopProperties.substring(0).trim();
 
-		toJava(counterVariable, condition, incrementation);
+		toJava(counterVariable, condition, incrementation, lineNumber);
 
 		/*
 		 * while(true) {
@@ -66,9 +66,9 @@ public class For {
 
 	}
 
-	private static void toJava(Variable counterVariable, String condition, String incrementation) {
+	private static void toJava(Variable counterVariable, String condition, String incrementation, int lineNumber) {
 
-		FileExecutionTool.translatedCode += "\nfor(" + counterVariable.getDatatype(counterVariable.getValue()) + " "
+		FileExecutionTool.translatedCode += "\nfor(" + counterVariable.getDatatype(counterVariable.getValue(), lineNumber) + " "
 				+ counterVariable.getName() + " = " + counterVariable.getValue() + "; " + condition + "; "
 				+ incrementation + ") {";
 
