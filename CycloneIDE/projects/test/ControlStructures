@@ -1,0 +1,17 @@
+main:
+	
+	a = 7
+	
+	if: a == 6
+		pl: "a is 6" 
+	eif: a == 5
+		pl: "a is 5"
+	else:
+		pl: "a is 7"
+	
+	f: i = 0: i < 5: i++
+		pl: "hi"
+	
+	w: true
+		pl: "while worked"
+		b:

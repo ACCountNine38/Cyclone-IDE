@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 
 import objects.Class;
 import objects.Project;
+import popup.CodingInCyclonePopup;
 import popup.GettingStartedPopup;
 import popup.KeywordCustomizationPopup;
 import popup.UtilityCustomizationPopup;
@@ -140,6 +141,9 @@ public class IDEInterface extends State {
 		} else if (e.getSource() ==  getGettingStartedOption()) {
 			this.setEnabled(false);
 			new GettingStartedPopup(this);
+		} else if (e.getSource() ==  getCodingInCycloneOption()) {
+			this.setEnabled(false);
+			new CodingInCyclonePopup(this);
 		} 
 		
 	}

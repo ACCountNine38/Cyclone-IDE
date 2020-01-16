@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+true true
+false false
+=======
+>>>>>>> refs/remotes/origin/master
 print p
 printl pl
 input in

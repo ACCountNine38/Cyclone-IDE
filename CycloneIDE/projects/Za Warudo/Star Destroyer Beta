@@ -2,6 +2,6 @@ main:
 	a = 7
 	b = true
 	c = 5
-	
+
 	if: a = 7
 		pl: "if worked"
