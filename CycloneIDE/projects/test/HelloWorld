@@ -1,2 +1,13 @@
 main:
-	p: "ac"
+	
+	a = 7
+	b = true
+	c = "tdfsf"
+	d = 7.331
+	
+	x = 0
+	in: x
+	
+	a + 4 + 3 + 2 
+	pl: "value " + a 
+	pl: x

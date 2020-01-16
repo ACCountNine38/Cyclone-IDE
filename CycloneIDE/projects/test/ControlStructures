@@ -1,7 +1,6 @@
 main:
 	
 	a = 7
-	b = t
 	
 	if: a == 6
 		pl: "a is 6" 

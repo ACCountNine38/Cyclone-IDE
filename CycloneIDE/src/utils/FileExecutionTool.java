@@ -394,9 +394,9 @@ public class FileExecutionTool {
 		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
 		System.setProperty("java.home", State.JDKFilepath);
 		
-		//PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-        //System.setOut(printStream);
-        //System.setErr(printStream);
+		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        System.setOut(printStream);
+        System.setErr(printStream);
         File jarFile = new File("src/JarRunFile.java");
 
         try {
@@ -416,7 +416,7 @@ public class FileExecutionTool {
 //        String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
 //        String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
 //        System.setProperty("java.home", jdkPath);
-        /*
+        
         System.out.println(System.getProperty("java.home")); //Java home path
         
         System.out.println(jarFile.getAbsolutePath());
@@ -439,10 +439,6 @@ public class FileExecutionTool {
 		        sjfm.getJavaFileObjects(javaFiles)
 		);
 		compilationTask.call();
-
-
-=======
-		*/
 
 		try {
 			
