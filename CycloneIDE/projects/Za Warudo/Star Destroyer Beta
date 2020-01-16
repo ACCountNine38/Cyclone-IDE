@@ -1,8 +1,10 @@
+awea = 0
 main:
 	a = 7
 	b = t
-	c = b
+	c = a
 	
+	in: a
 	if: a == 6
 		pl: "a is 6"
 	eif: a == 5
