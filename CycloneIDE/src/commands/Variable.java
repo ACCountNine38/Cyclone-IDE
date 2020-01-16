@@ -59,11 +59,6 @@ public class Variable {
 			return "String";
 		} 
 		
-		else if(variable.charAt(0) == '\'' && variable.charAt(variable.length()-1) == '\'' && variable.length() == 3) {
-			value = variable.substring(1, variable.length()-1);
-			return "char";
-		}
-		
 		for(Variable existingVariable: FileExecutionTool.userDeclaredVariables) {
 			if(existingVariable.getName().equals(variable)) {
 				
