@@ -1,11 +1,6 @@
 main:
-<<<<<<< HEAD
-	
-=======
->>>>>>> refs/remotes/origin/master
 	a = 7
-<<<<<<< HEAD
-	b = t
+	b = true
 	
 	if: a == 6
 		pl: "a is 6" 
@@ -14,19 +9,5 @@ main:
 	else:
 		pl: "a is 7"
 	
-	c = a
-	f: i = 0: i < 5: i++
-		pl: "hi"
-	
-	w: true
-		pl: "while worked"
-		b:
-
-	
-=======
-	b = true
-	c = 5
-
 	if: a = 7
 		pl: "if worked"
->>>>>>> refs/remotes/origin/master

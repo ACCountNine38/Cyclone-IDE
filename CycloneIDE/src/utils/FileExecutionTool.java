@@ -164,8 +164,8 @@ public class FileExecutionTool {
 					if(currentTabNumber < previousTabNumber) {
 						translatedCode += "\n}\n";
 						
-						if(!(line.substring(0, line.indexOf(":")-1).equals(userCommands.get("else_if")) || 
-								line.substring(0, line.indexOf(":")-1).equals(userCommands.get("else"))) && 
+						if(!(line.substring(0, line.indexOf(":")).equals(userCommands.get("else_if")) || 
+								line.substring(0, line.indexOf(":")).equals(userCommands.get("else"))) && 
 								loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
 							
 							loopContainer.pop();
