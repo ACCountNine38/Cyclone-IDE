@@ -1,5 +1,6 @@
 package display;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -24,6 +25,9 @@ public class State extends JFrame implements ActionListener {
 	public static final double SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
 	public static boolean darkTheme = false;
+	
+	public static Color utilityColor = new Color(250, 250, 250);
+	public static Color textColor = Color.black;
 	
 	public static File currentFile = new File("tabs/testFile");
 	public static String JDKFilepath;
@@ -52,6 +56,8 @@ public class State extends JFrame implements ActionListener {
 
 		new Images();
 		new FileExecutionTool();
+		
+		
 		customCursor();
 
 	}

@@ -49,7 +49,7 @@ public class ProjectExplorer extends Perspective {
 		
 		this.ide = ide;
 		
-		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, new Color(243, 243, 243));
+		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, State.utilityColor);
 		
 		addJComponents();
 		loadFiles();
@@ -70,7 +70,8 @@ public class ProjectExplorer extends Perspective {
 		
 		//Set up the main panel
 		projectExplorerPanel.setLayout(new BoxLayout(projectExplorerPanel, BoxLayout.Y_AXIS));
-		projectExplorerPanel.setBackground(Color.white);
+		projectExplorerPanel.setBackground(State.utilityColor);
+		projectExplorerPanel.setOpaque(true);
 		JScrollPane consoleTextAreaScroll = new JScrollPane(projectExplorerPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		consoleTextAreaScroll.setBounds(0 , 0, width, height);
 		add(consoleTextAreaScroll); 

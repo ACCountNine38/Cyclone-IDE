@@ -385,24 +385,9 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 			
 			String theme = "";
 			
-			//Read and apply the saved settings
-			try {
-				
-				Scanner input = new Scanner(new File("settings/fonts"));
-				
-				Class.editorFont = new Font(input.next(), Font.PLAIN, input.nextInt());
-				Class.editorTabSize = input.nextInt();
-				Console.consoleFont = new Font(input.next(), Font.PLAIN, input.nextInt());
-				Console.consoleTabSize = input.nextInt();
-				
-				theme = input.next();
-				
-				input.close();
-				
-			} catch(FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			//Apply the saved settings
+			ide.loadUtilitySettings();
+			ide.resetColor();
 			
 			//Apply changes to all editor text areas
 			for(Project currentProject: ide.getProjectExplorer().getProjects()) {

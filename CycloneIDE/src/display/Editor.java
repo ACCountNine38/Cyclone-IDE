@@ -1,19 +1,12 @@
 package display;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
-import javax.swing.JTextArea;
-
 import objects.Class;
 import objects.Project;
-import popup.KeywordCustomizationPopup;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -33,7 +26,7 @@ public class Editor extends Perspective {
 		
 		this.ide = ide;
 		
-		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, new Color(243, 243, 243));
+		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, State.utilityColor);
 		
 		addJComponents();
 		

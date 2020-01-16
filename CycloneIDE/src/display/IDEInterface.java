@@ -15,8 +15,8 @@ import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import objects.Class;
 import objects.Project;
@@ -31,12 +31,12 @@ public class IDEInterface extends State {
 	private Editor editor;
 	private ProjectExplorer projectExplorer;
 	
-	private JLabel background = new JLabel();
+	private static JPanel GUIPanel = new JPanel(null);
 	
 	public IDEInterface() {
 		
 		readJDKFilepath();
-		loadFontSettings();
+		loadUtilitySettings();
 		
 		addPerspectives();
 		
@@ -77,13 +77,17 @@ public class IDEInterface extends State {
 	private void addPerspectives(){
 		
 		console = new Console();
-		add(console);
+		GUIPanel.add(console);
 		
 		editor = new Editor(this);
-		add(editor);
+		GUIPanel.add(editor);
 		
 		projectExplorer = new ProjectExplorer(this);
-		add(projectExplorer);
+		GUIPanel.add(projectExplorer);
+		
+		GUIPanel.setBounds(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
+		GUIPanel.setBackground(State.utilityColor);
+		add(GUIPanel);
 		
 	}
 
@@ -100,7 +104,6 @@ public class IDEInterface extends State {
 		frame.setFocusable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBackground(new Color(225, 225, 225));
 
 		// set frame to appear on screen
 		frame.setVisible(true);
@@ -355,8 +358,57 @@ public class IDEInterface extends State {
         
     }
     
+    public void resetColor() {
+    	
+    	GUIPanel.setBackground(State.utilityColor);
+    	
+    	Console.consoleTextArea.setBackground(State.utilityColor);
+    	Console.consoleTextArea.setForeground(State.textColor);
+    	console.setBackground(State.utilityColor);
+    	
+    	projectExplorer.setBackground(State.utilityColor);
+    	projectExplorer.getProjectExplorerPanel().setBackground(State.utilityColor);
+    	
+    	editor.getTabbedPane().setBackground(State.utilityColor);
+    	editor.setBackground(State.utilityColor);
+    	editor.repaint();
+    	
+    	for(Project currentProject: projectExplorer.getProjects()) {
+    		
+    		currentProject.getProjectButton().setBackground(State.utilityColor);
+    		currentProject.getProjectButton().setForeground(State.textColor);
+    		currentProject.getProjectButton().repaint();
+    		
+    		currentProject.getFilePanel().setBackground(State.utilityColor);
+    		currentProject.getFilePanel().setForeground(State.textColor);
+    		currentProject.getFilePanel().repaint();
+    		
+    		currentProject.getProjectPanel().setBackground(State.utilityColor);
+    		currentProject.getProjectPanel().setForeground(State.textColor);
+    		currentProject.getProjectPanel().repaint();
+    		
+    		for(Class currentClass: currentProject.getFileButtons()) {
+    			currentClass.setBackground(State.utilityColor);
+    			currentClass.setForeground(State.textColor);
+    			currentClass.repaint();
+    			currentClass.getEditorTextArea().setBackground(State.utilityColor);
+    			currentClass.getEditorTextArea().setForeground(State.textColor);
+    			currentClass.getEditorTextArea().repaint();
+    		}
+    		
+    	}
+    	
+    	GUIPanel.repaint();
+    	console.repaint();
+    	projectExplorer.repaint();
+    	editor.getTabbedPane().repaint();
+    	Console.consoleTextArea.repaint();
+    	projectExplorer.getProjectExplorerPanel().repaint();
+    	
+    }
+    
     //This method loads the font settings and the dark and light mode settings
-    private void loadFontSettings() {
+    public void loadUtilitySettings() {
     	
 		try {
 			
@@ -366,6 +418,17 @@ public class IDEInterface extends State {
 			Class.editorTabSize = input.nextInt();
 			Console.consoleFont = new Font(input.next(), Font.PLAIN, input.nextInt());
 			Console.consoleTabSize = input.nextInt();
+			String theme = input.next();
+			
+			if(theme.equals("light")) {
+				State.darkTheme = false;
+				State.utilityColor = new Color(250, 250, 250);
+				State.textColor = Color.black;
+			} else if(theme.equals("dark")) {
+				State.darkTheme = true;
+				State.utilityColor = new Color(30, 30, 30);
+				State.textColor = Color.white;
+			}
 			
 			input.close();
 			
@@ -532,6 +595,10 @@ public class IDEInterface extends State {
 
 	public void setProjectExplorer(ProjectExplorer projectExplorer) {
 		this.projectExplorer = projectExplorer;
+	}
+
+	public static JPanel getGUIPanel() {
+		return GUIPanel;
 	}
     
 }
