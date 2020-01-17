@@ -25,38 +25,46 @@ import utils.LineNumberModelImpl;
 
 public class Class extends JButton {
 	
+	//Button dimensions
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
 	private static int height = (int) (Perspective.screenHeight/3*2 - 25);
 	
+	//Font settings
 	public static Font editorFont = new Font("Consolas", Font.PLAIN, 22);
 	public static int editorTabSize = 2;
 	
+	//Editor text area
 	private JTextArea editorTextArea = new JTextArea();
 	private JScrollPane editorTextAreaScroll = new JScrollPane(editorTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	private LineNumberModelImpl lineNumberModel = new LineNumberModelImpl(editorTextArea);
 	private LineNumberComponent lineNumberComponent = new LineNumberComponent(lineNumberModel);
 	
+	//Class and project names
 	private String projectName;
 	private String className; //Stores the name of the class
 	
 	private TabComponent tab; //Used in the editor tabbed pane
 	
-	private boolean edited;
+	private boolean edited; //Set to true when the pane is edited
 	
+	//Consstructor method
 	public Class(String projectName, String className) {
 		
 		this.projectName = projectName;
 		this.className = className;
 		edited = false;
 		
+		//Set the button text and alignment
 		setText(className); //Set the button text
 		setHorizontalAlignment(SwingConstants.LEFT);
+		
+		//Setup the tab component
 		tab = new TabComponent(className);
 		
 		addJComponents();
 		setupText();
 		
-		
+		//Add mouse listener to display a popup when right clicked
 		addMouseListener(new MouseAdapter() {
 			
 			public void mouseClicked(MouseEvent e) {
@@ -73,13 +81,16 @@ public class Class extends JButton {
 		
 	}
 	
+	//This method adds the required JComponents
 	public void addJComponents() {
 		
+		//Set up the button
 		setIcon(Images.classImage);
 		setOpaque(false);
 		setContentAreaFilled(false);
 		setBorderPainted(false);
 		
+		//Set up the text area
 		editorTextArea.setFont(editorFont);
 		editorTextArea.setForeground(State.textColor);
 		editorTextArea.setBackground(State.utilityColor);
@@ -88,7 +99,7 @@ public class Class extends JButton {
 		editorTextArea.setLineWrap(true);
 		editorTextArea.setWrapStyleWord(true);
 		editorTextArea.setTabSize(editorTabSize);
-		editorTextArea.addKeyListener(new KeyListener() {            
+		editorTextArea.addKeyListener(new KeyListener() { //Insert appropriate number of spaces       
 			
 			@Override
 	        public void keyPressed(KeyEvent e) {
@@ -123,6 +134,7 @@ public class Class extends JButton {
 	        
 	    });
 		
+		//Update the line component and set the edited variable to true when new text is added
 		editorTextArea.getDocument().addDocumentListener(new DocumentListener(){
 
 			@Override
@@ -151,18 +163,12 @@ public class Class extends JButton {
 
 		});
 		
-		//JScrollPane editorTextAreaScroll = new JScrollPane(editorTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		//Set the bounds of the text area
 		editorTextAreaScroll.setBounds(0 , 0, width, height);
-		editorTextAreaScroll.setRowHeaderView(lineNumberComponent);
-		//consoleTextAreaScroll.setViewportView(editorTextArea);
-		//add(consoleTextAreaScroll);
 		
 	}
 	
-	public void setTabText(String fileText) {
-		editorTextArea.setText(fileText);
-	}
-	
+	//This method sets up the text for the text area by reading from the class' file
 	public void setupText() {
 		editorTextArea.setText(FileInput.loadFileAsString(String.format("projects/%s/%s", projectName, className)));
 		setEdited(false);
