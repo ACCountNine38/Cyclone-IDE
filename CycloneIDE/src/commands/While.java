@@ -23,8 +23,18 @@ public class While {
 	// recursive method that breaks down a given condition line and checks for errors in the condition to be translated
 	private static String breakDownCondition(Queue<String> conditionList, String conditionLine, int lineNumber) {
 		
+		// checks if the condition is true or false
+		if(conditionLine.trim().equals(FileExecutionTool.userCommands.get("true")) || conditionLine.equals(FileExecutionTool.userCommands.get("false"))) {
+			
+			// add it to the condition list to be translated
+			conditionList.add(conditionLine.trim());
+			
+			return toConditionString(conditionList);
+			
+		}
+		
 		// checks if the given condition contains the "and" and "or" function to break down the input
-		if(conditionLine.contains(" " + FileExecutionTool.userCommands.get("and") + " ") || 
+		else if(conditionLine.contains(" " + FileExecutionTool.userCommands.get("and") + " ") || 
 				conditionLine.contains(" " + FileExecutionTool.userCommands.get("or") + " ")) {
 			
 			// position of the and/or keywords
@@ -65,7 +75,8 @@ public class While {
 			String token = conditionLine.substring(0, operatorPosition).trim();
 			
 			// checks if the token contains any operators, if not, then output error message
-			if(token.contains(" > ") || token.contains(" >= ") || token.contains(" < ") || token.contains(" <= ") || token.contains(" == ")) {
+			if(token.contains(" > ") || token.contains(" >= ") || token.contains(" < ") || token.contains(" <= ") || 
+					token.contains(" == ") || token.contains(" != ")) {
 				
 				// split the token into components on the left and right of the operator
 				String leftOperator = token.substring(0, token.indexOf(" ")).trim();
@@ -100,34 +111,115 @@ public class While {
 					
 				}
 				
-				// if the data-type of the left and right side of the operator is the same, then this section of condition is valid 
-				if(Variable.getDatatype(leftOperator, lineNumber).equals(Variable.getDatatype(rightOperator, lineNumber))) {
+				// the left and right can be compared if its integer or double
+				if((Variable.getDatatype(leftOperator, lineNumber).equals("int") || Variable.getDatatype(leftOperator, lineNumber).equals("double")) &&
+						(Variable.getDatatype(rightOperator, lineNumber).equals("int") || Variable.getDatatype(rightOperator, lineNumber).equals("double"))) {
 					
 					// add the token to the valid condition list
 					conditionList.add(token);
+					
 					// add the logical operator to the condition list
 					conditionList.add(" " + logicalOperator + " ");
 					
 					// proceed with the next part of the condition by cutting the token from the input condition
 					conditionLine = conditionLine.substring(operatorPosition + operatorSize + 1).trim();
 					
+
 					// if the new condition is empty, then it means that there are no more tokens to check
 					// or else recurse to check the next part of the condition
 					if(!conditionLine.equals("")) {
 						
 						return breakDownCondition(conditionList, conditionLine, lineNumber);
 						
-					} else {
+					} 
+					
+					// convert the condition tokens to java
+					else {
 						
-						// convert the condition tokens to java
 						return toConditionString(conditionList);
+						
+					}
+					
+				}
+				
+				// if the data-type of the left and right side of the operator is the same, then this section of condition is valid 
+				else if(Variable.getDatatype(leftOperator, lineNumber).equals(Variable.getDatatype(rightOperator, lineNumber))) {
+					
+					// checks if the left and right operators are strings
+					if(Variable.getDatatype(leftOperator, lineNumber).equals("String") && Variable.getDatatype(rightOperator, lineNumber).equals("String") &&
+							(token.contains(" == ") || token.contains(" != "))) {
+						
+						// translate code into .equals()
+						if(token.contains("==")) {
+							
+							conditionList.add(token.substring(0, token.indexOf(" ")).trim() + 
+									".equals(" + token.substring(token.indexOf(" ") + 2 + 1, token.length()).trim() + ")");
+							
+						} else if(token.contains("!=")) {
+							
+							conditionList.add("!" +token.substring(0, token.indexOf(" ")).trim() + 
+									".equals(" + token.substring(token.indexOf(" ") + 2 + 1, token.length()).trim() + ")");
+							
+						} else {
+							
+							// other types of comparison operators are not allowed
+							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							return "";
+							
+						}
+						
+						// add the logical operator to the condition list
+						conditionList.add(" " + logicalOperator + " ");
+
+						conditionLine = conditionLine.substring(operatorPosition + operatorSize + 1).trim();
+						
+						if(!conditionLine.equals("")) {
+							
+							return breakDownCondition(conditionList, conditionLine, lineNumber);
+							
+						} else {
+							
+							return toConditionString(conditionList);
+							
+						}
+						
+					} 
+					
+					// if the left and right side values are boolean, then they can only be compared with equal or not equal sign
+					else if(Variable.getDatatype(leftOperator, lineNumber).equals("boolean") && Variable.getDatatype(rightOperator, lineNumber).equals("boolean") &&
+							(token.contains(" == ") || token.contains(" != "))) {
+						
+						// add the token to the valid condition list
+						conditionList.add(token);
+						
+						conditionList.add(" " + logicalOperator + " ");
+						
+						conditionLine = conditionLine.substring(operatorPosition + operatorSize + 1).trim();
+						
+						if(!conditionLine.equals("")) {
+							
+							return breakDownCondition(conditionList, conditionLine, lineNumber);
+							
+						} else {
+							
+							return toConditionString(conditionList);
+							
+						}
+						
+					} 
+					
+					// other cases of values cannot be compared
+					else {
+						
+						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						return "";
 						
 					}
 					
 				} else {
 					
 					// terminate the program if the data-type of both sides of the operator does not match
-					FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 					
 					return "";
 					
@@ -151,7 +243,8 @@ public class While {
 			String token = conditionLine.trim();
 			
 			// checks if the token contains any operators, if not, then output error message
-			if(token.contains(" > ") || token.contains(" >= ") || token.contains(" < ") || token.contains(" <= ") || token.contains(" == ")) {
+			if(token.contains(" > ") || token.contains(" >= ") || token.contains(" < ") || token.contains(" <= ") 
+					|| token.contains(" == ") || token.contains(" != ")) {
 				
 				// break down the left and right side of the operators to validate the condition
 				String leftOperator = token.substring(0, token.indexOf(" ")).trim();
@@ -184,17 +277,71 @@ public class While {
 					
 				}
 				
-				// if the left operator and the right operator have the same data-type, then translate the condition to java
-				if(Variable.getDatatype(leftOperator, lineNumber).equals(Variable.getDatatype(rightOperator, lineNumber))) {
+				// the left and right can be compared if its integer or double
+				if((Variable.getDatatype(leftOperator, lineNumber).equals("int") || Variable.getDatatype(leftOperator, lineNumber).equals("double")) &&
+						(Variable.getDatatype(rightOperator, lineNumber).equals("int") || Variable.getDatatype(rightOperator, lineNumber).equals("double"))) {
 					
+					// add the token to the valid condition list
 					conditionList.add(token);
 					
 					return toConditionString(conditionList);
 					
-				} else {
+				}
+				
+				// if the left operator and the right operator have the same data-type, then translate the condition to java
+				else if(Variable.getDatatype(leftOperator, lineNumber).equals(Variable.getDatatype(rightOperator, lineNumber))) {
+
+					// checks if the left and right operators are strings, if it is, then translate into .equals()
+					if(Variable.getDatatype(leftOperator, lineNumber).equals("String") && Variable.getDatatype(rightOperator, lineNumber).equals("String") &&
+							(token.contains(" == ") || token.contains(" != "))) {
+		
+						// translate code into .equals()
+						if(token.contains("==")) {
+							
+							conditionList.add(token.substring(0, token.indexOf(" ")).trim() + 
+									".equals(" + token.substring(token.indexOf(" ") + 2 + 1, token.length()).trim() + ")");
+							
+						} else if(token.contains("!=")) {
+							
+							conditionList.add("!" +token.substring(0, token.indexOf(" ")).trim() + 
+									".equals(" + token.substring(token.indexOf(" ") + 2 + 1, token.length()).trim() + ")");
+							
+						} else {
+							// other types of comparison operators are not allowed
+							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							return "";
+							
+						}
+						
+						return toConditionString(conditionList);
+						
+					} 
 					
-					// terminate the program if the left and right operators does not match
-					FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+					// if the left and right side values are boolean, then they can only be compared with equal or not equal sign
+					else if(Variable.getDatatype(leftOperator, lineNumber).equals("boolean") && Variable.getDatatype(rightOperator, lineNumber).equals("boolean") &&
+							(token.contains(" == ") || token.contains(" != "))) {
+						
+						// add the token to the valid condition list
+						conditionList.add(token);
+						
+						return toConditionString(conditionList);
+						
+					} 
+					
+					// other cases of values cannot be compared
+					else {
+						
+						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						return "";
+						
+					}
+					
+				} 
+				
+				// terminate the program if the left and right operators does not match
+				else {
+					
+					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 					
 					return "";
 					

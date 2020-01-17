@@ -15,11 +15,20 @@ public class Variable {
 	
 	public Variable(String name, String value, boolean isCounterVariable, int lineNumber) {
 		
+		if((int)name.charAt(0) >= 48 && (int)name.charAt(0) <= 57) {
+			
+			FileExecutionTool.terminate("Invalid Variable Name, cannot start with a number: Line " + lineNumber, lineNumber);
+			return;
+			
+		}
+		
 		for(char character: invalidCharacters.toCharArray()) {
 			
 			if(name.contains(character + "")) {
+				
 				FileExecutionTool.terminate("Invalid Variable Name: Line " + lineNumber, lineNumber);
 				return;
+				
 			}
 			
 		}
@@ -35,9 +44,20 @@ public class Variable {
 		
 	}
 	
-	public void calculate(String calculation) {
+	public void calculate(String inputValue, String operator, int lineNumber) {
 		
-		FileExecutionTool.translatedCode += "\n" + name + " = " + name + calculation + ";";
+		if((getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("int")) ||
+				(getDatatype(inputValue, lineNumber).equals("double") && datatype.equals("double"))||
+				(getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("double"))||
+				(getDatatype(inputValue, lineNumber).equals("String") && datatype.equals("String") && operator.equals("+"))) {
+			
+			FileExecutionTool.translatedCode += "\n" + name + " = " + name + " " + operator + " " + inputValue + ";";
+			
+		} else {
+			
+			FileExecutionTool.terminate("Invalid Syntax. Unmatching Datatype/Value: Line " + lineNumber, lineNumber);
+			
+		}
 		
 	}
 
@@ -106,8 +126,6 @@ public class Variable {
 			return;
 		}
 		
-		//FileExecutionTool.translatedCode += "\ntry { ";
-		
 		if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("int") && datatype.equals("int")) {
 			int testValue = Integer.parseInt(value);
 			this.value = testValue + "";
@@ -127,7 +145,7 @@ public class Variable {
 			
 		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("String") && datatype.equals("String")) {
 			
-			this.value = value;
+			this.value = value.substring(1, value.length());
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else {
@@ -161,7 +179,7 @@ public class Variable {
 			
 		} else {
 			
-			FileExecutionTool.translatedCode += "\nString " + name + " = \"" + value + "\";";
+			FileExecutionTool.translatedCode += "\nString " + name + " = " + value + ";";
 			
 		}
 		

@@ -1,7 +1,8 @@
 a = 7
 b = true
 c = 5
-
+d = "chad"
+ 
 loop: a < 100
 	a + 1
 	if: a == 9
@@ -13,6 +14,6 @@ loop: a < 100
 	else: a == 12
 		p: "hello 4" 
 
-p: "hello"
+p: c
 
 	
