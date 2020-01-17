@@ -17,6 +17,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 
 import objects.Class;
 import objects.Project;
@@ -132,10 +134,6 @@ public class IDEInterface extends State {
 		} else if(e.getSource() == getUtilityCustomizationOption()) { //Customize utility options
 			this.setEnabled(false);
 			new UtilityCustomizationPopup(this);
-		} else if (e.getSource() ==  getGenerateMainOption()) { //Generate the main method
-			editor.generateMainMethod();
-		} else if (e.getSource() ==  getGenerateForOption()) { //Generate a for loop
-			editor.generateForLoop();
 		} else if (e.getSource() ==  getGettingStartedOption()) { //Show starting help screen
 			this.setEnabled(false);
 			new GettingStartedPopup(this);
@@ -391,6 +389,7 @@ public class IDEInterface extends State {
     			currentClass.setBackground(State.utilityColor);
     			currentClass.setForeground(State.textColor);
     			currentClass.repaint();
+    			currentClass.getEditorTextArea().setCaretColor(State.textColor);
     			currentClass.getEditorTextArea().setBackground(State.utilityColor);
     			currentClass.getEditorTextArea().setForeground(State.textColor);
     			currentClass.getEditorTextArea().repaint();
@@ -502,11 +501,7 @@ public class IDEInterface extends State {
         fileChooser.setAcceptAllFileFilterUsed(false);
         
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
-        	System.out.println("getCurrentDirectory(): " +  fileChooser.getCurrentDirectory());
-        	System.out.println("getSelectedFile() : " +  fileChooser.getSelectedFile().getAbsolutePath());
         	JOptionPane.showMessageDialog(this, String.format("JDK Filepath set to: %s", fileChooser.getSelectedFile().getAbsolutePath()));
-        } else {
-        	System.out.println("No Selection ");
         }
         
         String file = fileChooser.getSelectedFile().getAbsolutePath();

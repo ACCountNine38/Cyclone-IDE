@@ -28,35 +28,38 @@ import assets.Images;
 import display.IDEInterface;
 import display.State;
 
-public class GettingStartedPopup extends JFrame implements DisplayPopups, ActionListener {
+public class GettingStartedPopup extends JFrame implements DisplayPopups {
 	
+	//Dimensions
 	private static final int WIDTH = (int) (State.SCREEN_WIDTH / 3 * 2);
 	private static final int HEIGHT = (int) (State.SCREEN_HEIGHT / 3 * 2);
 	
-	private JButton exit = new JButton("EXIT");
-	private JLabel helpLabel = new JLabel(); //Main panel
+	private JLabel helpLabel = new JLabel(); //Background label
 	
-	private IDEInterface ide;
+	private IDEInterface ide; //IDEInterface is passed in to the constructor
 	
 	//Constructor method
 	public GettingStartedPopup(IDEInterface ide) {
 		
-		this.ide = ide;
+		this.ide = ide; 
 		
+		//Set up the frame and help label
 		addJComponents();
 		frameSetup();
 		
+		//Enable the ide before closing
 		addWindowListener(new WindowAdapter() {
 			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				ide.setEnabled(true); //Enable the ide before closing
+				ide.setEnabled(true); 
 			}
 			
 		});
 		
 	}
 	
+	//This method adds the help label to the frame
 	@Override
 	public void addJComponents() {
 		
@@ -92,14 +95,13 @@ public class GettingStartedPopup extends JFrame implements DisplayPopups, Action
 		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		if(e.getSource() == exit) {
-			ide.setEnabled(true); //Enable the ide before closing
-			this.dispose();
-		}
-		
+	//Getter and setter
+	public IDEInterface getIde() {
+		return ide;
+	}
+
+	public void setIde(IDEInterface ide) {
+		this.ide = ide;
 	}
 
 }

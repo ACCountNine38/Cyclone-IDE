@@ -148,6 +148,10 @@ public class Variable {
 		}
 		
 	}
+	
+	public String getDatatype() {
+		return datatype;
+	}
 
 	// getters and setters
 	public void setDatatype(String datatype) {

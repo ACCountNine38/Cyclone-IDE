@@ -1,5 +1,24 @@
-main:
-	
-	a = 7
+pl: "hi"
+pl: "ZA WARUDO"
 
-	
+a = 0
+s = 0.11
+
+pl: a
+
+if: a < 1
+	a - 10
+
+pl: a
+
+loop: a < 50
+	b = 7
+	a + 1
+	pl: a
+	if: s == 1.0 or a == 10
+		p: "fadfafa"
+	eif: a < 10
+		pl: s
+
+pl: "finished"
+

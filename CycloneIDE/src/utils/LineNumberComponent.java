@@ -27,20 +27,16 @@ import objects.Class;
  * @author Greg Cope
  *
  */
-
 public class LineNumberComponent extends JComponent{
 	
-	static final long serialVersionUID = 432143214L;
 	public static final int LEFT_ALIGNMENT = 0;
 	public static final int RIGHT_ALIGNMENT = 1;
 	public static final int CENTER_ALIGNMENT = 2;
 
 	//pixel padding on left and right
-
 	private static final int HORIZONTAL_PADDING = 1;
 
 	//pixel padding on left and right
-
 	private static final int VERTICAL_PADDING = 3;
 
 	private int alignment = LEFT_ALIGNMENT;

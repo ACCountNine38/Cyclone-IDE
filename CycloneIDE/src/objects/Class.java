@@ -56,6 +56,8 @@ public class Class extends JButton {
 		
 		//Set the button text and alignment
 		setText(className); //Set the button text
+		setBackground(State.utilityColor);
+		setForeground(State.textColor);
 		setHorizontalAlignment(SwingConstants.LEFT);
 		
 		//Setup the tab component
@@ -91,6 +93,7 @@ public class Class extends JButton {
 		setBorderPainted(false);
 		
 		//Set up the text area
+		editorTextArea.setCaretColor(State.textColor);
 		editorTextArea.setFont(editorFont);
 		editorTextArea.setForeground(State.textColor);
 		editorTextArea.setBackground(State.utilityColor);
@@ -104,19 +107,21 @@ public class Class extends JButton {
 			@Override
 	        public void keyPressed(KeyEvent e) {
 				
-	            if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-	            	int currentPosition = editorTextArea.getCaretPosition();
+	            if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+	            	e.consume();
+	            	//int currentPosition = editorTextArea.getCaretPosition();
 	            	editorTextArea.insert("\n", editorTextArea.getCaretPosition());
 	            	
 	            	int requiredTabs = FileExecutionTool.insertTabs(editorTextArea.getText().substring(0, editorTextArea.getCaretPosition()));
 	            	
 	            	for(int i = 0; i < requiredTabs; i++) {
 	            		
+	            		System.out.println("");
 	            		editorTextArea.insert("\t", editorTextArea.getCaretPosition());
 	            		
 	            	}
 	            	
-	            	editorTextArea.setCaretPosition(currentPosition);
+	            	//editorTextArea.setCaretPosition(currentPosition);
 	            	
 	            }
 	            
