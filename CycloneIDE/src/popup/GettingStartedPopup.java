@@ -38,6 +38,7 @@ public class GettingStartedPopup extends JFrame implements DisplayPopups, Action
 	
 	private IDEInterface ide;
 	
+	//Constructor method
 	public GettingStartedPopup(IDEInterface ide) {
 		
 		this.ide = ide;
@@ -69,11 +70,6 @@ public class GettingStartedPopup extends JFrame implements DisplayPopups, Action
 		
 		helpLabel.setBounds(0, 0, WIDTH, HEIGHT);
 		add(helpLabel);
-		
-		//Setup the buttons
-//		exit.setBounds(WIDTH - 200, HEIGHT - 100, 150, 50);
-//		exit.addActionListener(this);
-//		add(exit);
 
 	}
 
@@ -89,7 +85,6 @@ public class GettingStartedPopup extends JFrame implements DisplayPopups, Action
 		setLayout(null);
 		setFocusable(true);
 		setLocationRelativeTo(null);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(new Color(225, 225, 225));
 
 		// set frame to appear on screen

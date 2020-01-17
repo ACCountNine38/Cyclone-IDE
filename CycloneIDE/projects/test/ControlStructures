@@ -1,6 +1,7 @@
 main:
 	
 	a = 7
+	a = "f"
 	
 	if: a == 6
 		pl: "a is 6" 

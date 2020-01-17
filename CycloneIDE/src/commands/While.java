@@ -163,7 +163,7 @@ public class While {
 						} else {
 							
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 							return "";
 							
 						}
@@ -211,7 +211,7 @@ public class While {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 						return "";
 						
 					}
@@ -219,7 +219,7 @@ public class While {
 				} else {
 					
 					// terminate the program if the data-type of both sides of the operator does not match
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 					
 					return "";
 					
@@ -228,7 +228,7 @@ public class While {
 			} else {
 				
 				// if there are no operators, then program terminates
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 				
 				return "";
 				
@@ -308,7 +308,7 @@ public class While {
 							
 						} else {
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 							return "";
 							
 						}
@@ -331,7 +331,7 @@ public class While {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 						return "";
 						
 					}
@@ -341,7 +341,7 @@ public class While {
 				// terminate the program if the left and right operators does not match
 				else {
 					
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 					
 					return "";
 					
@@ -350,7 +350,7 @@ public class While {
 			} else {
 				
 				// terminate the program if operators(==, >=, <, etc.) are not found within the input condition
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 				
 				return "";
 				

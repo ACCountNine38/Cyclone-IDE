@@ -160,7 +160,7 @@ public class ControlStructures {
 						} else {
 							
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 							return "";
 							
 						}
@@ -208,7 +208,7 @@ public class ControlStructures {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 						return "";
 						
 					}
@@ -216,7 +216,7 @@ public class ControlStructures {
 				} else {
 					
 					// terminate the program if the data-type of both sides of the operator does not match
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 					
 					return "";
 					
@@ -225,8 +225,7 @@ public class ControlStructures {
 
 			} else {
 				
-				// if there are no operators, then program terminates
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 				
 				return "";
 				
@@ -306,7 +305,7 @@ public class ControlStructures {
 							
 						} else {
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 							return "";
 							
 						}
@@ -314,7 +313,7 @@ public class ControlStructures {
 						return toConditionString(conditionList);
 						
 					} 
-					
+				
 					// if the left and right side values are boolean, then they can only be compared with equal or not equal sign
 					else if(Variable.getDatatype(leftOperator, lineNumber).equals("boolean") && Variable.getDatatype(rightOperator, lineNumber).equals("boolean") &&
 							(token.contains(" == ") || token.contains(" != "))) {
@@ -329,7 +328,7 @@ public class ControlStructures {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 						return "";
 						
 					}
@@ -339,7 +338,7 @@ public class ControlStructures {
 				// terminate the program if the left and right operators does not match
 				else {
 					
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
 					
 					return "";
 					
@@ -347,8 +346,7 @@ public class ControlStructures {
 				
 			} else {
 				
-				// terminate the program if operators(==, >=, <, etc.) are not found within the input condition
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 				
 				return "";
 				

@@ -61,7 +61,7 @@ public class Print {
 					
 				} else {
 					
-					FileExecutionTool.terminate("RuntimeException(print statement): Line " + lineNumber);
+					FileExecutionTool.terminate("RuntimeException(print statement): Line " + lineNumber, lineNumber);
 					return "";
 					
 				}
@@ -105,7 +105,7 @@ public class Print {
 					
 				} else {
 					
-					FileExecutionTool.terminate("RuntimeException(print statement): Line " + lineNumber);
+					FileExecutionTool.terminate("RuntimeException(print statement): Line " + lineNumber, lineNumber);
 					return "";
 					
 				}

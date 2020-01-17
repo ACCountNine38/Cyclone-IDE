@@ -17,7 +17,7 @@ public class Variable {
 		
 		if((int)name.charAt(0) >= 48 && (int)name.charAt(0) <= 57) {
 			
-			FileExecutionTool.terminate("Invalid Variable Name, cannot start with a number: Line " + lineNumber);
+			FileExecutionTool.terminate("Invalid Variable Name, cannot start with a number: Line " + lineNumber, lineNumber);
 			return;
 			
 		}
@@ -25,8 +25,10 @@ public class Variable {
 		for(char character: invalidCharacters.toCharArray()) {
 			
 			if(name.contains(character + "")) {
-				FileExecutionTool.terminate("Invalid Variable Name, cannot have symbols: Line " + lineNumber);
+				
+				FileExecutionTool.terminate("Invalid Variable Name: Line " + lineNumber, lineNumber);
 				return;
+				
 			}
 			
 		}
@@ -53,7 +55,7 @@ public class Variable {
 			
 		} else {
 			
-			FileExecutionTool.terminate("Invalid Syntax. Unmatching Datatype/Value: Line " + lineNumber);
+			FileExecutionTool.terminate("Invalid Syntax. Unmatching Datatype/Value: Line " + lineNumber, lineNumber);
 			
 		}
 		
@@ -89,7 +91,7 @@ public class Variable {
 		
 		if(FileExecutionTool.executeSuccessful) {
 			
-			FileExecutionTool.terminate("Unrecongnizable Datatype/Value: Line " + lineNumber);
+			FileExecutionTool.terminate("Unrecongnizable Datatype: Line " + lineNumber, lineNumber);
 			
 		}
 		
@@ -118,7 +120,7 @@ public class Variable {
 	public void setValue(String value, int lineNumber) {
 		
 		if(getDatatype(value, lineNumber) == null) {
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber));
+			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber), lineNumber);
 			return;
 		}
 		
@@ -147,7 +149,7 @@ public class Variable {
 		} else {
 			
 			FileExecutionTool.executeSuccessful = false;
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber));
+			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber), lineNumber);
 			
 		}
 		

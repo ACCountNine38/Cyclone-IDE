@@ -35,6 +35,7 @@ import commands.While;
 import javax.tools.JavaCompiler.CompilationTask;
 
 import display.Console;
+import display.Editor;
 import display.State;
 
 public class FileExecutionTool {
@@ -236,7 +237,7 @@ public class FileExecutionTool {
 								
 								else {
 									
-									terminate("Invalid Control Structure(check structure and placement): Line " + lineNumber);
+									terminate("Invalid Control Structure(check structure and placement): Line " + lineNumber, lineNumber);
 									return;
 									
 								}
@@ -260,7 +261,7 @@ public class FileExecutionTool {
 									
 								} else {
 									
-									terminate("No Loop to Break Out: Line " + lineNumber);
+									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
 									return;
 									
 								}
@@ -275,7 +276,7 @@ public class FileExecutionTool {
 									
 								} else {
 									
-									terminate("No Loop to Break Out: Line " + lineNumber);
+									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
 									return;
 									
 								}
@@ -296,7 +297,7 @@ public class FileExecutionTool {
 							
 						} else {
 							
-							terminate("Unknown Keyword: Line " + lineNumber);
+							terminate("Unknown Keyword: Line " + lineNumber, lineNumber);
 							
 						}
 						
@@ -505,6 +506,14 @@ public class FileExecutionTool {
 			e.printStackTrace();
 		}
 		
+		//Delete the new JarRunFile
+		if(jarFile.exists()) {
+			System.out.println(String.format("JavaRunFile%d.java was deleted", State.numExecutions));
+			jarFile.delete();
+		} else {
+			System.out.println("Couldn't delete java file");
+		}
+		
 		State.numExecutions++;
 		
 	}
@@ -578,11 +587,13 @@ public class FileExecutionTool {
 		
 	}
 	
-	public static void terminate(String message) {
+	
+	public static void terminate(String message, int lineNumber) {
 		
 		if(executeSuccessful) {
 			
-			System.out.println(message);
+			System.out.println(message + "" +lineNumber);
+			Editor.highlightLine(lineNumber);
 			
 		}
 		

@@ -1,0 +1,13 @@
+print p
+printl pl
+input in
+loop loop
+break b
+continue c
+if if
+else_if eif
+else else
+true true
+false false
+and and
+or or
