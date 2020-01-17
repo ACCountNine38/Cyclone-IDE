@@ -14,7 +14,7 @@ public class Variable {
 	private String name;
 	private String value;
 	
-	// characters that cannot be contained in a variabnle
+	// characters that cannot be contained in a variable
 	private String invalidCharacters = "~!@#$%^&*()_+`-= {}|[]\\:\";\'<>?,./";
 	
 	// constructor of variable checks if the input name and values are valid and sets the attributes
