@@ -32,6 +32,7 @@ import objects.Project;
 
 public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, ActionListener {
 	
+	//Dimensions
 	private static final int WIDTH = DisplayPopups.POPUP_WIDTH - 100;
 	private static final int HEIGHT = DisplayPopups.POPUP_HEIGHT - 200;
 	
@@ -76,16 +77,18 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 		this.ide = ide;
 		
+		//Set up the frame
 		addJComponents();
 		frameSetup();
 		addFontOptions();
 		readCurrentFont();
 		
+		//Enable the ide before closing
 		addWindowListener(new WindowAdapter() {
 			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				ide.setEnabled(true); //Enable the ide before closing
+				ide.setEnabled(true); 
 			}
 			
 		});
@@ -319,6 +322,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 		try {
 			
+			//Read from the current font file
 			Scanner input = new Scanner(new File("settings/fonts"));
 			
 			//Display settings to respective components on screen
@@ -414,13 +418,6 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 			
 			Console.consoleTextArea.setFont(Console.consoleFont); //Change the console font
 			Console.consoleTextArea.setTabSize(Console.consoleTabSize); //Change the console tab size
-			
-			//Apply dark theme changes
-			if(theme.equals("light")) {
-				
-			} else if(theme.equals("dark")) {
-				
-			}
 			
 			//Close the popup
 			ide.setEnabled(true); //Enable the ide before closing

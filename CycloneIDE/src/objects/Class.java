@@ -91,6 +91,7 @@ public class Class extends JButton {
 		setBorderPainted(false);
 		
 		//Set up the text area
+		editorTextArea.setCaretColor(State.textColor);
 		editorTextArea.setFont(editorFont);
 		editorTextArea.setForeground(State.textColor);
 		editorTextArea.setBackground(State.utilityColor);
@@ -112,6 +113,7 @@ public class Class extends JButton {
 	            	
 	            	for(int i = 0; i < requiredTabs; i++) {
 	            		
+	            		System.out.println("");
 	            		editorTextArea.insert("\t", editorTextArea.getCaretPosition());
 	            		
 	            	}

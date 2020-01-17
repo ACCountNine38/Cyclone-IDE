@@ -78,11 +78,13 @@ public class Variable {
 		return "String";
 		
 	}
+	
+	public String getDatatype() {
+		return datatype;
+	}
 
 	public void setDatatype(String datatype) {
-		
 		this.datatype = datatype;
-		
 	}
 
 	public String getName() {

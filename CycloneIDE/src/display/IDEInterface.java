@@ -17,6 +17,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 
 import objects.Class;
 import objects.Project;
@@ -391,6 +393,7 @@ public class IDEInterface extends State {
     			currentClass.setBackground(State.utilityColor);
     			currentClass.setForeground(State.textColor);
     			currentClass.repaint();
+    			currentClass.getEditorTextArea().setCaretColor(State.textColor);
     			currentClass.getEditorTextArea().setBackground(State.utilityColor);
     			currentClass.getEditorTextArea().setForeground(State.textColor);
     			currentClass.getEditorTextArea().repaint();

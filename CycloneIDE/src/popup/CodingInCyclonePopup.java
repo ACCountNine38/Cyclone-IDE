@@ -30,18 +30,22 @@ import display.State;
 
 public class CodingInCyclonePopup extends JFrame implements DisplayPopups, ActionListener {
 	
+	//Dimensions
 	private static final int WIDTH = (int) (State.SCREEN_WIDTH / 3 * 2);
 	private static final int HEIGHT = (int) (State.SCREEN_HEIGHT / 3 * 2);
 	
+	//Forward and back buttons
 	private JButton continueButton = new JButton("Continue");
 	private JButton backButton = new JButton("Back");
+	
+	//Background labels
 	private JLabel helpLabel1 = new JLabel(); 
 	private JLabel helpLabel2 = new JLabel(); 
 	private JLabel helpLabel3 = new JLabel(); 
 	
-	private int screenNum = 0;
+	private int screenNum = 0; //Tracks which label should be displayed
 	
-	private IDEInterface ide;
+	private IDEInterface ide; //IDEInterface is passed in to the constructor
 	
 	public CodingInCyclonePopup(IDEInterface ide) {
 		
@@ -143,9 +147,9 @@ public class CodingInCyclonePopup extends JFrame implements DisplayPopups, Actio
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if(e.getSource() == continueButton) {
+		if(e.getSource() == continueButton) { //Move forward one page
 			setScreen(screenNum + 1);
-		} else if(e.getSource() == backButton) {
+		} else if(e.getSource() == backButton) { //Move back one page
 			setScreen(screenNum - 1);
 		}
 		
