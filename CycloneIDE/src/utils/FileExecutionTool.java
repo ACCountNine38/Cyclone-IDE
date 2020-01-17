@@ -372,36 +372,6 @@ public class FileExecutionTool {
 			
 			translatedCode += "\n}\n";
 			
-			/*
-			if(executeSuccessful) {
-				
-				StyledDocument doc = Console.consoleTextArea.getStyledDocument();
-				Style greenStyle = Console.consoleTextArea.addStyle("Green", null);
-				Style blackStyle = Console.consoleTextArea.addStyle("Black", null);
-			    StyleConstants.setForeground(greenStyle, Color.GREEN);
-
-			    // Inherits from "Red"; makes text red and underlined
-			    StyleConstants.setUnderline(greenStyle, true);
-			    
-			    try {
-			    	
-			    	if(!Console.consoleTextArea.getText().isEmpty()) {
-			    		
-			    		doc.insertString(doc.getLength(), "\n", greenStyle);
-			    		 
-			    	} 
-			    	
-			    	doc.insertString(doc.getLength(), "BUILD SUCCESSFUL", greenStyle);
-					StyleConstants.setForeground(blackStyle, Color.black);
-					StyleConstants.setUnderline(blackStyle, false);
-					doc.insertString(doc.getLength(), " ", blackStyle);
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
-			    
-			} 
-			*/
-			
 			while(!loopContainer.isEmpty()) {
 				translatedCode += "\n}";
 				loopContainer.pop();
@@ -409,30 +379,19 @@ public class FileExecutionTool {
 			
 			translatedCode += "\n}";
 			
-			//printer.println(translatedCode);
-			//System.out.println(translatedCode);
-			//Console.consoleTextArea.setText(translatedCode);
-			
-			//JarRunFile.execute();
-			
-			//printer.close();
-			
 		} catch (FileNotFoundException e) {
 			
 			e.printStackTrace();
 			
 		}
 		
-		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
-		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
-		
-		//System.setProperty("java.home", State.JDKFilepath);
-		
+		//Switch console output to the console text area
 		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
         System.setOut(printStream);
         System.setErr(printStream);
+        
+        //Write java code to a file
         File jarFile = new File(String.format("src/JarRunFile%d.java", State.numExecutions));
-		//File jarFile = new File(String.format("src/JarRunFile.java"));
         try {
         	
             PrintWriter pr = new PrintWriter(jarFile);
@@ -446,20 +405,9 @@ public class FileExecutionTool {
             e.printStackTrace();
         }
         
-        //Set to use JDK
-//        String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
-//        String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
-//        System.setProperty("java.home", jdkPath);
-        
-        //System.out.println(System.getProperty("java.home")); //Java home path
-        
-        //System.out.println(jarFile.getAbsolutePath());
-        
+        //Specify the bin path for the compiler
         String regex = String.format("\\s*\\bsrc\\\\JarRunFile%d.java\\b\\s*", State.numExecutions);
-        //String regex = String.format("\\s*\\bsrc\\\\JarRunFile.java\\b\\s*");
         String binPath = jarFile.getAbsolutePath().replaceAll(regex, "bin");
-        
-        //System.out.println(binPath);
         
 		//SOURCE: https://stackoverflow.com/questions/2028193/specify-output-path-for-dynamic-compilation/7532171
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
@@ -467,7 +415,6 @@ public class FileExecutionTool {
 
 		String[] options = new String[] { "-d", binPath };
 		File[] javaFiles = new File[] { new File(String.format("src/JarRunFile%d.java", State.numExecutions)) };
-		//File[] javaFiles = new File[] { new File(String.format("src/JarRunFile.java")) };
 
 		CompilationTask compilationTask = javaCompiler.getTask(null, null, null,
 		        Arrays.asList(options),
@@ -476,12 +423,12 @@ public class FileExecutionTool {
 		);
 		compilationTask.call();
 		
-	
+		
+		//Call the main method
 		try {
 			
 			String[] params = null;
 			Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions));
-			//Class<?> cls = Class.forName(String.format("JarRunFile"));
 
 			Method method;
 			try {
@@ -512,16 +459,14 @@ public class FileExecutionTool {
 		
 		//Delete the new JarRunFile
 		if(jarFile.exists()) {
-			System.out.println(String.format("JavaRunFile%d.java was deleted", State.numExecutions));
 			jarFile.delete();
-		} else {
-			System.out.println("Couldn't delete java file");
 		}
 		
-		State.numExecutions++;
+		State.numExecutions++; //Increment the number of executions
 		
 	}
 	
+	//This method allows the user to export cyclone code as java code
 	public static void exportFile(File file) {
 		
 		Console.consoleTextArea.setText("");
@@ -800,6 +745,7 @@ public class FileExecutionTool {
 			
 			translatedCode += "\n}";
 			
+			//Import a scanner if it's needed
 			if(inputUsed) {
 				
 				String scannerImport = "import java.util.Scanner;\n\n" + translatedCode;
@@ -812,8 +758,6 @@ public class FileExecutionTool {
 			e.printStackTrace();
 			
 		}
-
-
 		
 		//Open a file dialog and use it to decide where to save the file to
 	    FileDialog fileDialog = new FileDialog((Frame) null, "Select Where to Save the File");
