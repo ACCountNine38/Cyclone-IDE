@@ -16,6 +16,17 @@ public class While {
 	public static void initialize(String condition, int lineNumber) {
 		
 		// translate the code to Java after error checking
+		//While can only run a max of 10000 times
+		FileExecutionTool.translatedCode += String.format("\nint lineNumberWhileLimit%d = 0;\nwhile(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {\n"
+				+ "if(lineNumberWhileLimit%d >= 10000){\nSystem.out.println(\"Loop limit reached at line: %d.  Loop terminated.\");\nbreak;\n}\nlineNumberWhileLimit%d++;\n", 
+				lineNumber, lineNumber, lineNumber, lineNumber); 
+		
+	}
+	
+	// method that initializes the loop given the condition and line number
+	public static void initializeForExport(String condition, int lineNumber) {
+		
+		// translate the code to Java after error checking
 		FileExecutionTool.translatedCode += "\nwhile(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {";
 		
 	}

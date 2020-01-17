@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-a = awdawd
-=======
-a = 0
+p = 0
+true = 0
 
-loop: a == 0
-	pl: "x"
->>>>>>> refs/remotes/origin/master
+p: true
