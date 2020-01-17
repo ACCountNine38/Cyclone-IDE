@@ -2,6 +2,9 @@ package commands;
 
 import utils.FileExecutionTool;
 
+/*
+ * object class that stores an user declared variable
+ */
 public class Variable {
 	
 	private String datatype;

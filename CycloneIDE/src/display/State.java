@@ -18,21 +18,25 @@ import objects.Class;
 import objects.Project;
 import utils.FileExecutionTool;
 
+/*
+ * The parent class of all states, top of the class hierarchy
+ * contains default information to be used for other states and abstract methods
+ */
 public class State extends JFrame implements ActionListener {
 
-	// final variables
+	// screen dimension variables
 	public static final double SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	public static final double SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
+	// global variables
 	public static boolean darkTheme = false;
-	
 	public static Color utilityColor = new Color(250, 250, 250);
 	public static Color textColor = Color.black;
-	
 	public static File currentFile = new File("tabs/testFile");
 	public static String JDKFilepath;
 	public static int numExecutions = 0;
 	
+	// menu components
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
 	private JMenuItem newProjectOption = new JMenuItem("New Project");
@@ -54,11 +58,11 @@ public class State extends JFrame implements ActionListener {
 	private JMenuItem gettingStartedOption = new JMenuItem("Getting Started");
 	private JMenuItem codingInCycloneOption = new JMenuItem("Coding in Cyclone");
 	
+	// constructor of the State class initializes the images, frame, and enables the IDE to execute file
 	public State() {
 
 		new Images();
 		new FileExecutionTool();
-		
 		
 		customCursor();
 
@@ -218,6 +222,7 @@ public class State extends JFrame implements ActionListener {
 		
 	}
 
+	// getters and setters
 	public JMenu getFileMenu() {
 		return fileMenu;
 	}
