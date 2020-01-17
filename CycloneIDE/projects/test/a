@@ -1,2 +1,4 @@
 main:
+	
+	a = ;
 	pl: "hello world"

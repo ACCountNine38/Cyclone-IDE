@@ -15,7 +15,7 @@ public class Variable {
 		for(char character: invalidCharacters.toCharArray()) {
 			
 			if(name.contains(character + "")) {
-				FileExecutionTool.terminate("Invalid Variable Name: Line " + lineNumber);
+				FileExecutionTool.terminate("Invalid Variable Name: Line " + lineNumber, lineNumber);
 				return;
 			}
 			
@@ -68,7 +68,7 @@ public class Variable {
 		
 		if(FileExecutionTool.executeSuccessful) {
 			
-			FileExecutionTool.terminate("Unrecongnizable Datatype: Line " + lineNumber);
+			FileExecutionTool.terminate("Unrecongnizable Datatype: Line " + lineNumber, lineNumber);
 			
 		}
 		
@@ -97,7 +97,7 @@ public class Variable {
 	public void setValue(String value, int lineNumber) {
 		
 		if(getDatatype(value, lineNumber) == null) {
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber));
+			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber), lineNumber);
 			return;
 		}
 		
@@ -128,7 +128,7 @@ public class Variable {
 		} else {
 			
 			FileExecutionTool.executeSuccessful = false;
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber));
+			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber), lineNumber);
 			
 		}
 		

@@ -71,11 +71,9 @@ public class IDEInterface extends State {
 			
 		});
 		
-		//TEST
-		//new KeywordCustomizationPopup();
-		
 	}
 	
+	//This method adds the project explorer, console, and editor to the frame
 	private void addPerspectives(){
 		
 		console = new Console();
@@ -116,32 +114,32 @@ public class IDEInterface extends State {
 	public void actionPerformed(ActionEvent e) {
 		
 		//Create a new project or class
-		if(e.getSource() == getNewProjectOption()) {
+		if(e.getSource() == getNewProjectOption()) { //Create a new project
 			createProject();
-		} else if(e.getSource() == getNewClassOption()) {
+		} else if(e.getSource() == getNewClassOption()) { //Create a new class
 			createClass();
-		} else if(e.getSource() == getSaveCurrentTabOption()) {
+		} else if(e.getSource() == getSaveCurrentTabOption()) { //Save the current tab
 			editor.saveCurrentTab();
-		} else if (e.getSource() ==  getSaveAllTabsOption()) {
+		} else if (e.getSource() ==  getSaveAllTabsOption()) { //Save all opened tabs
 			editor.saveAllTabs();
-		} else if (e.getSource() ==  getExportJavaFileOption()) {
+		} else if (e.getSource() ==  getExportJavaFileOption()) { //Export the project as a .java file
 			exportProject();
-		} else if (e.getSource() ==  getSetJDKFilepathOption()) {
+		} else if (e.getSource() ==  getSetJDKFilepathOption()) { //Set the JDK path
 			setJDKFilepath();
-		} else if(e.getSource() == getKeywordCustomizationOption()) {
+		} else if(e.getSource() == getKeywordCustomizationOption()) { //Customize keywords
 			this.setEnabled(false);
 			new KeywordCustomizationPopup(this);
-		} else if(e.getSource() == getUtilityCustomizationOption()) {
+		} else if(e.getSource() == getUtilityCustomizationOption()) { //Customize utility options
 			this.setEnabled(false);
 			new UtilityCustomizationPopup(this);
-		} else if (e.getSource() ==  getGenerateMainOption()) {
+		} else if (e.getSource() ==  getGenerateMainOption()) { //Generate the main method
 			editor.generateMainMethod();
-		} else if (e.getSource() ==  getGenerateForOption()) {
+		} else if (e.getSource() ==  getGenerateForOption()) { //Generate a for loop
 			editor.generateForLoop();
-		} else if (e.getSource() ==  getGettingStartedOption()) {
+		} else if (e.getSource() ==  getGettingStartedOption()) { //Show starting help screen
 			this.setEnabled(false);
 			new GettingStartedPopup(this);
-		} else if (e.getSource() ==  getCodingInCycloneOption()) {
+		} else if (e.getSource() ==  getCodingInCycloneOption()) { //Show coding help screen
 			this.setEnabled(false);
 			new CodingInCyclonePopup(this);
 		} 
@@ -151,21 +149,27 @@ public class IDEInterface extends State {
 	//This method allows the user to create a project
 	private void createProject() {
 		
+		//Allow user to enter a project name
 		String projectName = JOptionPane.showInputDialog("Enter a project name:").trim();
-		//System.out.println(projectName);
 		
-		boolean validName = true;
+		boolean validName = true; //Determines if the project name is valid
 		
+		//If no project name was entered, it's not a valid name
 		if(projectName.isEmpty()) {
-			validName = false;
+			
+			validName = false; //Set valid name to false
+			
 			//Display error message
 			JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
 		}
 		
+		//Check if the project name is already taken
 		for(Project currentProject: projectExplorer.getProjects()) {
 			
 			if(projectName.equalsIgnoreCase(currentProject.getProjectName())) {
-				validName = false;
+				
+				validName = false; //Set valid name to false
+				
 				//Display error message
 				JOptionPane.showMessageDialog(null, "The project name is already taken","INVALID", JOptionPane.WARNING_MESSAGE);
 				break;
@@ -173,28 +177,25 @@ public class IDEInterface extends State {
 				
 		}
 		
-		//A filename can't contain any of the following characters
-		//\/:*?"<>|
+		//A filename can't contain any of the following characters: \/:*?"<>|
 		if(projectName.contains("\\") || projectName.contains("/") || 
 				projectName.contains(":") || projectName.contains("*") || 
 				projectName.contains("?") || projectName.contains("\"") || 
 				projectName.contains("<") || projectName.contains(">") || 
 				projectName.contains("|")) {
 			JOptionPane.showMessageDialog(null, "A filename can't contain any of the following characters:\n\\/:*?\"<>|","INVALID", JOptionPane.WARNING_MESSAGE);
-			validName = false;
+			validName = false;  //Set valid name to false
 		}
 		
 		//If the project name is not taken, create the folder
 		if(validName) {
 			
+			//Create the folder
 			File file = new File(String.format("projects/%s", projectName));
 			boolean directoryCreated = file.mkdir();
 
 			if(directoryCreated) {
-				//System.out.println("Project folder created");
-				projectExplorer.addNewProject(projectName); //add the project to the project explorer
-			} else {
-				//System.out.println("Project folder was not created");
+				projectExplorer.addNewProject(projectName); //Add the project to the project explorer if it's successfully created
 			}
 			
 		}
@@ -207,7 +208,6 @@ public class IDEInterface extends State {
     	//Select the project
         String selectedProject = (String) JOptionPane.showInputDialog(null, "Choose a project to create a class in:", "Menu", JOptionPane.PLAIN_MESSAGE, null, 
         		projectExplorer.getProjectDirectories().toArray(), projectExplorer.getProjectDirectories().get(0));
-        //System.out.println("Creating class within: " + selectedProject);
         
         //Return from the method if nothing was entered
         if(selectedProject == null)
@@ -215,15 +215,16 @@ public class IDEInterface extends State {
         
         //Enter a class name
 		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
-		//System.out.println(className);
 		
 		boolean validName = true;
 		
 		//Check if a class name was entered
 		if(className.isEmpty()) {
-			validName = false;
+			
+			validName = false; //Set valid name to false
+			
 			//Display error message
-			//JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "A class name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
 		}
 		
 		//Check if the class name is taken
@@ -234,13 +235,14 @@ public class IDEInterface extends State {
 				project = currentProject;
 				break;
 			}
-			//System.out.println(currentProject.getProjectName());
 		}
 		
 		for(File currentClass: project.getFilepath().listFiles()) {
 			
 			if(className.equalsIgnoreCase(currentClass.getName())) {
-				validName = false;
+				
+				validName = false; //Set valid name to false
+				
 				//Display error message
 				JOptionPane.showMessageDialog(null, "The class name is already taken","INVALID", JOptionPane.WARNING_MESSAGE);
 				break;
@@ -248,29 +250,25 @@ public class IDEInterface extends State {
 			
 		}
 		
-		//A filename can't contain any of the following characters
-		//\/:*?"<>|
+		//A filename can't contain any of the following characters: \/:*?"<>|
 		if(className.contains("\\") || className.contains("/") || 
 				className.contains(":") || className.contains("*") || 
 				className.contains("?") || className.contains("\"") || 
 				className.contains("<") || className.contains(">") || 
 				className.contains("|") || className.contains(" ")) {
 			JOptionPane.showMessageDialog(null, "A class name can't contain any of the following characters:\n\\/:*?\"<>| or spaces","INVALID", JOptionPane.WARNING_MESSAGE);
-			validName = false;
+			validName = false; //Set valid name to false
 		}
 		
-		//If the project name is not taken, create the folder
+		//If the project name is not taken, create the file
 		if(validName) {
 			
 			File file = new File(String.format("projects/%s/%s", project.getProjectName(), className));
-
+			
 			try {
 				file.createNewFile();
-				//System.out.println("Class file was created");
-				//projectExplorer.addNewClass(className);
-				projectExplorer.addNewClass(selectedProject, className);
+				projectExplorer.addNewClass(selectedProject, className); //Add the new class to its project
 			} catch (IOException e) {
-				//System.out.println("Class file was not created");
 				e.printStackTrace();
 			}
 			
@@ -279,8 +277,10 @@ public class IDEInterface extends State {
     }
     
 	//This method is used to create a class given the project name
+    //This method is called from the project explorer
     public void createClass(String projectName){
     	
+    	//Get the index of the selected project
     	int index = 0;
     	for(int i = 0; i < projectExplorer.getProjectDirectories().size(); i++) {
     		if(projectExplorer.getProjectDirectories().get(i).equals(projectName)) {
@@ -292,7 +292,6 @@ public class IDEInterface extends State {
     	//Select the project
         String selectedProject = (String) JOptionPane.showInputDialog(null, "Choose a project to create a class in:", "Menu", JOptionPane.PLAIN_MESSAGE, null, 
         		projectExplorer.getProjectDirectories().toArray(), projectExplorer.getProjectDirectories().get(index));
-       // System.out.println("Creating class within: " + selectedProject);
         
         //Return from the method if nothing was entered
         if(selectedProject == null)
@@ -300,7 +299,6 @@ public class IDEInterface extends State {
         
         //Enter a class name
 		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
-		//System.out.println(className);
 		
 		boolean validName = true;
 		
@@ -308,7 +306,7 @@ public class IDEInterface extends State {
 		if(className.isEmpty()) {
 			validName = false;
 			//Display error message
-			//JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "A project name was not input","INVALID", JOptionPane.WARNING_MESSAGE);
 		}
 		
 		//Check if the class name is taken
@@ -319,7 +317,6 @@ public class IDEInterface extends State {
 				project = currentProject;
 				break;
 			}
-			//System.out.println(currentProject.getProjectName());
 		}
 		
 		for(File currentClass: project.getFilepath().listFiles()) {
@@ -333,8 +330,7 @@ public class IDEInterface extends State {
 			
 		}
 		
-		//A filename can't contain any of the following characters
-		//\/:*?"<>|
+		//A filename can't contain any of the following characters: \/:*?"<>|
 		if(className.contains("\\") || className.contains("/") || 
 				className.contains(":") || className.contains("*") || 
 				className.contains("?") || className.contains("\"") || 
@@ -351,11 +347,8 @@ public class IDEInterface extends State {
 
 			try {
 				file.createNewFile();
-				//System.out.println("Class file was created");
-				//projectExplorer.addNewClass(className);
-				projectExplorer.addNewClass(selectedProject, className);
+				projectExplorer.addNewClass(selectedProject, className); //Add the new class to its project
 			} catch (IOException e) {
-				//System.out.println("Class file was not created");
 				e.printStackTrace();
 			}
 			
@@ -363,6 +356,8 @@ public class IDEInterface extends State {
         
     }
     
+    //This method resets the color of GUI components when the theme is changed between light
+    //and dark in the utility settings
     public void resetColor() {
     	
     	GUIPanel.setBackground(State.utilityColor);
@@ -417,14 +412,17 @@ public class IDEInterface extends State {
     	
 		try {
 			
+			//Read from the utility settings file
 			Scanner input = new Scanner(new File("settings/fonts"));
 			
+			//Set the fonts
 			Class.editorFont = new Font(input.next(), Font.PLAIN, input.nextInt());
 			Class.editorTabSize = input.nextInt();
 			Console.consoleFont = new Font(input.next(), Font.PLAIN, input.nextInt());
 			Console.consoleTabSize = input.nextInt();
 			String theme = input.next();
 			
+			//Set the light or dark theme
 			if(theme.equals("light")) {
 				State.darkTheme = false;
 				State.utilityColor = new Color(250, 250, 250);
@@ -552,6 +550,7 @@ public class IDEInterface extends State {
 		
 	}
 	
+	//Getters and setters
 	public Console getConsole() {
 		return console;
 	}

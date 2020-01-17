@@ -1,6 +1,5 @@
 package objects;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -46,6 +45,7 @@ public class Class extends JButton {
 	private TabComponent tab; //Used in the editor tabbed pane
 	
 	private boolean edited; //Set to true when the pane is edited
+	private Object highlightTag;
 	
 	//Consstructor method
 	public Class(String projectName, String className) {
@@ -135,6 +135,7 @@ public class Class extends JButton {
 	    });
 		
 		//Update the line component and set the edited variable to true when new text is added
+		//Also remove any highlights
 		editorTextArea.getDocument().addDocumentListener(new DocumentListener(){
 
 			@Override
@@ -142,6 +143,8 @@ public class Class extends JButton {
 
 				lineNumberComponent.adjustWidth();
 				setEdited(true);
+				if(highlightTag != null)
+					editorTextArea.getHighlighter().removeHighlight(highlightTag);
 
 			}
 
@@ -150,6 +153,8 @@ public class Class extends JButton {
 
 				lineNumberComponent.adjustWidth();
 				setEdited(true);
+				if(highlightTag != null)
+					editorTextArea.getHighlighter().removeHighlight(highlightTag);
 				
 			}
 			
@@ -158,13 +163,16 @@ public class Class extends JButton {
 
 				lineNumberComponent.adjustWidth();
 				setEdited(true);
+				if(highlightTag != null)
+					editorTextArea.getHighlighter().removeHighlight(highlightTag);
 
 			}
 
 		});
 		
-		//Set the bounds of the text area
+		//Set the bounds of the text area and add the line number component
 		editorTextAreaScroll.setBounds(0 , 0, width, height);
+		editorTextAreaScroll.setRowHeaderView(lineNumberComponent);
 		
 	}
 	
@@ -237,10 +245,20 @@ public class Class extends JButton {
 
 	public void setEdited(boolean edited) {
 		this.edited = edited;
+		
+		//Show on the tab component when the class is edited or saved
 		if(edited)
 			tab.showEdited();
 		else
 			tab.showSaved();
+	}
+
+	public Object getHighlightTag() {
+		return highlightTag;
+	}
+
+	public void setHighlightTag(Object highlightTag) {
+		this.highlightTag = highlightTag;
 	}
 	
 }

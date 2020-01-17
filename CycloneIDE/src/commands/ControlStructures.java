@@ -108,7 +108,7 @@ public class ControlStructures {
 					
 				} else {
 					
-					FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+					FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 					
 					return "";
 					
@@ -116,7 +116,7 @@ public class ControlStructures {
 				
 			} else {
 				
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 				
 				return "";
 				
@@ -164,7 +164,7 @@ public class ControlStructures {
 					
 				} else {
 					
-					FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+					FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 					
 					return "";
 					
@@ -172,7 +172,7 @@ public class ControlStructures {
 				
 			} else {
 				
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
 				
 				return "";
 				

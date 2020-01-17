@@ -94,7 +94,6 @@ public class Project {
 			}
 			
 		});
-		
 		projectPanel.add(projectButton);
 		
 		//Setup the file panel
@@ -102,7 +101,6 @@ public class Project {
 		filePanel.setBackground(State.utilityColor);
 		filePanel.setOpaque(true);
 		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
-		//filePanel.setBorder(BorderFactory.createLineBorder(Color.green, 5));
 		projectPanel.add(filePanel);
 		
 	}
@@ -158,7 +156,6 @@ public class Project {
 			
 		}
 		
-		
 		//Revalidate and repaint
 		filePanel.revalidate();
 		filePanel.repaint();
@@ -211,7 +208,7 @@ public class Project {
 	}
 	
 	//This method reformats the class file buttons after a class is deleted or added
-	public void reformatFileButtons() { //NOTE: use this when adding project
+	public void reformatFileButtons() { //This method is used when adding a project
 		
 		//Clear the panel and button array list
 		filePanel.removeAll();
@@ -227,6 +224,7 @@ public class Project {
 		//Sort the file buttons alphabetically
 		Collections.sort(fileButtons, alphaSorter);
 		
+		//Set the bounds of the class file buttons
 		int i = 0;
 		for(Class fileButton: fileButtons) {
 			fileButton.setBounds(width / 10, i * buttonHeight, width * 9 / 10, buttonHeight);
@@ -255,13 +253,13 @@ public class Project {
 			
 		}
 		
-		
 		//Revalidate and repaint
 		filePanel.revalidate();
 		filePanel.repaint();
 		
 	}
 	
+	//This method adds a new class to the project
 	public void addNewClass(String className) {
 		
 		//Add a new class to the file buttons array list
@@ -277,12 +275,14 @@ public class Project {
 		
 	}
 	
+	//Comparator for sorting classes alphabetically
 	public static Comparator<Class> alphaSorter = new Comparator<Class>(){
 		public int compare(Class class1, Class class2) {
 			return class1.getClassName().compareTo(class2.getClassName());
 		}
 	};
 	
+	//Getters and setters
 	public JPanel getProjectPanel() {
 		return projectPanel;
 	}

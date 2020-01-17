@@ -1,5 +1,6 @@
 package display;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +13,9 @@ import popup.KeywordOption;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
 
 public class Editor extends Perspective {
 	
@@ -21,14 +25,14 @@ public class Editor extends Perspective {
 	private static int width = (int) (Perspective.screenWidth/4*3 - 50);
 	private static int height = (int) (Perspective.screenHeight/3*2 - 25);
 	
-	private JTabbedPane tabbedPane = new JTabbedPane(); //Tabbed pane
+	private static JTabbedPane tabbedPane = new JTabbedPane(); //Tabbed pane
 	
-	private IDEInterface ide; //IDEInterface is passed into the editor
+	private static IDEInterface ide; //IDEInterface is passed into the editor
 	
 	//Constructor method
 	public Editor(IDEInterface ide) {
 		
-		this.ide = ide;
+		Editor.ide = ide;
 		
 		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, State.utilityColor);
 		
@@ -273,17 +277,18 @@ public class Editor extends Perspective {
 		
 	}
 	
-	//This method returns the keyword for a for loop
-	private String getKeyword(String keyword) {
+	//This method returns the keyword for a for a function
+	private String getKeyword(String function) {
 		
 		try {
 			
+			//Read from the user commands file
 			Scanner input = new Scanner(new File("commands/userCommands"));
 			
 			//Read the commands and current keywords and display them
 			while(input.hasNextLine()) {
 				
-				if(input.next().equals(keyword)) {
+				if(input.next().equals(function)) {
 					return input.next();
 				}
 				
@@ -300,6 +305,47 @@ public class Editor extends Perspective {
 		
 	}
 	
+	//This method highlights a specific line of the currently displayed text area
+	public static void highlightLine(int lineNumber) {
+		
+		lineNumber -= 1; //The line number index starts at 0
+		
+		//Return if no tabs are opened in the editor
+		if(tabbedPane.getTabCount() == 0) {
+			return;
+		}
+		
+		//Find the currently displayed text area
+		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
+			
+			for(Class currentClass: currentProject.getFileButtons()) {
+				
+				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
+					
+					//SOURCE: https://stackoverflow.com/questions/10191723/highlight-one-specific-row-line-in-jtextarea
+			        try {
+			        	
+			            int startIndex = currentClass.getEditorTextArea().getLineStartOffset(lineNumber);
+			            int endIndex = currentClass.getEditorTextArea().getLineEndOffset(lineNumber);
+			            HighlightPainter painter;
+			            System.out.println("RED Colour");
+			            painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+			            currentClass.setHighlightTag(currentClass.getEditorTextArea().getHighlighter().addHighlight(startIndex, endIndex, painter));
+
+			        } catch(BadLocationException e) {
+			            e.printStackTrace();
+			        }
+					
+				}
+				
+			}
+			
+		}
+		
+
+	}
+	
+	//Getter and setter
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
