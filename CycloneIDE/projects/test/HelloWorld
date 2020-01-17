@@ -1,9 +1,11 @@
-a = 1
-b = 2
+a = 7
+b = true
+c = 5.2
+d = "chad"
 
-loop: a == b or b == 4
-	a + b
-	if: a == 11
-		p: a
-		b:
+x = 0
+in: x
 
+a + 4
+pl: "value " + a
+pl: x
