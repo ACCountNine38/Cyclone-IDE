@@ -807,7 +807,7 @@ public class FileExecutionTool {
 				}
 			}
 
-			if(!line.trim().equals("") && 
+			if(!line.trim().equals("") && line.indexOf(":") != -1 &&
 					(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("if")) || 
 							line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) ||
 							line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else")) ||
