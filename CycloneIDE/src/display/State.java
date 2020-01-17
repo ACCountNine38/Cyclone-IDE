@@ -49,9 +49,6 @@ public class State extends JFrame implements ActionListener {
 	private JMenu editMenu = new JMenu("Edit");
 	private JMenuItem keywordCustomizationOption = new JMenuItem("Customize Keywords");
 	private JMenuItem utilityCustomizationOption = new JMenuItem("Utility Customizations");
-	private JMenu sourceMenu = new JMenu("Source");
-	private JMenuItem generateMainOption = new JMenuItem("Generate Main Method");
-	private JMenuItem generateForOption = new JMenuItem("Generate For Loop");
 	private JMenu runMenu = new JMenu("Run");
 	private JMenuItem runOption = new JMenuItem("Run Project");
 	private JMenu helpMenu = new JMenu("Help");
@@ -126,14 +123,6 @@ public class State extends JFrame implements ActionListener {
 		keywordCustomizationOption.addActionListener(this);
 		editMenu.add(utilityCustomizationOption);
 		utilityCustomizationOption.addActionListener(this);
-
-		// create a new menu to make window changes
-		menuBar.add(sourceMenu);
-		
-		sourceMenu.add(generateMainOption);
-		generateMainOption.addActionListener(this);
-		sourceMenu.add(generateForOption);
-		generateForOption.addActionListener(this);
 		
 		// create a new menu to run the project
 		menuBar.add(runMenu);
@@ -281,30 +270,6 @@ public class State extends JFrame implements ActionListener {
 
 	public void setUtilityCustomizationOption(JMenuItem utilityCustomizationOption) {
 		this.utilityCustomizationOption = utilityCustomizationOption;
-	}
-
-	public JMenu getSourceMenu() {
-		return sourceMenu;
-	}
-
-	public void setSourceMenu(JMenu sourceMenu) {
-		this.sourceMenu = sourceMenu;
-	}
-
-	public JMenuItem getGenerateMainOption() {
-		return generateMainOption;
-	}
-
-	public void setGenerateMainOption(JMenuItem generateMainOption) {
-		this.generateMainOption = generateMainOption;
-	}
-
-	public JMenuItem getGenerateForOption() {
-		return generateForOption;
-	}
-
-	public void setGenerateForOption(JMenuItem generateForOption) {
-		this.generateForOption = generateForOption;
 	}
 
 	public JMenu getRunMenu() {

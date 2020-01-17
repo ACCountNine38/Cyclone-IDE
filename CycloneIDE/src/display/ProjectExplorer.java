@@ -219,7 +219,7 @@ public class ProjectExplorer extends Perspective {
 		if(e.getSource() == deleteProject) {
 			
 			int option = JOptionPane.showConfirmDialog(ide, "Are you sure you want to delete this project: " + projectMenu.getProject().getProjectName());
-			//System.out.println("Option = " + option);
+			
 			//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
 			if(option == 0) {
 				
@@ -261,7 +261,6 @@ public class ProjectExplorer extends Perspective {
 			
 			//Collapse project if the project button is pressed
 			if(e.getSource() == currentProject.getProjectButton()) {
-				//System.out.println("project button pressed");
 				currentProject.collapse();
 				projectExplorerPanel.revalidate();
 				projectExplorerPanel.repaint();
@@ -274,18 +273,13 @@ public class ProjectExplorer extends Perspective {
 				//Open the class file if its button is pressed
 				if(e.getSource() == classButton) {
 					
-					//System.out.println(classButton.getText() + " class button was pressed");
-					
 					//Display the file's contents in the text editor
-					//ide.loadFileToEditor(currentProject.getProjectName(), classButton.getText());
 					ide.getEditor().addTab(classButton);
 					classButton.setupText(); //Call here to update the line numbers (also erases unsaved data from a text area)
+					classButton.getLineNumberComponent().adjustWidth();
 					//set the current file
 					State.currentFile = new File(String.format("projects/%s/%s", 
 							classButton.getProjectName(), classButton.getClassName()));
-					
-					//System.out.println(String.format("current file set to: projects/%s/%s", 
-					//		classButton.getProjectName(), classButton.getClassName()));
 					
 				} 
 				
