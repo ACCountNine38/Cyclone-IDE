@@ -75,7 +75,9 @@ public class FileExecutionTool {
 		
 		previousTabNumber = 0;
 		currentTabNumber = 0;
-		translatedCode = String.format("public class JarRunFile%d { ", State.numExecutions);
+		//translatedCode = String.format("public class JarRunFile%d { ", State.numExecutions);
+		translatedCode = String.format("public class JarRunFile { "
+				+ "\npublic static void main(String[] args) {");
 		
 	}
 	
@@ -164,11 +166,17 @@ public class FileExecutionTool {
 					
 					if(currentTabNumber < previousTabNumber) {
 						translatedCode += "\n}\n";
-						
-						if(!(line.substring(0, line.indexOf(":")).equals(userCommands.get("else_if")) || 
-								line.substring(0, line.indexOf(":")).equals(userCommands.get("else"))) && 
-								loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
+				
+						if(!loopContainer.isEmpty() && loopContainer.peek().equals("loop")) {
 							
+							loopContainer.pop();
+							
+						}
+						System.out.println(line.substring(0, line.indexOf(":")).trim());
+						if(!(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
+								line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else"))) && 
+								!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
+
 							loopContainer.pop();
 							
 						}
@@ -244,9 +252,10 @@ public class FileExecutionTool {
 								actionPerformed = true;
 								break;
 								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("while")) {
+							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
-								While.initialize(action);
+								While.initialize(action, lineNumber);
+								loopContainer.add("loop");
 								actionPerformed = true;
 								break;
 								
@@ -256,7 +265,9 @@ public class FileExecutionTool {
 								actionPerformed = true;
 								break;
 								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("main")) {
+							} 
+							/*
+							else if(key.equals(command.getValue()) && command.getKey().equals("main")) {
 								
 								Function.declareMain();
 								break;
@@ -282,6 +293,7 @@ public class FileExecutionTool {
 								break;
 								
 							}
+							*/
 							
 						}
 						
@@ -410,13 +422,14 @@ public class FileExecutionTool {
 		
 		//HOW TO FIND JDK LOCATION: https://stackoverflow.com/questions/4681090/how-do-i-find-where-jdk-is-installed-on-my-windows-machine
 		//System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_181");
-		System.setProperty("java.home", State.JDKFilepath);
 		
-		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-        System.setOut(printStream);
-        System.setErr(printStream);
-        File jarFile = new File(String.format("src/JarRunFile%d.java", State.numExecutions));
-
+		//System.setProperty("java.home", State.JDKFilepath);
+		
+		//PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        //System.setOut(printStream);
+        //System.setErr(printStream);
+        //File jarFile = new File(String.format("src/JarRunFile%d.java", State.numExecutions));
+		File jarFile = new File(String.format("src/JarRunFile.java"));
         try {
         	
             PrintWriter pr = new PrintWriter(jarFile);
@@ -434,7 +447,7 @@ public class FileExecutionTool {
 //        String jdkReplace = "\\s*\\bsrc\\\\JarRunFile.java\\b\\s*";
 //        String jdkPath = jarFile.getAbsolutePath().replaceAll(jdkReplace, "jdk\\\\jdk1.8.0_181");
 //        System.setProperty("java.home", jdkPath);
-        
+        /*
         System.out.println(System.getProperty("java.home")); //Java home path
         
         System.out.println(jarFile.getAbsolutePath());
@@ -457,16 +470,17 @@ public class FileExecutionTool {
 		        sjfm.getJavaFileObjects(javaFiles)
 		);
 		compilationTask.call();
-
+		*/
 	
 		try {
 			
 			String[] params = null;
-			Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions));
+			//Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions));
+			Class<?> cls = Class.forName(String.format("JarRunFile"));
 
 			Method method;
 			try {
-				System.out.println(String.format("Executing JarRunFile%d.main", State.numExecutions));
+				//System.out.println(String.format("Executing JarRunFile%d.main", State.numExecutions));
 				method = cls.getMethod("main", String[].class);
 				method.invoke(null, (Object) params);
 			} catch (NoSuchMethodException e) {

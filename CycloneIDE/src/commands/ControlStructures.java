@@ -5,15 +5,14 @@ import java.util.Queue;
 
 import utils.FileExecutionTool;
 
+/*
+ * class that executes the function of a control structure
+ * error checks the conditionLine conditions
+ * if the conditionLine condition is invalid, program is terminated and error custom message displays
+ */
 public class ControlStructures {
 	
 	public static void initialize(String condition, String controlStatement, int lineNumber) {
-		
-		toJava(condition.trim(), controlStatement, lineNumber);
-		
-	}
-	
-	private static void toJava(String condition, String controlStatement, int lineNumber) {
 		
 		if(controlStatement.equals("if")) {
 			
@@ -28,7 +27,6 @@ public class ControlStructures {
 			FileExecutionTool.translatedCode += "\nelse {";
 			
 		}
-		
 	}
 	
 	private static String breakDownCondition(Queue<String> conditionList,  String input, int lineNumber) {
@@ -43,13 +41,25 @@ public class ControlStructures {
 			
 			String logicalOperator = "";
 			
-			if(orPosition == -1 || andPosition < orPosition) {
+			if(orPosition == -1) {
 				
 				finalPosition = andPosition;
 				finalOperatorSize = FileExecutionTool.userCommands.get("and").length();
 				logicalOperator = "&&";
 				
-			} else  {
+			} else if(andPosition == -1) {
+				
+				finalPosition = orPosition;
+				finalOperatorSize = FileExecutionTool.userCommands.get("or").length();
+				logicalOperator = "||";
+				
+			} else if(andPosition < orPosition) {
+				
+				finalPosition = andPosition;
+				finalOperatorSize = FileExecutionTool.userCommands.get("and").length();
+				logicalOperator = "&&";
+				
+			} else {
 				
 				finalPosition = orPosition;
 				finalOperatorSize = FileExecutionTool.userCommands.get("or").length();

@@ -1,13 +1,9 @@
-main:
-	
-	a = 7
-	b = true
-	c = "tdfsf"
-	d = 7.331
-	
-	x = 0
-	in: x
-	
-	a + 4 + 3 + 2 
-	pl: "value " + a 
-	pl: x
+a = 1
+b = 2
+
+loop: a == b or b == 4
+	a + b
+	if: a == 11
+		p: a
+		b:
+
