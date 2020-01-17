@@ -562,15 +562,16 @@ public class FileExecutionTool {
 					
 					currentTabNumber = numTabs;
 					
-					if(currentTabNumber < previousTabNumber) {
+					while(currentTabNumber < previousTabNumber) {
 						translatedCode += "\n}\n";
+						previousTabNumber--;
 				
 						if(!loopContainer.isEmpty() && loopContainer.peek().equals("loop")) {
 							
 							loopContainer.pop();
 							
 						}
-						System.out.println(line.substring(0, line.indexOf(":")).trim());
+						
 						if(!(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
 								line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else"))) && 
 								!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
@@ -600,7 +601,6 @@ public class FileExecutionTool {
 								Print.print(line, lineNumber);
 								
 								actionPerformed = true;
-								break;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
 								
@@ -608,7 +608,6 @@ public class FileExecutionTool {
 								Print.printLine(line, lineNumber);
 								
 								actionPerformed = true;
-								break;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
 								
@@ -620,10 +619,10 @@ public class FileExecutionTool {
 								
 								//Add a different scanner method depending on the variable data type
 								for(Variable variable: FileExecutionTool.userDeclaredVariables) {
-									
+
 									//Don't add a scanner method if variable is not declared
 									if(variable.getName().equals(action.trim()) && variable.getDatatype() != null) {
-										
+
 										if(variable.getDatatype().equals("boolean")) {
 											translatedCode += String.format("\n%s = get.nextBoolean();\n", variable.getName());
 										} else if(variable.getDatatype().equals("int")) {
@@ -633,15 +632,14 @@ public class FileExecutionTool {
 										} else if(variable.getDatatype().equals("String")) {
 											translatedCode += String.format("\n%s = get.next();\n", variable.getName());
 										}
-										
+
 										break;
-										
+
 									}
-									
+
 								}
 								
 								actionPerformed = true;
-								break;
 								
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("if"))) {
 								
@@ -649,7 +647,6 @@ public class FileExecutionTool {
 								
 								ControlStructures.initialize(action, command.getKey(), lineNumber);
 								actionPerformed = true;
-								break;
 								
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("else_if") || 
 									command.getKey().equals("else"))) {
@@ -658,7 +655,6 @@ public class FileExecutionTool {
 									//System.out.println("here + "  + 2);
 									ControlStructures.initialize(action, command.getKey(), lineNumber);
 									actionPerformed = true;
-									break;
 									
 								}
 								
@@ -673,27 +669,59 @@ public class FileExecutionTool {
 								
 								For.initialize(action, lineNumber);
 								actionPerformed = true;
-								break;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
 								While.initialize(action, lineNumber);
 								loopContainer.add("loop");
 								actionPerformed = true;
-								break;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
 								
-								translatedCode += "\nbreak;";
+								if(loopContainer.peek().equals("loop")) {
+									
+									translatedCode += "\nbreak;";
+									
+								} else {
+									
+									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
+									return;
+									
+								}
+								
 								actionPerformed = true;
-								break;
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("continue")) {
+								
+								if(loopContainer.peek().equals("loop")) {
+									
+									translatedCode += "\ncontinue;";
+									
+								} else {
+									
+									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
+									return;
+									
+								}
+								
+								actionPerformed = true;
 								
 							} 
+
+							if(actionPerformed) {
+								break;
+							}
 							
 						}
 						
 						if(actionPerformed) {
+							
 							break;
+							
+						} else {
+							
+							terminate("Unknown Keyword: Line " + lineNumber, lineNumber);
+							
 						}
 						
 					} else if(line.charAt(i) == '=') {
@@ -728,7 +756,8 @@ public class FileExecutionTool {
 						
 						//char operator = line.charAt(i);
 						String variable = line.substring(0, i).trim();
-						String calculation = line.substring(i, line.length());
+						String operator = line.substring(i, i + 1).trim();
+						String calculation = line.substring(i + 1, line.length()).trim();
 						//String value = line.substring(i+1, line.length()).trim();
 						
 						Variable operatingVariable = null;
@@ -745,7 +774,7 @@ public class FileExecutionTool {
 							
 						}
 						
-						operatingVariable.calculate(calculation);
+						operatingVariable.calculate(calculation, operator, lineNumber);
 						break;
 						
 					} 
@@ -763,7 +792,6 @@ public class FileExecutionTool {
 			}
 			
 			translatedCode += "\n}\n";
-			
 			
 			while(!loopContainer.isEmpty()) {
 				translatedCode += "\n}";
