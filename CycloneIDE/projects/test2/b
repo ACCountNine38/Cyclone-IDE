@@ -1,8 +1,0 @@
-a = 2
-b = "132.5"
-toString: b: 12
-p: b
-if: a == 2
-	in: b
-
-p: a

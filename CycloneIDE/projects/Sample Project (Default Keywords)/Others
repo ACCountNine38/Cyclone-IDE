@@ -1,0 +1,16 @@
+a = 0
+b = "32"
+parse: a: b
+pl: "parsed value of a is: "
+pl: a
+
+c = 0
+r: c: 100
+pl: "random value of c is: "
+pl: c
+
+d = 0.44
+e = "temp"
+toString: e: d
+pl: "toString of e is: "
+pl: e
