@@ -1,14 +1,20 @@
+a = 0
+b = 10
+c = false
+d = "ahwaadwadwa"
+e = 23.3
+f = 3223.3
+g = 1
 
-a = 7
-b = 3.0
-
-loop: true
-	pl: a
+loop: a < b
 	a + 1
-	b:
-
-pl: b
-
-p: a
-
-p: a
+	loop: c == false
+		d + "a"
+		g * 2
+		pl: d
+		if: g > 100
+			b:
+		else:
+			p: a
+			
+pl: "success"

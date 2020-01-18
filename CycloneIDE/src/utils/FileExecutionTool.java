@@ -176,7 +176,7 @@ public class FileExecutionTool {
 							
 						}
 						
-						if(!(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
+						if(line.indexOf(":") != -1 && !(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
 								line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else"))) && 
 								!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
 
