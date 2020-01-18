@@ -12,8 +12,10 @@ import utils.FileExecutionTool;
  */
 public class ControlStructures {
 	
+	// method that initializes the appropriate control structure given the condition and line number
 	public static void initialize(String condition, String controlStatement, int lineNumber) {
 		
+		// translate code based on the condtrol structure it is
 		if(controlStatement.equals("if")) {
 			
 			FileExecutionTool.translatedCode += "\nif(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {";
@@ -29,6 +31,7 @@ public class ControlStructures {
 		}
 	}
 	
+	// recursive method that breaks down a given condition line and checks for errors in the condition to be translated
 	private static String breakDownCondition(Queue<String> conditionList,  String conditionLine, int lineNumber) {
 		
 		// checks if the given condition contains the "and" and "or" function to break down the input
@@ -356,10 +359,13 @@ public class ControlStructures {
 		
 	}
 	
+	// method that converts a given list of conditions into a String condition of a java loop
 	private static String toConditionString(Queue<String> conditionList) {
-		//System.out.println(conditionList);
+		
+		// variable that stores the overall condition
 		String condition = "";
 		
+		// combine the values from the Queue in the order they are typed by the user and the order that they are split
 		while(!conditionList.isEmpty()) {
 			
 			condition += conditionList.poll();

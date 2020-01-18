@@ -1,6 +1,7 @@
 s = "word"
 d = "word"
 a = 1
+
 awd = 2
 b = 2.1
 c = true
@@ -12,6 +13,7 @@ e = false
 
 loop: a < 20
 	a + 2
-	
+
+a*2
 pl: a
 pl: "akwdoadw"

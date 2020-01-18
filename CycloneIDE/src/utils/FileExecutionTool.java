@@ -27,11 +27,10 @@ import javax.tools.ToolProvider;
 
 import commands.ControlStructures;
 import commands.For;
-import commands.Function;
 import commands.Input;
 import commands.Print;
 import commands.Variable;
-import commands.While;
+import commands.Loop;
 
 import javax.tools.JavaCompiler.CompilationTask;
 
@@ -76,10 +75,10 @@ public class FileExecutionTool {
 		
 		previousTabNumber = 0;
 		currentTabNumber = 0;
-		translatedCode = String.format("public class JarRunFile%d { " 
-				+ "\npublic static void main(String[] args) {", State.numExecutions);
-		//translatedCode = String.format("public class JarRunFile { "
-				//+ "\npublic static void main(String[] args) {");
+		//translatedCode = String.format("public class JarRunFile%d { " 
+		//		+ "\npublic static void main(String[] args) {", State.numExecutions);
+		translatedCode = String.format("public class JarRunFile { "
+				+ "\npublic static void main(String[] args) {");
 		
 	}
 	
@@ -176,7 +175,7 @@ public class FileExecutionTool {
 							
 						}
 						
-						if(!(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
+						if(line.contains(":") && !(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
 								line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else"))) && 
 								!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
 
@@ -251,13 +250,13 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
-								While.initialize(action, lineNumber);
+								Loop.initialize(action, lineNumber);
 								loopContainer.add("loop");
 								actionPerformed = true;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
 								
-								if(loopContainer.peek().equals("loop")) {
+								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\nbreak;";
 									
@@ -272,7 +271,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("continue")) {
 								
-								if(loopContainer.peek().equals("loop")) {
+								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\ncontinue;";
 									
@@ -337,7 +336,7 @@ public class FileExecutionTool {
 						String variable = line.substring(0, i).trim();
 						String operator = line.substring(i, i + 1).trim();
 						String calculation = line.substring(i + 1, line.length()).trim();
-						//String value = line.substring(i+1, line.length()).trim();
+						System.out.println(variable + " " + operator + " " + calculation);
 						
 						Variable operatingVariable = null;
 						
@@ -385,13 +384,16 @@ public class FileExecutionTool {
 			
 		}
 		
+		Console.consoleTextArea.setText(translatedCode);
 		//Switch console output to the console text area
-		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-        System.setOut(printStream);
-        System.setErr(printStream);
+		//PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+        //System.setOut(printStream);
+        //System.setErr(printStream);
         
         //Write java code to a file
-        File jarFile = new File(String.format("src/JarRunFile%d.java", State.numExecutions));
+        File jarFile = new File(String.format("src/JarRunFile.java"));
+        
+        //File jarFile = new File(String.format("src/JarRunFile%d.java", State.numExecutions));
         try {
         	
             PrintWriter pr = new PrintWriter(jarFile);
@@ -404,7 +406,7 @@ public class FileExecutionTool {
             System.out.println("Class file was not created");
             e.printStackTrace();
         }
-        
+        /*
         //Specify the bin path for the compiler
         String regex = String.format("\\s*\\bsrc\\\\JarRunFile%d.java\\b\\s*", State.numExecutions);
         String binPath = jarFile.getAbsolutePath().replaceAll(regex, "bin");
@@ -422,13 +424,14 @@ public class FileExecutionTool {
 		        sjfm.getJavaFileObjects(javaFiles)
 		);
 		compilationTask.call();
-		
+		*/
 		
 		//Call the main method
 		try {
 			
 			String[] params = null;
-			Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions));
+			//Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions));
+			Class<?> cls = Class.forName(String.format("JarRunFile"));
 
 			Method method;
 			try {
@@ -458,9 +461,9 @@ public class FileExecutionTool {
 		}
 		
 		//Delete the new JarRunFile
-		if(jarFile.exists()) {
-			jarFile.delete();
-		}
+		//if(jarFile.exists()) {
+		//	jarFile.delete();
+		//}
 		
 		State.numExecutions++; //Increment the number of executions
 		
@@ -617,7 +620,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
-								While.initialize(action, lineNumber);
+								Loop.initialize(action, lineNumber);
 								loopContainer.add("loop");
 								actionPerformed = true;
 								
@@ -767,7 +770,8 @@ public class FileExecutionTool {
 	    File jarFile = new File(fileLocation);
 	    
 	    //Replace the placeholder class name with the one entered by the user
-	    String jarRunFile = String.format("JarRunFile%d", State.numExecutions);
+	    //String jarRunFile = String.format("JarRunFile%d", State.numExecutions);
+	    String jarRunFile = String.format("JarRunFile");
 	    translatedCode = translatedCode.replaceFirst(Pattern.quote(jarRunFile), fileDialog.getFile());
 
         //Print the java code to the specified file

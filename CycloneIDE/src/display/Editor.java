@@ -5,11 +5,9 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Scanner;
 
 import objects.Class;
 import objects.Project;
-import popup.KeywordOption;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;

@@ -10,7 +10,7 @@ import utils.FileExecutionTool;
  * error checks the conditionLine conditions
  * if the conditionLine condition is invalid, program is terminated and error custom message displays
  */
-public class While {
+public class Loop {
 	
 	// method that initializes the loop given the condition and line number
 	public static void initialize(String condition, int lineNumber) {
@@ -363,10 +363,10 @@ public class While {
 	// method that converts a given list of conditions into a String condition of a java loop
 	private static String toConditionString(Queue<String> conditionList) {
 		
-		// variable that stores the condition
+		// variable that stores the overall condition
 		String condition = "";
 		
-		// combine the values from the Queue in the order they are typed by the user and the order that they are splitted
+		// combine the values from the Queue in the order they are typed by the user and the order that they are split
 		while(!conditionList.isEmpty()) {
 			
 			condition += conditionList.poll();

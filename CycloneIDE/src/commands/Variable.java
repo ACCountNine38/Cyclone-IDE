@@ -24,7 +24,16 @@ public class Variable {
 		if((int)name.charAt(0) >= 48 && (int)name.charAt(0) <= 57) {
 			
 			// terminate the program and display error
-			FileExecutionTool.terminate("Invalid Variable Name, cannot start with a number: Line " + lineNumber, lineNumber);
+			FileExecutionTool.terminate("Invalid Variable Name, Cannot Start With a Number: Line " + lineNumber, lineNumber);
+			return;
+			
+		}
+		
+		// checks if the variable name is the user declared boolean values
+		if(name.equals(FileExecutionTool.userCommands.get("true")) || name.equals(FileExecutionTool.userCommands.get("false"))) {
+			
+			// terminate the program and display error
+			FileExecutionTool.terminate("Invalid Variable Name, Cannot be a Boolean Value: Line " + lineNumber, lineNumber);
 			return;
 			
 		}
@@ -55,23 +64,48 @@ public class Variable {
 		
 	}
 	
+	public static void getRandom(String input) {
+		
+		boolean isValid = true;
+		// tests if the variable can be can be converted to integer
+		try {
+			int testValue = Integer.parseInt(input);
+			isValid = true;
+		} catch (NumberFormatException e) {
+			isValid = false;
+		}
+		
+	}
+	
 	// method that processes the variable calculations
 	public void calculate(String inputValue, String operator, int lineNumber) {
 		
 		/*
-		 * integer can only calculate with integer
+		 * integer can only calculate with integer, if the value is double, then it is casted to int
 		 * double can calculate with integer and double
 		 * string can only be added with a string
 		 */
-		if((getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("int")) ||
-				(getDatatype(inputValue, lineNumber).equals("double") && datatype.equals("double"))||
-				(getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("double"))||
+		if((getDatatype(inputValue, lineNumber).equals("double") && datatype.equals("int"))) {
+			
+			FileExecutionTool.translatedCode += "\n" + name + " = " + name + " " + operator + " (int)" + inputValue + ";";
+			
+		}
+		else if((getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("int")) ||
+				(getDatatype(inputValue, lineNumber).equals("double") && datatype.equals("double")) ||
+				(getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("double")) ||
 				(getDatatype(inputValue, lineNumber).equals("String") && datatype.equals("String") && operator.equals("+"))) {
 			
-			FileExecutionTool.translatedCode += "\n" + name + " = " + name + " " + operator + " " + inputValue + ";";
+			if(inputValue.equals("0") && operator.equals("/")) {
+				
+				FileExecutionTool.terminate("Cannot divide by 0: Line " + lineNumber, lineNumber);
+				
+			} else {
+			
+				FileExecutionTool.translatedCode += "\n" + name + " = " + name + " " + operator + " " + inputValue + ";";
+			
+			}
 			
 		} 
-		
 		// other cases are not allowed for calculation
 		else {
 			
@@ -178,39 +212,32 @@ public class Variable {
 			return;
 		}
 		
-		// if the data-type of the input value is the same as the variable's, translate it to Java
-		if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("int") && datatype.equals("int")) {
-			
-			int testValue = Integer.parseInt(value);
-			this.value = testValue + "";
+		if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("int") && datatype.equals("double")) {
+
+			// turn the value into String to be stored
+			this.value = value + "";
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("double") && datatype.equals("int")) {
 			
-			int testValue = Integer.parseInt(value);
-			this.value = testValue + "";
-			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
-			
-		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("double") && datatype.equals("double")) {
-			
-			double testValue = Double.parseDouble(value);
-			this.value = testValue + "";
-			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
-			
-		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("boolean") && datatype.equals("boolean")) {
-			
-			boolean testValue = Boolean.parseBoolean(value);
-			this.value = testValue + "";
-			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
+			// turn the value into String to be stored, cast the double to int
+			this.value = value + "";
+			FileExecutionTool.translatedCode += "\n" + name + " = (int)" + value + ";";
 			
 		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("String") && datatype.equals("String")) {
 			
+			// remove the quotation marks to be stored
 			this.value = value.substring(1, value.length());
+			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
+			
+		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals(datatype)) {
+			
+			this.value = value + "";
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else {
 			
-			FileExecutionTool.executeSuccessful = false;
+			// terminate the program if value data-type is invalid
 			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber), lineNumber);
 			
 		}
