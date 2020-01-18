@@ -512,6 +512,7 @@ public class FileExecutionTool {
 			
 		}
 		
+		//Set the java.home property to use the JDK file path set by the user
 		System.setProperty("java.home", State.JDKFilepath);
 		
         //Write java code to a file
@@ -519,10 +520,9 @@ public class FileExecutionTool {
         
         try {
         	
+        	//Save the java code to a file
             PrintWriter pr = new PrintWriter(jarFile);
-            
             pr.print(translatedCode);
-            
             pr.close();
             
         } catch (IOException e) {
@@ -535,12 +535,14 @@ public class FileExecutionTool {
         String binPath = jarFile.getAbsolutePath().replaceAll(regex, "bin");
         
 		//SOURCE: https://stackoverflow.com/questions/2028193/specify-output-path-for-dynamic-compilation/7532171
+        //Use the JavaCompiler to compile the file that was just written
 		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 		StandardJavaFileManager sjfm = javaCompiler.getStandardFileManager(null, null, null); 
 
-		String[] options = new String[] { "-d", binPath };
-		File[] javaFiles = new File[] { new File(String.format("src/JarRunFile%d.java", State.numExecutions)) };
-
+		String[] options = new String[] { "-d", binPath }; //Output the .class file to the bin folder
+		File[] javaFiles = new File[] { new File(String.format("src/JarRunFile%d.java", State.numExecutions)) }; //Specify the .java file to be compiled
+		
+		//Compile the class
 		CompilationTask compilationTask = javaCompiler.getTask(null, null, null,
 		        Arrays.asList(options),
 		        null,
@@ -548,15 +550,15 @@ public class FileExecutionTool {
 		);
 		compilationTask.call();
 		
-		//Call the main method
+		//Call the main method of the compiled class
 		try {
 			
-			String[] params = null;
-			Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions));
-
+			String[] params = null; //parameters for the main method
+			Class<?> cls = Class.forName(String.format("JarRunFile%d", State.numExecutions)); //Create an instance of the compiled class
+			
+			//Invoke the main method of the compiled class
 			Method method;
 			try {
-				//System.out.println(String.format("Executing JarRunFile%d.main", State.numExecutions));
 				method = cls.getMethod("main", String[].class);
 				method.invoke(null, (Object) params);
 			} catch (NoSuchMethodException e) {
@@ -598,14 +600,14 @@ public class FileExecutionTool {
 		System.setOut(printStream);
 		System.setErr(printStream);
 				
-		resetCode();
+		resetCode(); //Reset the code
 		
 		userDeclaredVariables.clear();
 		
 		try {
 			
 			int lineNumber = 0;
-			boolean inputUsed = false;
+			boolean inputUsed = false; //Set this to true if input is taken from the user
 			Scanner input = new Scanner(file);
 			
 			executeSuccessful = true;
@@ -664,13 +666,16 @@ public class FileExecutionTool {
 				
 				for(int i = 0; i < line.length(); i++) {
 					
-					if(line.charAt(i) == ':') {
+					//if the line contains a colon, check the keyword before the colon
+					if(line.charAt(i) == ':') { 
 						
+						//Get the key and action from the line
 						String key = line.substring(0, i).trim();
 						String action = line.substring(line.indexOf(key) + key.length() + 1);
 						
 						boolean actionPerformed = false;
 						
+						//Loop through the user commands hash map and check for the the key mapped to the keyword
 						for(HashMap.Entry<String, String> command : userCommands.entrySet()) {
 							
 							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
@@ -700,7 +705,8 @@ public class FileExecutionTool {
 
 									//Don't add a scanner method if variable is not declared
 									if(variable.getName().equals(action.trim()) && variable.getDatatype() != null) {
-
+										
+										//Add a different scanner method depending on the variable data type
 										if(variable.getDatatype().equals("boolean")) {
 											translatedCode += String.format("\n%s = get.nextBoolean();\n", variable.getName());
 										} else if(variable.getDatatype().equals("int")) {
@@ -710,7 +716,8 @@ public class FileExecutionTool {
 										} else if(variable.getDatatype().equals("String")) {
 											translatedCode += String.format("\n%s = get.next();\n", variable.getName());
 										}
-
+										
+										//Break out of loop
 										break;
 
 									}
@@ -718,7 +725,7 @@ public class FileExecutionTool {
 								}
 								
 								actionPerformed = true;
-								
+							
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("if"))) {
 								
 								loopContainer.push("if");
@@ -728,9 +735,8 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("else_if") || 
 									command.getKey().equals("else"))) {
-								//System.out.println("here + "  + 1);
+
 								if(!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
-									//System.out.println("here + "  + 2);
 									ControlStructures.initialize(action, command.getKey(), lineNumber);
 									actionPerformed = true;
 									
@@ -742,13 +748,13 @@ public class FileExecutionTool {
 									return;
 									
 								}
-								
+							
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
 								Loop.initializeToFile(action, lineNumber);
 								loopContainer.add("loop");
 								actionPerformed = true;
-								
+							
 							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
 								
 								if(loopContainer.contains("loop")) {
@@ -878,10 +884,6 @@ public class FileExecutionTool {
 								}
 
 							}
-							
-							if(actionPerformed) {
-								break;
-							}
 
 							if(actionPerformed) {
 								break;
@@ -899,13 +901,16 @@ public class FileExecutionTool {
 							
 						}
 						
+						//If the line has an equals sign, assign a value to a variable
 					} else if(line.charAt(i) == '=') {
 						
+						//Get the variable and value from the line
 						String variable = line.substring(0, i).trim();
 						String value = line.substring(i+1, line.length()).trim();
 						
 						boolean found = false;
 						
+						//Check if the variable has already been declared
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
@@ -918,21 +923,24 @@ public class FileExecutionTool {
 							
 						}
 						
+						//If the variable has not been declared, add it to the userDeclaredVariables
 						if(!found) {
 							
 							userDeclaredVariables.add(new Variable(variable, value, true, lineNumber));
 							
 						}
-						
+					
+					//If the line contains an operation, apply that operation to the variable
 					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
 							|| line.charAt(i) == '/') {
 						
-						//char operator = line.charAt(i);
+						//Get the variable, operation, and calculation from the line
 						String variable = line.substring(0, i).trim();
 						String operator = line.substring(i, i + 1).trim();
 						String calculation = line.substring(i + 1, line.length()).trim();
 						boolean found = false;
 						
+						//If the variable exists, perform the calculation
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
@@ -945,6 +953,7 @@ public class FileExecutionTool {
 							
 						}
 						
+						//If the variable has not been declare, terminate the line
 						if(!found) {
 							
 							terminate("Invalid Calculation: Line ", lineNumber);
@@ -968,18 +977,22 @@ public class FileExecutionTool {
 				
 			}
 			
+			//Close the main method
 			translatedCode += "\n}\n";
 			
+			//Add any braces required for a loop or control structure
 			while(!loopContainer.isEmpty()) {
 				translatedCode += "\n}";
 				loopContainer.pop();
 			}
 			
+			//Close the class
 			translatedCode += "\n}";
 			
 			//Import a scanner if it's needed
 			if(inputUsed) {
 				
+				//Add scanner import to translated code
 				String scannerImport = "import java.util.Scanner;\n\n" + translatedCode;
 				translatedCode = scannerImport;
 				
@@ -1025,11 +1038,13 @@ public class FileExecutionTool {
 		try {
  
 			String line = "";
-
+			
+			//Get the last line of the code block
 			while(input.hasNextLine()) {
 				line = input.nextLine();
 			}
 
+			//Find the number of spaces on the line
 			int numTabs = 0;
 			for(int i = 0; i < line.length(); i++) {
 				if(line.charAt(i) == '\t') {
@@ -1039,6 +1054,7 @@ public class FileExecutionTool {
 				}
 			}
 
+			//Add an extra tab if the previous line contained a loop or control structure
 			if(!line.trim().equals("") && line.indexOf(":") != -1 &&
 					(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("if")) || 
 							line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) ||
@@ -1048,23 +1064,24 @@ public class FileExecutionTool {
 
 			}
 			
-			requiredTabs = numTabs;
+			requiredTabs = numTabs; //Set the required number of tabs
 			
-			input.close();
+			input.close(); //close the scanner
 			
 		} catch(NoSuchElementException error) {
 
 		}
 		
-		return requiredTabs;
+		return requiredTabs; //Return the required number of tabs
 		
 	}
 	
-	
+	//This method displays an error that has been caught while converting Cyclone code to Java
 	public static void terminate(String message, int lineNumber) {
 		
 		if(executeSuccessful) {
 			
+			//Print the error message and highlight line
 			System.out.println(message + "" +lineNumber);
 			Editor.highlightLine(lineNumber);
 			
