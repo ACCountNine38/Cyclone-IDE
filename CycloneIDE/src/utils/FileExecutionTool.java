@@ -12,26 +12,19 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.regex.Pattern;
-
-import javax.swing.text.Style;
-import javax.swing.text.StyledDocument;
 import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import commands.ControlStructures;
-import commands.For;
-import commands.Function;
 import commands.Input;
 import commands.Print;
 import commands.Variable;
-import commands.While;
+import commands.Loop;
 
 import javax.tools.JavaCompiler.CompilationTask;
 
@@ -39,58 +32,75 @@ import display.Console;
 import display.Editor;
 import display.State;
 
+/*
+ * class that handles the execution of a class file
+ * checks for errors in user input code
+ * stores user declared variables for data-type reference
+ * uses compiler to execute the code
+ * able to save and export file as Java
+ */
 public class FileExecutionTool {
 	
+	// map that stores the user customized commands and declared variables
 	public static HashMap<String, String> userCommands = new HashMap<String, String>();
-	public static HashMap<String, String> userDatatypes = new HashMap<String, String>();
-	
 	public static ArrayList<Variable> userDeclaredVariables = new ArrayList<Variable>();
-	public static ArrayList<Method> userDeclaredReturnMethods = new ArrayList<Method>();
 	
+	// boolean variable for terminating the program
 	public static boolean executeSuccessful;
 	
+	// String variable that stores the translated code in Java
 	public static String translatedCode = "";
 	
+	// print writer that writes output to the console
 	public static PrintWriter printer;
 	
+	// variables that checks for indentation
 	public static int previousTabNumber = 0, currentTabNumber = 0;
 	
+	// constructor initializes the user commands, and empties the translated code
 	public FileExecutionTool() {
 		
 		updateCommands();
-		updateDatatypes();
 		resetCode();
 		
+		// declares the print writer for saving the Java file for code execution
 		try {
+			
 			printer = new PrintWriter("src/JarRunFile.java");
-			//printer = new PrintWriter(
-			//		new BufferedWriter(new FileWriter("src/JarRunFile.java", true)));
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+			
 		}
 		
 	}
 	
+	// method that resets the program when user runs the program
 	public static void resetCode() {
 		
+		// resets the output file, indent information, and console
 		previousTabNumber = 0;
 		currentTabNumber = 0;
 		translatedCode = String.format("public class JarRunFile%d { " 
 				+ "\npublic static void main(String[] args) {", State.numExecutions);
-		//translatedCode = String.format("public class JarRunFile { "
-				//+ "\npublic static void main(String[] args) {");
+		
+		Console.consoleTextArea.setText("");
 		
 	}
 	
+	// method that updates the customizable commands
 	public static void updateCommands() {
 		
+		// empties the map
 		userCommands.clear();
 		
+		// try to see if the user command file exist
 		try {
 			
 			Scanner command = new Scanner(new File("commands/userCommands"));
 			
+			// read every command into the command list
 			while(command.hasNext()) {
 				
 				userCommands.put(command.next(), command.next());
@@ -105,58 +115,54 @@ public class FileExecutionTool {
 		
 	}
 	
-	public static void updateDatatypes() {
-		
-		userDatatypes.clear();
-		
-		try {
-			
-			Scanner command = new Scanner(new File("commands/datatypes"));
-			
-			while(command.hasNext()) {
-				
-				userCommands.put(command.next(), command.next());
-				
-			}
-			
-		} catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
-			
-		}
-		
-	}
-	
+	// method that executes a input file
 	public static void executeFile(File file) {
 		
-		Console.consoleTextArea.setText("");
-
+		//Switch console output to the console text area
+		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+		System.setOut(printStream);
+		System.setErr(printStream);
+		        
+		// reset run information
 		resetCode();
-		Console.consoleTextArea.setText("");
-		
 		userDeclaredVariables.clear();
-		userDeclaredReturnMethods.clear();
 		
+		// try and catch to read the input file using a scanner
 		try {
 			
 			int lineNumber = 0;
 			Scanner input = new Scanner(file);
 			
 			executeSuccessful = true;
+			
+			// declaring a stack to keep track of the loop and control structure order
 			Stack<String> loopContainer = new Stack<String>();
 			
+			// executes while a new line can be read from the input file
 			while(input.hasNext()) {
 				
+				// if the execution fails, exit the file execution
 				if(!executeSuccessful) {
 					return;
 				}
 				
+				// update the user indent and line number
 				previousTabNumber = currentTabNumber;
 				String line = input.nextLine();
 				lineNumber++;
 				
+				// checks if the line contains a command operator, else it is not able to be executed
+				if(!(line.contains(":") || line.contains("-") || line.contains("+") || line.contains("*") || line.contains("/") || line.contains("=") || line.trim().equals(""))) {
+					
+					terminate("No Command Executors Found: Line ", lineNumber);
+					return;
+					
+				}
+				
+				// checks if the line is not empty
 				if(line.trim().length() > 0) {
 					
+					// Calculate the tab difference to auto close control structures and loops
 					int numTabs = 0;
 					for(int i = 0; i < line.length(); i++) {
 						if(line.charAt(i) == '\t') {
@@ -166,17 +172,28 @@ public class FileExecutionTool {
 					
 					currentTabNumber = numTabs;
 					
+					// add the necessary closing to the translated code, if the tab difference is different from the previous line
 					while(currentTabNumber < previousTabNumber) {
 						translatedCode += "\n}\n";
 						previousTabNumber--;
 				
+						// terminate the program if there is an unnecessary indent
+						if(loopContainer.isEmpty()) {
+							
+							terminate("Unessasary Tab Entered: Line ", lineNumber);
+							return;
+							
+						}
+						
+						// if a loop was previously declared, remove the loop from the container
 						if(!loopContainer.isEmpty() && loopContainer.peek().equals("loop")) {
 							
 							loopContainer.pop();
 							
 						}
 						
-						if(line.indexOf(":") != -1 && !(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
+						// checks to see if 
+						if((line.indexOf(":") != -1 || line.equals("")) && !(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
 								line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else"))) && 
 								!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
 
@@ -193,7 +210,7 @@ public class FileExecutionTool {
 					if(line.charAt(i) == ':') {
 						
 						String key = line.substring(0, i).trim();
-						String action = line.substring(line.indexOf(key) + key.length() + 1);
+						String action = line.substring(line.indexOf(key) + key.length() + 1).trim();
 						
 						boolean actionPerformed = false;
 						
@@ -215,8 +232,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("input")) {
 								
-								String inputVariable = Input.validateText(action);
-								Input.readVariable(inputVariable, lineNumber);
+								Input.readVariable(action, lineNumber);
 								
 								actionPerformed = true;
 								
@@ -229,9 +245,9 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("else_if") || 
 									command.getKey().equals("else"))) {
-								//System.out.println("here + "  + 1);
+								
 								if(!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
-									//System.out.println("here + "  + 2);
+									
 									ControlStructures.initialize(action, command.getKey(), lineNumber);
 									actionPerformed = true;
 									
@@ -239,19 +255,14 @@ public class FileExecutionTool {
 								
 								else {
 									
-									terminate("Invalid Control Structure(check structure and placement): Line " + lineNumber, lineNumber);
+									terminate("Invalid Control Structure(check structure and placement): Line ", lineNumber);
 									return;
 									
 								}
 								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
-								
-								For.initialize(action, lineNumber);
-								actionPerformed = true;
-								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
-								While.initialize(action, lineNumber);
+								Loop.initialize(action, lineNumber);
 								loopContainer.add("loop");
 								actionPerformed = true;
 								
@@ -263,7 +274,7 @@ public class FileExecutionTool {
 									
 								} else {
 									
-									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
+									terminate("No Loop to Break Out: Line ", lineNumber);
 									return;
 									
 								}
@@ -278,15 +289,117 @@ public class FileExecutionTool {
 									
 								} else {
 									
-									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
+									terminate("No Loop to Break Out: Line ", lineNumber);
 									return;
 									
 								}
 								
 								actionPerformed = true;
 								
-							} 
+							} else if(key.equals(command.getValue()) && command.getKey().equals("random")) {
+								
+								if(action.contains(":")) {
+									
+									boolean isFound = false;
+									
+									for(Variable var: userDeclaredVariables) {
+										
+										String actioVariable = action.substring(0, action.indexOf(":")).trim();
+										if(var.getName().equals(actioVariable)) {
+											
+											var.getRandom(action.substring(action.indexOf(":") + 1, action.length()).trim(), lineNumber);
+											isFound = true;
+											actionPerformed = true;
+											break;
+											
+										}
+										
+									}
+									
+									if(!isFound) {
+										
+										terminate("Variable have to be Initialized Before Randomizing(keyword: variable: randomizer): Line ", lineNumber);
+										return;
+										
+									}
+									
+								} else {
+									
+									terminate("improper Random Format(keyword: variable: randomizer): Line ", lineNumber);
+									return;
+									
+								}
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("parse(int/double)")) {
+								
+								if(action.contains(":")) {
+									
+									boolean isFound = false;
+									
+									for(Variable var: userDeclaredVariables) {
+										
+										String actioVariable = action.substring(0, action.indexOf(":")).trim();
+										if(var.getName().equals(actioVariable)) {
+											
+											var.parse(action.substring(action.indexOf(":") + 1, action.length()).trim(), lineNumber);
+											isFound = true;
+											actionPerformed = true;
+											break;
+											
+										}
+										
+									}
+									
+									if(!isFound) {
+										
+										terminate("Variable Have to be Initialized First Before Parsing(keyword: int/double variable: String value): Line ", lineNumber);
+										return;
+										
+									}
+									
+								} else {
+									
+									terminate("Improper Parse_Int Format(keyword: int/doublevariable: String value): Line ", lineNumber);
+									return;
+									
+								}
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("to_string")) {
+								
+								if(action.contains(":")) {
+									
+									boolean isFound = false;
+									
+									for(Variable var: userDeclaredVariables) {
+										
+										String actioVariable = action.substring(0, action.indexOf(":")).trim();
+										if(var.getName().equals(actioVariable)) {
+											
+											var.toStringValue(action.substring(action.indexOf(":") + 1, action.length()).trim(), lineNumber);
+											isFound = true;
+											actionPerformed = true;
+											break;
+											
+										}
+										
+									}
+									
+									if(!isFound) {
+										
+										terminate("Variable Have to be Initialized First Before To_String(keyword: String variable: value): Line ", lineNumber);
+										return;
+										
+									}
+									
+								} else {
+									
+									terminate("Improper To_String Format(keyword: String variable: value): Line ", lineNumber);
+									return;
+									
+								}
 
+							}
+							
 							if(actionPerformed) {
 								break;
 							}
@@ -299,7 +412,7 @@ public class FileExecutionTool {
 							
 						} else {
 							
-							terminate("Unknown Keyword: Line " + lineNumber, lineNumber);
+							terminate("Unknown Keyword: Line ", lineNumber);
 							
 						}
 						
@@ -326,34 +439,46 @@ public class FileExecutionTool {
 						
 						if(!found) {
 							
-							userDeclaredVariables.add(new Variable(variable, value, true, lineNumber));
+							if(!loopContainer.isEmpty()) {
+								
+								terminate("Variables Cannot be Declared Inside a Loop or Control Structure: Line ", lineNumber);
+								
+							} else {
+								
+								userDeclaredVariables.add(new Variable(variable, value, true, lineNumber));
+								
+							}
 							
 						}
 						
 					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
-							|| line.charAt(i) == '/' || line.charAt(i) == '%') {
+							|| line.charAt(i) == '/') {
 						
 						//char operator = line.charAt(i);
 						String variable = line.substring(0, i).trim();
 						String operator = line.substring(i, i + 1).trim();
 						String calculation = line.substring(i + 1, line.length()).trim();
-						//String value = line.substring(i+1, line.length()).trim();
-						
-						Variable operatingVariable = null;
+						boolean found = false;
 						
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
 								
-								operatingVariable = var;
-								
+								found = true;
+								var.calculate(calculation, operator, lineNumber);
 								break;
 								
 							}
 							
 						}
 						
-						operatingVariable.calculate(calculation, operator, lineNumber);
+						if(!found) {
+							
+							terminate("Invalid Calculation: Line ", lineNumber);
+							return;
+							
+						}
+						
 						break;
 						
 					} 
@@ -387,13 +512,9 @@ public class FileExecutionTool {
 		
 		System.setProperty("java.home", State.JDKFilepath);
 		
-		//Switch console output to the console text area
-		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
-        System.setOut(printStream);
-        System.setErr(printStream);
-        
         //Write java code to a file
         File jarFile = new File(String.format("src/JarRunFile%d.java", State.numExecutions));
+        
         try {
         	
             PrintWriter pr = new PrintWriter(jarFile);
@@ -424,7 +545,6 @@ public class FileExecutionTool {
 		        sjfm.getJavaFileObjects(javaFiles)
 		);
 		compilationTask.call();
-		
 		
 		//Call the main method
 		try {
@@ -471,13 +591,14 @@ public class FileExecutionTool {
 	//This method allows the user to export cyclone code as java code
 	public static void exportFile(File file) {
 		
-		Console.consoleTextArea.setText("");
-
+		//Switch console output to the console text area
+		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
+		System.setOut(printStream);
+		System.setErr(printStream);
+				
 		resetCode();
-		Console.consoleTextArea.setText("");
 		
 		userDeclaredVariables.clear();
-		userDeclaredReturnMethods.clear();
 		
 		try {
 			
@@ -513,13 +634,21 @@ public class FileExecutionTool {
 						translatedCode += "\n}\n";
 						previousTabNumber--;
 				
+						if(loopContainer.isEmpty()) {
+							
+							terminate("Unessasary Tab Entered: Line ", lineNumber);
+							return;
+							
+						}
+						
 						if(!loopContainer.isEmpty() && loopContainer.peek().equals("loop")) {
 							
 							loopContainer.pop();
 							
 						}
 						
-						if(!(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
+						if((line.indexOf(":") != -1 || line.equals("")) && !(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
+
 								line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else"))) && 
 								!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
 
@@ -607,19 +736,14 @@ public class FileExecutionTool {
 								
 								else {
 									
-									terminate("Invalid Control Structure(check structure and placement): Line " + lineNumber, lineNumber);
+									terminate("Invalid Control Structure(check structure and placement): Line ", lineNumber);
 									return;
 									
 								}
 								
-							} else if(key.equals(command.getValue()) && command.getKey().equals("for")) {
-								
-								For.initialize(action, lineNumber);
-								actionPerformed = true;
-								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
-								While.initialize(action, lineNumber);
+								Loop.initializeToFile(action, lineNumber);
 								loopContainer.add("loop");
 								actionPerformed = true;
 								
@@ -631,7 +755,7 @@ public class FileExecutionTool {
 									
 								} else {
 									
-									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
+									terminate("No Loop to Break Out: Line ", lineNumber);
 									return;
 									
 								}
@@ -646,14 +770,116 @@ public class FileExecutionTool {
 									
 								} else {
 									
-									terminate("No Loop to Break Out: Line " + lineNumber, lineNumber);
+									terminate("No Loop to Break Out: Line ", lineNumber);
 									return;
 									
 								}
 								
 								actionPerformed = true;
 								
-							} 
+							} else if(key.equals(command.getValue()) && command.getKey().equals("random")) {
+								
+								if(action.contains(":")) {
+									
+									for(Variable var: userDeclaredVariables) {
+										
+										String actioVariable = action.substring(0, action.indexOf(":")).trim();
+										if(var.getName().equals(actioVariable)) {
+											
+											var.getRandom(action.substring(action.indexOf(":") + 1, action.length()).trim(), lineNumber);
+											break;
+											
+										} else {
+											
+											terminate("Variable Have to be Initialized First Before Random: Line ", lineNumber);
+											return;
+											
+										}
+										
+									}
+									
+									actionPerformed = true;
+									
+								} else {
+									
+									terminate("improper Random Format(keyword: variable: randomizer): Line ", lineNumber);
+									return;
+									
+								}
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("parse(int/double)")) {
+								
+								if(action.contains(":")) {
+									
+									boolean isFound = false;
+									
+									for(Variable var: userDeclaredVariables) {
+										
+										String actioVariable = action.substring(0, action.indexOf(":")).trim();
+										if(var.getName().equals(actioVariable)) {
+											
+											var.parse(action.substring(action.indexOf(":") + 1, action.length()).trim(), lineNumber);
+											isFound = true;
+											actionPerformed = true;
+											break;
+											
+										}
+										
+									}
+									
+									if(!isFound) {
+										
+										terminate("Variable Have to be Initialized First Before Parsing(keyword: int/double variable: String value): Line ", lineNumber);
+										return;
+										
+									}
+									
+								} else {
+									
+									terminate("Improper Parse_Int Format(keyword: int/doublevariable: String value): Line ", lineNumber);
+									return;
+									
+								}
+								
+							} else if(key.equals(command.getValue()) && command.getKey().equals("to_string")) {
+								
+								if(action.contains(":")) {
+									
+									boolean isFound = false;
+									
+									for(Variable var: userDeclaredVariables) {
+										
+										String actioVariable = action.substring(0, action.indexOf(":")).trim();
+										if(var.getName().equals(actioVariable)) {
+											
+											var.toStringValue(action.substring(action.indexOf(":") + 1, action.length()).trim(), lineNumber);
+											isFound = true;
+											actionPerformed = true;
+											break;
+											
+										}
+										
+									}
+									
+									if(!isFound) {
+										
+										terminate("Variable Have to be Initialized First Before To_String(keyword: String variable: value): Line ", lineNumber);
+										return;
+										
+									}
+									
+								} else {
+									
+									terminate("Improper To_String Format(keyword: String variable: value): Line ", lineNumber);
+									return;
+									
+								}
+
+							}
+							
+							if(actionPerformed) {
+								break;
+							}
 
 							if(actionPerformed) {
 								break;
@@ -667,7 +893,7 @@ public class FileExecutionTool {
 							
 						} else {
 							
-							terminate("Unknown Keyword: Line " + lineNumber, lineNumber);
+							terminate("Unknown Keyword: Line ", lineNumber);
 							
 						}
 						
@@ -683,9 +909,7 @@ public class FileExecutionTool {
 							if(var.getName().equals(variable)) {
 								
 								found = true;
-								
 								var.setValue(value, lineNumber);
-								
 								break;
 								
 							}
@@ -699,29 +923,33 @@ public class FileExecutionTool {
 						}
 						
 					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
-							|| line.charAt(i) == '/' || line.charAt(i) == '%') {
+							|| line.charAt(i) == '/') {
 						
 						//char operator = line.charAt(i);
 						String variable = line.substring(0, i).trim();
 						String operator = line.substring(i, i + 1).trim();
 						String calculation = line.substring(i + 1, line.length()).trim();
-						//String value = line.substring(i+1, line.length()).trim();
-						
-						Variable operatingVariable = null;
+						boolean found = false;
 						
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
 								
-								operatingVariable = var;
-								
+								found = true;
+								var.calculate(calculation, operator, lineNumber);
 								break;
 								
 							}
 							
 						}
 						
-						operatingVariable.calculate(calculation, operator, lineNumber);
+						if(!found) {
+							
+							terminate("Invalid Calculation: Line ", lineNumber);
+							return;
+							
+						}
+						
 						break;
 						
 					} 

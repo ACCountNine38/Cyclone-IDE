@@ -8,12 +8,14 @@ import utils.FileExecutionTool;
 /*
  * class that executes the function of a control structure
  * error checks the conditionLine conditions
- * if the conditionLine condition is invalid, program is terminated and error custom message displays
+ * if the condition is invalid, program is terminated and error custom message displays
  */
 public class ControlStructures {
 	
+	// method that initializes the appropriate control structure given the condition and line number
 	public static void initialize(String condition, String controlStatement, int lineNumber) {
 		
+		// translate code based on the control structure it is
 		if(controlStatement.equals("if")) {
 			
 			FileExecutionTool.translatedCode += "\nif(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {";
@@ -29,6 +31,7 @@ public class ControlStructures {
 		}
 	}
 	
+	// recursive method that breaks down a given condition line and checks for errors in the condition to be translated
 	private static String breakDownCondition(Queue<String> conditionList,  String conditionLine, int lineNumber) {
 		
 		// checks if the given condition contains the "and" and "or" function to break down the input
@@ -160,7 +163,7 @@ public class ControlStructures {
 						} else {
 							
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 							return "";
 							
 						}
@@ -208,7 +211,7 @@ public class ControlStructures {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 						return "";
 						
 					}
@@ -216,7 +219,7 @@ public class ControlStructures {
 				} else {
 					
 					// terminate the program if the data-type of both sides of the operator does not match
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 					
 					return "";
 					
@@ -225,7 +228,8 @@ public class ControlStructures {
 
 			} else {
 				
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement\n"
+						+ "Make Sure Spaces are Added Between Comparison Signs: Line ", lineNumber);
 				
 				return "";
 				
@@ -305,7 +309,7 @@ public class ControlStructures {
 							
 						} else {
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 							return "";
 							
 						}
@@ -328,7 +332,7 @@ public class ControlStructures {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 						return "";
 						
 					}
@@ -338,7 +342,7 @@ public class ControlStructures {
 				// terminate the program if the left and right operators does not match
 				else {
 					
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 					
 					return "";
 					
@@ -346,7 +350,8 @@ public class ControlStructures {
 				
 			} else {
 				
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Control Structure Statement\n"
+						+ "Make Sure Spaces are Added Between Comparison Signs: Line ", lineNumber);
 				
 				return "";
 				
@@ -356,10 +361,13 @@ public class ControlStructures {
 		
 	}
 	
+	// method that converts a given list of conditions into a String condition of a java loop
 	private static String toConditionString(Queue<String> conditionList) {
-		//System.out.println(conditionList);
+		
+		// variable that stores the overall condition
 		String condition = "";
 		
+		// combine the values from the Queue in the order they are typed by the user and the order that they are split
 		while(!conditionList.isEmpty()) {
 			
 			condition += conditionList.poll();

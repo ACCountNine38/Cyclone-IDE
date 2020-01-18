@@ -8,25 +8,23 @@ import utils.FileExecutionTool;
 /*
  * class that executes the function of java while loop
  * error checks the conditionLine conditions
- * if the conditionLine condition is invalid, program is terminated and error custom message displays
+ * if the condition is invalid, program is terminated and error custom message displays
  */
-public class While {
-	
-	// method that initializes the loop given the condition and line number
+public class Loop {
+
+	// method that translates the code to Java for file execution
 	public static void initialize(String condition, int lineNumber) {
 		
-		// translate the code to Java after error checking
-		//While can only run a max of 10000 times
-		FileExecutionTool.translatedCode += String.format("\nint lineNumberWhileLimit%d = 0;\nwhile(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {\n"
-				+ "if(lineNumberWhileLimit%d >= 10000){\nSystem.out.println(\"Loop limit reached at line: %d.  Loop terminated.\");\nbreak;\n}\nlineNumberWhileLimit%d++;\n", 
-				lineNumber, lineNumber, lineNumber, lineNumber); 
+		FileExecutionTool.translatedCode += String.format("\nint lineNumberLimit%d = 0;\nwhile(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {"
+				+ "\nlineNumberLimit%d++;\nif(lineNumberLimit%d > 1000) {\n"
+				+ "\nSystem.out.println(\"Loop Limit Reached: Line %d\");"
+				+ "\nbreak;\n}\n", lineNumber, lineNumber, lineNumber, lineNumber);
 		
 	}
 	
-	// method that initializes the loop given the condition and line number
-	public static void initializeForExport(String condition, int lineNumber) {
+	// method that translates the code to Java for file saving
+	public static void initializeToFile(String condition, int lineNumber) {
 		
-		// translate the code to Java after error checking
 		FileExecutionTool.translatedCode += "\nwhile(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {";
 		
 	}
@@ -174,7 +172,7 @@ public class While {
 						} else {
 							
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line " , lineNumber);
 							return "";
 							
 						}
@@ -222,7 +220,7 @@ public class While {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 						return "";
 						
 					}
@@ -230,7 +228,7 @@ public class While {
 				} else {
 					
 					// terminate the program if the data-type of both sides of the operator does not match
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 					
 					return "";
 					
@@ -239,7 +237,8 @@ public class While {
 			} else {
 				
 				// if there are no operators, then program terminates
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Loop Statement\n"
+						+ "Make Sure Spaces are Added Between Comparison Signs: Line ", lineNumber);
 				
 				return "";
 				
@@ -319,7 +318,7 @@ public class While {
 							
 						} else {
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 							return "";
 							
 						}
@@ -342,7 +341,7 @@ public class While {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line " , lineNumber);
 						return "";
 						
 					}
@@ -352,7 +351,7 @@ public class While {
 				// terminate the program if the left and right operators does not match
 				else {
 					
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 					
 					return "";
 					
@@ -361,7 +360,8 @@ public class While {
 			} else {
 				
 				// terminate the program if operators(==, >=, <, etc.) are not found within the input condition
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Loop Statement\n"
+						+ "Make Sure Spaces are Added Between Comparison Signs: Line ", lineNumber);
 				
 				return "";
 				
@@ -374,10 +374,10 @@ public class While {
 	// method that converts a given list of conditions into a String condition of a java loop
 	private static String toConditionString(Queue<String> conditionList) {
 		
-		// variable that stores the condition
+		// variable that stores the overall condition
 		String condition = "";
 		
-		// combine the values from the Queue in the order they are typed by the user and the order that they are splitted
+		// combine the values from the Queue in the order they are typed by the user and the order that they are split
 		while(!conditionList.isEmpty()) {
 			
 			condition += conditionList.poll();

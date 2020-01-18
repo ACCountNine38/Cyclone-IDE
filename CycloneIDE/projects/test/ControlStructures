@@ -1,13 +1,26 @@
 a = 7
+in: a
+r: a: 15
+	b = "sss"
+c = "23"
+awd = a
+dawdad = awd
+d = c
+e = 2.55
 
-if: a == 6
+aaa = true
+
+if: b == "sss"
 	pl: "a is 6" 
 eif: a == 5
 	pl: "a is 5"
 else:
-	pl: "a is 7"
+	p: "a"
 
-loop: true
-	pl: "while worked"
-	b:
+
+toString: c: aaa
+c + b
+pl: c
+weew = 232
+
 	

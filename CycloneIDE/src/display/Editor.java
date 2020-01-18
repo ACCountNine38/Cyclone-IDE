@@ -5,11 +5,9 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Scanner;
 
 import objects.Class;
 import objects.Project;
-import popup.KeywordOption;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -122,7 +120,6 @@ public class Editor extends Perspective {
 				for(int i = 0; i < tabbedPane.getTabCount() + 1; i++) {
 					
 					if(tabbedPane.getComponent(i).equals(currentClass.getEditorTextAreaScroll())) {
-						System.out.println("saving class: " + currentClass.getClassName());
 						
 						currentClass.setEdited(false);//Remove asterisk on the tab
 						
@@ -237,12 +234,13 @@ public class Editor extends Perspective {
 			            int startIndex = currentClass.getEditorTextArea().getLineStartOffset(lineNumber);
 			            int endIndex = currentClass.getEditorTextArea().getLineEndOffset(lineNumber);
 			            HighlightPainter painter;
-			            System.out.println("RED Colour");
 			            painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
 			            currentClass.setHighlightTag(currentClass.getEditorTextArea().getHighlighter().addHighlight(startIndex, endIndex, painter));
 
-			        } catch(BadLocationException e) {
-			            e.printStackTrace();
+			        } catch(BadLocationException error) {
+			        	
+			            error.printStackTrace();
+			            
 			        }
 					
 				}
@@ -276,7 +274,7 @@ public class Editor extends Perspective {
 					if(isCurrentTabEdited()) {
 						
 						int option = JOptionPane.showConfirmDialog(ide, "Would you like to save this class, " + classButton.getClassName() + ", before closing");
-						System.out.println("Option = " + option);
+						
 						//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
 						if(option == 0) {
 							saveCurrentTab();

@@ -12,7 +12,6 @@ if: a < 1
 pl: a
 
 loop: a < 50
-	b = 7
 	a + 1
 	pl: a
 	if: s == 1.0 or a == 10
@@ -20,5 +19,9 @@ loop: a < 50
 	eif: a < 10
 		pl: s
 
+ad = false
+loop: ad
+	b:
+	
 pl: "finished"
 

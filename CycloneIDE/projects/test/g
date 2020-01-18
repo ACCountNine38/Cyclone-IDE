@@ -1,17 +1,4 @@
-s = "word"
-d = "word"
-a = 1
-awd = 2
-b = 2.1
-c = true
-s + "1"
-pl: s
-
-c = true
-e = false
-
-loop: a < 20
-	a + 2
-	
-pl: a
-pl: "akwdoadw"
+a = true
+ae = a
+b = "aweaw"
+pl: b + ae

@@ -6,15 +6,5 @@ e = 23.3
 f = 3223.3
 g = 1
 
-loop: a < b
-	a + 1
-	loop: c == false
-		d + "a"
-		g * 2
-		pl: d
-		if: g > 100
-			b:
-		else:
-			p: a
 			
-pl: "success"
+pl: c

@@ -1,7 +1,8 @@
-a = 0
-loop: true
-	a + 1
-	if: a == 10
-		b:
-	pl:a
-pl: a
+a = 2
+b = "132.5"
+toString: b: 12
+p: b
+if: a == 2
+	in: b
+
+p: a

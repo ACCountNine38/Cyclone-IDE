@@ -11,3 +11,6 @@ true true
 false false
 and and
 or or
+random r
+parse(int/double) parse
+to_string toString
