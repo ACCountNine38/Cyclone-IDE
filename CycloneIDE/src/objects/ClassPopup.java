@@ -2,10 +2,11 @@ package objects;
 
 import javax.swing.JPopupMenu;
 
-//This class is used to create popup menus when a class is is right clicked
+//This class is used to create popup menus when a class in the project explorer is is right clicked
 public class ClassPopup extends JPopupMenu {
 	
-	private Class selectedClass; //Selected class
+	//Selected class that has been right clicked
+	private Class selectedClass; 
 	
 	//Constructor method
 	public ClassPopup() {

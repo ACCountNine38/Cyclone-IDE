@@ -15,6 +15,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
+//This class is used to create an editor JPanel to be displayed on the main frame of the Cyclone IDE
 public class Editor extends Perspective {
 	
 	//Panel dimensions and position
@@ -30,10 +31,12 @@ public class Editor extends Perspective {
 	//Constructor method
 	public Editor(IDEInterface ide) {
 		
-		Editor.ide = ide;
+		Editor.ide = ide; //Initialize the IDEInterface
 		
+		//Set up the panel
 		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, State.utilityColor);
 		
+		//Add the tabbed pane to the panel
 		addJComponents();
 		
 	}
@@ -41,6 +44,7 @@ public class Editor extends Perspective {
 	//This method adds the tabbed pane to the editor panel
 	public void addJComponents() {
 		
+		//Set up the tabbed pane
 		tabbedPane.setBounds(0, 0, width, height);
 		add(tabbedPane);
 		
@@ -112,7 +116,7 @@ public class Editor extends Perspective {
 			return;
 		}
 		
-		//Locate the all of the currently opened classes
+		//Locate the all of the currently opened classes by looping through each project's classes
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
@@ -129,6 +133,7 @@ public class Editor extends Perspective {
 						File classFile = new File(String.format("projects/%s/%s", currentClass.getProjectName(), currentClass.getClassName()));
 						try {
 							
+							//Write the text from the text area to the class file
 							PrintWriter pr = new PrintWriter(classFile);
 							pr.print(classText);
 							pr.close();
@@ -170,8 +175,10 @@ public class Editor extends Perspective {
 				
 				for(int i = 0; i < tabbedPane.getTabCount() + 1; i++) {
 					
+					//If an opened tab has been found, check if it has been edited
 					if(tabbedPane.getComponent(i).equals(currentClass.getEditorTextAreaScroll())) {
 						
+						//If there is an edited tab, return true
 						if(currentClass.isEdited())
 							return true;
 						
@@ -183,10 +190,12 @@ public class Editor extends Perspective {
 			
 		}
 		
+		//Return false if no edited tab has been found
 		return false;
 		
 	}
 	
+	//This method checks if the current tab has been edited
 	public boolean isCurrentTabEdited() {
 		
 		//If there are no tabs opened, return false
@@ -194,12 +203,15 @@ public class Editor extends Perspective {
 			return false;
 		}
 		
+		//Check all of the currently opened classes by looping through each project's classes
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
 				
+				//If the current tab has been found, check if it has been edited
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					
+					//If the current tab has been edited, return true
 					if(currentClass.isEdited())
 						return true;
 					
@@ -209,6 +221,7 @@ public class Editor extends Perspective {
 			
 		}
 		
+		//Return false if the current tab has not been edited
 		return false;
 	}
 	
@@ -227,8 +240,10 @@ public class Editor extends Perspective {
 			
 			for(Class currentClass: currentProject.getFileButtons()) {
 				
+				//If the currently displayed text area is found, highlight the specified line number
 				if(tabbedPane.getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 					
+					//Highlight the specified line number
 					//SOURCE: https://stackoverflow.com/questions/10191723/highlight-one-specific-row-line-in-jtextarea
 			        try {
 			        	
@@ -260,30 +275,33 @@ public class Editor extends Perspective {
 	public void setTabbedPane(JTabbedPane tabbedPane) {
 		this.tabbedPane = tabbedPane;
 	}
-
+	
+	//This method detects if a button to close a tab has been pressed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		//Loop through all of the currently opened classes by looping through each project's classes
 		for(Project currentProject: ide.getProjectExplorer().getProjects()) {
 			
 			for(Class classButton: currentProject.getFileButtons()) {
 				
+				//If the tab button has been found, check if the tab has been edited
 				if(e.getSource() == classButton.getTab().getCloseButton()) {
 					
-					//If the
+					//If the current tab is edited, warn the user before they close is
 					if(isCurrentTabEdited()) {
 						
+						//Prompt the user to save the class before closing its tab
 						int option = JOptionPane.showConfirmDialog(ide, "Would you like to save this class, " + classButton.getClassName() + ", before closing");
-						System.out.println("Option = " + option);
 						//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
-						if(option == 0) {
+						if(option == 0) { //If the user selects yes, save the tab and close it
 							saveCurrentTab();
 							removeDeletedClassTab(classButton);
-						} else if(option == 1) {
+						} else if(option == 1) { //If the user selects no, close the tab without saving
 							removeDeletedClassTab(classButton);
 						} 
 						
-					} else {
+					} else { //If the tab is not edited, remove the tab 
 						removeDeletedClassTab(classButton);
 					}
 		            

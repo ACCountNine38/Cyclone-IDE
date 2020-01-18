@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+//This class is used for creating tab components to be used in the tab pane of the editor
 public class TabComponent extends JPanel {
 	
 	//Panel components

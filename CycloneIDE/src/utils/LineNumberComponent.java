@@ -43,7 +43,7 @@ public class LineNumberComponent extends JComponent{
 
 	private LineNumberModel lineNumberModel;
 
-
+	//Constructor method
 	public LineNumberComponent(){
 
 		super();
