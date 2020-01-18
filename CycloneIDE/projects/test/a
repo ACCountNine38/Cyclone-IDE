@@ -1,4 +1,14 @@
-main:
-	
-	a = ;
-	pl: "hello world"
+
+a = 7
+b = 3.0
+
+loop: true
+	pl: a
+	a + 1
+	b:
+
+pl: b
+
+p: a
+
+p: a

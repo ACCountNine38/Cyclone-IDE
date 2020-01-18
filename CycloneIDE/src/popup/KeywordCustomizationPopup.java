@@ -18,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -167,7 +168,6 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 				
 				//Create a keyword option based on the command and keyword
 				KeywordOption keywordOption = new KeywordOption(input.next(), input.next());
-				System.out.println(keywordOption.getFunction() +  " " + keywordOption.getKeyword());
 				options.add(keywordOption); //Add option to the array list
 				customizePanel.add(keywordOption.getCustomizePanel()); //Add panel to the main panel
 				
@@ -289,6 +289,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		
 		if(e.getSource() == save) { //Save the current settings
 			saveKeywords();
+			JOptionPane.showMessageDialog(null, "Keywords have been saved");
 		} else if(e.getSource() == defaultSettings) { //Display the default settings
 			showDefaultSettings();
 		} else if(e.getSource() == exit) {

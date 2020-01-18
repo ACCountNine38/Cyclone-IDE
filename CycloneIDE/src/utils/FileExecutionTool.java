@@ -384,7 +384,8 @@ public class FileExecutionTool {
 			
 		}
 		
-		Console.consoleTextArea.setText(translatedCode);
+		System.setProperty("java.home", State.JDKFilepath);
+		
 		//Switch console output to the console text area
 		//PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
         //System.setOut(printStream);
@@ -626,7 +627,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
 								
-								if(loopContainer.peek().equals("loop")) {
+								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\nbreak;";
 									
@@ -641,7 +642,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("continue")) {
 								
-								if(loopContainer.peek().equals("loop")) {
+								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\ncontinue;";
 									

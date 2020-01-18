@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 a = 3
 b = 2.5
 a = b
 p: a
+=======
+p = 0
+true = 0
+
+p: true
+>>>>>>> branch 'master' of https://github.com/ACCount-Nine38/Cyclone-IDE
