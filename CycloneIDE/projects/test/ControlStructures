@@ -1,7 +1,6 @@
 a = 7
-in: a
-r: a: 15
-	b = "sss"
+r: a: 1000
+b = "sss"
 c = "23"
 awd = a
 dawdad = awd
@@ -10,7 +9,7 @@ e = 2.55
 
 aaa = true
 
-if: b == "sss"
+if: b == "sss" and a == 7
 	pl: "a is 6" 
 eif: a == 5
 	pl: "a is 5"
@@ -20,7 +19,7 @@ else:
 
 toString: c: aaa
 c + b
-pl: c
+pl: a
 weew = 232
 
 	

@@ -180,7 +180,7 @@ public class FileExecutionTool {
 						// terminate the program if there is an unnecessary indent
 						if(loopContainer.isEmpty()) {
 							
-							terminate("Unessasary Tab Entered: Line ", lineNumber);
+							terminate("Unessasary Tab Entered: Line ", lineNumber-1);
 							return;
 							
 						}
@@ -211,24 +211,25 @@ public class FileExecutionTool {
 					// the colon is the command key
 					if(line.charAt(i) == ':') {
 						
+						// split the program into its key and action
 						String key = line.substring(0, i).trim();
 						String action = line.substring(line.indexOf(key) + key.length() + 1).trim();
 						
 						boolean actionPerformed = false;
 						
+						// loop through the customized commands to see if it is called by the user
 						for(HashMap.Entry<String, String> command : userCommands.entrySet()) {
 							
+							// calls the command actions for each of the following functions
 							if(key.equals(command.getValue()) && command.getKey().equals("print")) {
 								
-								line = action;
-								Print.print(line, lineNumber);
+								Print.print(action, lineNumber);
 								
 								actionPerformed = true;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("printl")) {
 								
-								line = action;
-								Print.printLine(line, lineNumber);
+								Print.printLine(action, lineNumber);
 								
 								actionPerformed = true;
 								
@@ -240,6 +241,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("if"))) {
 								
+								// add the if statement to the loop container because it needs to be closed later
 								loopContainer.push("if");
 								
 								ControlStructures.initialize(action, command.getKey(), lineNumber);
@@ -248,6 +250,7 @@ public class FileExecutionTool {
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("else_if") || 
 									command.getKey().equals("else"))) {
 								
+								// checks to see if the loop container is empty, if the last value is not if, then else if and else cannot be declared
 								if(!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
 									
 									ControlStructures.initialize(action, command.getKey(), lineNumber);
@@ -255,6 +258,7 @@ public class FileExecutionTool {
 									
 								}
 								
+								// terminate the program if it is not connected with an if
 								else {
 									
 									terminate("Invalid Control Structure(check structure and placement): Line ", lineNumber);
@@ -265,11 +269,14 @@ public class FileExecutionTool {
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
 								Loop.initialize(action, lineNumber);
+								
+								// adds a loop to the loop containers because it will be closed later
 								loopContainer.add("loop");
 								actionPerformed = true;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
 								
+								// break can only be called if there is a loop
 								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\nbreak;";
@@ -285,6 +292,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("continue")) {
 								
+								// continue can only be called if there is a loop
 								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\ncontinue;";
@@ -300,12 +308,15 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("random")) {
 								
+								// checks to see if there is another command key inside the action
 								if(action.contains(":")) {
 									
 									boolean isFound = false;
 									
+									// random can only be called to a variable that is declared
 									for(Variable var: userDeclaredVariables) {
 										
+										// break the input line to be used to randomize the variable
 										String actioVariable = action.substring(0, action.indexOf(":")).trim();
 										if(var.getName().equals(actioVariable)) {
 											
@@ -318,6 +329,7 @@ public class FileExecutionTool {
 										
 									}
 									
+									// terminate the program if variable is not initialized before
 									if(!isFound) {
 										
 										terminate("Variable have to be Initialized Before Randomizing(keyword: variable: randomizer): Line ", lineNumber);
@@ -338,8 +350,10 @@ public class FileExecutionTool {
 									
 									boolean isFound = false;
 									
+									// parsing can only be called to a variable that is declared
 									for(Variable var: userDeclaredVariables) {
 										
+										// break the input line to be used to parse the variable
 										String actioVariable = action.substring(0, action.indexOf(":")).trim();
 										if(var.getName().equals(actioVariable)) {
 											
@@ -352,6 +366,7 @@ public class FileExecutionTool {
 										
 									}
 									
+									// terminate the program if variable is not initialized before
 									if(!isFound) {
 										
 										terminate("Variable Have to be Initialized First Before Parsing(keyword: int/double variable: String value): Line ", lineNumber);
@@ -372,8 +387,10 @@ public class FileExecutionTool {
 									
 									boolean isFound = false;
 									
+									// toString can only be called to a variable that is declared
 									for(Variable var: userDeclaredVariables) {
 										
+										// break the input line to be used to turn the action into String
 										String actioVariable = action.substring(0, action.indexOf(":")).trim();
 										if(var.getName().equals(actioVariable)) {
 											
@@ -386,6 +403,7 @@ public class FileExecutionTool {
 										
 									}
 									
+									// terminate the program if variable is not initialized before
 									if(!isFound) {
 										
 										terminate("Variable Have to be Initialized First Before To_String(keyword: String variable: value): Line ", lineNumber);
@@ -402,12 +420,14 @@ public class FileExecutionTool {
 
 							}
 							
+							// if an action is performed in this line, then skip looking for other commands
 							if(actionPerformed) {
 								break;
 							}
 							
 						}
 						
+						// if an action is performed in this line, then skip checking other characters
 						if(actionPerformed) {
 							
 							break;
@@ -420,17 +440,22 @@ public class FileExecutionTool {
 						
 					} else if(line.charAt(i) == '=') {
 						
+						// equal sign is used to initialize variables
+						// split the line into a variable and value, based on the position of the equal sign
 						String variable = line.substring(0, i).trim();
 						String value = line.substring(i+1, line.length()).trim();
 						
 						boolean found = false;
 						
+						// see if the variable is declared by the user
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
 								
 								found = true;
 								
+								// set the value of that variable to the one user entered
+								// further error checking will be made in the Variable class
 								var.setValue(value, lineNumber);
 								
 								break;
@@ -439,14 +464,17 @@ public class FileExecutionTool {
 							
 						}
 						
+						// if the variable does not exist, then initialize it as a new variable
 						if(!found) {
 							
+							// variables cannot be declared inside a loop or control structure
 							if(!loopContainer.isEmpty()) {
 								
 								terminate("Variables Cannot be Declared Inside a Loop or Control Structure: Line ", lineNumber);
 								
 							} else {
 								
+								// adding a new variable to the variable list
 								userDeclaredVariables.add(new Variable(variable, value, true, lineNumber));
 								
 							}
@@ -456,16 +484,19 @@ public class FileExecutionTool {
 					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
 							|| line.charAt(i) == '/') {
 						
-						//char operator = line.charAt(i);
+						// operators checking for calculations
+						// break down the line to process variable calculations
 						String variable = line.substring(0, i).trim();
 						String operator = line.substring(i, i + 1).trim();
 						String calculation = line.substring(i + 1, line.length()).trim();
-						boolean found = false;
 						
+						// loop through the variable list to see if the variable is declared already
+						boolean found = false;
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
 								
+								// calculate the variables in the Variable class
 								found = true;
 								var.calculate(calculation, operator, lineNumber);
 								break;
@@ -474,8 +505,10 @@ public class FileExecutionTool {
 							
 						}
 						
+						// values can only be calculated if it was declared already
 						if(!found) {
 							
+							// terminate the program if it was not declared before
 							terminate("Invalid Calculation: Line ", lineNumber);
 							return;
 							
@@ -485,6 +518,7 @@ public class FileExecutionTool {
 						
 					} 
 					
+					// skip the file execution if the program fails to execute
 					if(!executeSuccessful) {
 						return;
 					}
@@ -497,13 +531,13 @@ public class FileExecutionTool {
 				
 			}
 			
-			translatedCode += "\n}\n";
+			// end the program by adding all the closings to loops and control structures
 			
+			translatedCode += "\n}\n";
 			while(!loopContainer.isEmpty()) {
 				translatedCode += "\n}";
 				loopContainer.pop();
 			}
-			
 			translatedCode += "\n}";
 			
 		} catch (FileNotFoundException e) {
@@ -597,11 +631,12 @@ public class FileExecutionTool {
 		PrintStream printStream = new PrintStream(new CustomOutputStream(Console.consoleTextArea));
 		System.setOut(printStream);
 		System.setErr(printStream);
-				
+				        
+		// reset run information
 		resetCode();
-		
 		userDeclaredVariables.clear();
-		
+				
+		// try and catch to read the input file using a scanner
 		try {
 			
 			int lineNumber = 0;
@@ -609,17 +644,30 @@ public class FileExecutionTool {
 			Scanner input = new Scanner(file);
 			
 			executeSuccessful = true;
-			Stack<String> loopContainer = new Stack<String>();
 			
+			// declaring a stack to keep track of the loop and control structure order
+			Stack<String> loopContainer = new Stack<String>();
+						
+			// executes while a new line can be read from the input file
 			while(input.hasNext()) {
 				
+				// if the execution fails, exit the file execution
 				if(!executeSuccessful) {
 					return;
 				}
 				
+				// update the user indent and line number
 				previousTabNumber = currentTabNumber;
 				String line = input.nextLine();
 				lineNumber++;
+				
+				// checks if the line contains a command operator, else it is not able to be executed
+				if(!(line.contains(":") || line.contains("-") || line.contains("+") || line.contains("*") || line.contains("/") || line.contains("=") || line.trim().equals(""))) {
+					
+					terminate("No Command Executors Found: Line ", lineNumber);
+					return;
+					
+				}
 				
 				if(line.trim().length() > 0) {
 					
@@ -721,6 +769,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("if"))) {
 								
+								// add the if statement to the loop container because it needs to be closed later
 								loopContainer.push("if");
 								
 								ControlStructures.initialize(action, command.getKey(), lineNumber);
@@ -728,14 +777,16 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && (command.getKey().equals("else_if") || 
 									command.getKey().equals("else"))) {
-								//System.out.println("here + "  + 1);
+								
+								// checks to see if the loop container is empty, if the last value is not if, then else if and else cannot be declared
 								if(!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
-									//System.out.println("here + "  + 2);
+									
 									ControlStructures.initialize(action, command.getKey(), lineNumber);
 									actionPerformed = true;
 									
 								}
 								
+								// terminate the program if it is not connected with an if
 								else {
 									
 									terminate("Invalid Control Structure(check structure and placement): Line ", lineNumber);
@@ -746,11 +797,14 @@ public class FileExecutionTool {
 							} else if(key.equals(command.getValue()) && command.getKey().equals("loop")) {
 								
 								Loop.initializeToFile(action, lineNumber);
+								
+								// adds a loop to the loop containers because it will be closed later
 								loopContainer.add("loop");
 								actionPerformed = true;
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("break")) {
 								
+								// break can only be called if there is a loop
 								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\nbreak;";
@@ -766,6 +820,7 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("continue")) {
 								
+								// continue can only be called if there is a loop
 								if(loopContainer.contains("loop")) {
 									
 									translatedCode += "\ncontinue;";
@@ -781,26 +836,34 @@ public class FileExecutionTool {
 								
 							} else if(key.equals(command.getValue()) && command.getKey().equals("random")) {
 								
+								// checks to see if there is another command key inside the action
 								if(action.contains(":")) {
 									
+									boolean isFound = false;
+									
+									// random can only be called to a variable that is declared
 									for(Variable var: userDeclaredVariables) {
 										
+										// break the input line to be used to randomize the variable
 										String actioVariable = action.substring(0, action.indexOf(":")).trim();
 										if(var.getName().equals(actioVariable)) {
 											
 											var.getRandom(action.substring(action.indexOf(":") + 1, action.length()).trim(), lineNumber);
+											isFound = true;
+											actionPerformed = true;
 											break;
-											
-										} else {
-											
-											terminate("Variable Have to be Initialized First Before Random: Line ", lineNumber);
-											return;
 											
 										}
 										
 									}
 									
-									actionPerformed = true;
+									// terminate the program if variable is not initialized before
+									if(!isFound) {
+										
+										terminate("Variable have to be Initialized Before Randomizing(keyword: variable: randomizer): Line ", lineNumber);
+										return;
+										
+									}
 									
 								} else {
 									
@@ -815,8 +878,10 @@ public class FileExecutionTool {
 									
 									boolean isFound = false;
 									
+									// parsing can only be called to a variable that is declared
 									for(Variable var: userDeclaredVariables) {
 										
+										// break the input line to be used to parse the variable
 										String actioVariable = action.substring(0, action.indexOf(":")).trim();
 										if(var.getName().equals(actioVariable)) {
 											
@@ -829,6 +894,7 @@ public class FileExecutionTool {
 										
 									}
 									
+									// terminate the program if variable is not initialized before
 									if(!isFound) {
 										
 										terminate("Variable Have to be Initialized First Before Parsing(keyword: int/double variable: String value): Line ", lineNumber);
@@ -849,8 +915,10 @@ public class FileExecutionTool {
 									
 									boolean isFound = false;
 									
+									// toString can only be called to a variable that is declared
 									for(Variable var: userDeclaredVariables) {
 										
+										// break the input line to be used to turn the action into String
 										String actioVariable = action.substring(0, action.indexOf(":")).trim();
 										if(var.getName().equals(actioVariable)) {
 											
@@ -863,6 +931,7 @@ public class FileExecutionTool {
 										
 									}
 									
+									// terminate the program if variable is not initialized before
 									if(!isFound) {
 										
 										terminate("Variable Have to be Initialized First Before To_String(keyword: String variable: value): Line ", lineNumber);
@@ -879,16 +948,14 @@ public class FileExecutionTool {
 
 							}
 							
-							if(actionPerformed) {
-								break;
-							}
-
+							// if an action is performed in this line, then skip looking for other commands
 							if(actionPerformed) {
 								break;
 							}
 							
 						}
 						
+						// if an action is performed in this line, then skip checking other characters
 						if(actionPerformed) {
 							
 							break;
@@ -901,42 +968,63 @@ public class FileExecutionTool {
 						
 					} else if(line.charAt(i) == '=') {
 						
+						// equal sign is used to initialize variables
+						// split the line into a variable and value, based on the position of the equal sign
 						String variable = line.substring(0, i).trim();
 						String value = line.substring(i+1, line.length()).trim();
 						
 						boolean found = false;
 						
+						// see if the variable is declared by the user
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
 								
 								found = true;
+								
+								// set the value of that variable to the one user entered
+								// further error checking will be made in the Variable class
 								var.setValue(value, lineNumber);
+								
 								break;
 								
 							}
 							
 						}
 						
+						// if the variable does not exist, then initialize it as a new variable
 						if(!found) {
 							
-							userDeclaredVariables.add(new Variable(variable, value, true, lineNumber));
+							// variables cannot be declared inside a loop or control structure
+							if(!loopContainer.isEmpty()) {
+								
+								terminate("Variables Cannot be Declared Inside a Loop or Control Structure: Line ", lineNumber);
+								
+							} else {
+								
+								// adding a new variable to the variable list
+								userDeclaredVariables.add(new Variable(variable, value, true, lineNumber));
+								
+							}
 							
 						}
 						
 					} else if(line.charAt(i) == '+' || line.charAt(i) == '-' || line.charAt(i) == '*'
 							|| line.charAt(i) == '/') {
 						
-						//char operator = line.charAt(i);
+						// operators checking for calculations
+						// break down the line to process variable calculations
 						String variable = line.substring(0, i).trim();
 						String operator = line.substring(i, i + 1).trim();
 						String calculation = line.substring(i + 1, line.length()).trim();
-						boolean found = false;
 						
+						// loop through the variable list to see if the variable is declared already
+						boolean found = false;
 						for(Variable var: userDeclaredVariables) {
 							
 							if(var.getName().equals(variable)) {
 								
+								// calculate the variables in the Variable class
 								found = true;
 								var.calculate(calculation, operator, lineNumber);
 								break;
@@ -945,8 +1033,10 @@ public class FileExecutionTool {
 							
 						}
 						
+						// values can only be calculated if it was declared already
 						if(!found) {
 							
+							// terminate the program if it was not declared before
 							terminate("Invalid Calculation: Line ", lineNumber);
 							return;
 							
@@ -956,6 +1046,7 @@ public class FileExecutionTool {
 						
 					} 
 					
+					// skip the file execution if the program fails to execute
 					if(!executeSuccessful) {
 						return;
 					}
