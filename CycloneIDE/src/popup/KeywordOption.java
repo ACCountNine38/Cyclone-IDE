@@ -11,6 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+//This method is used for creating an object to be used in the keyword customization popup
+//It contains a panel containing a label with the name of a function and
+//a text field that allows the user to customize keyword
 public class KeywordOption {
 	
 	//Panel dimensions
@@ -29,14 +32,16 @@ public class KeywordOption {
 	//Constructor
 	public KeywordOption(String function, String keyword) {
 		
+		//Initialize function and keyword variables
 		this.function = function;
 		this.keyword = keyword;
 		
+		//Set up the JComponents
 		setupJComponents();
 		
 	}
 	
-	//This method sets up the 
+	//This method sets up the JComponents of the object
 	private void setupJComponents() {
 		
 		//Set up the main panel

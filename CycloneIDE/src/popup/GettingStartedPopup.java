@@ -28,6 +28,7 @@ import assets.Images;
 import display.IDEInterface;
 import display.State;
 
+//This class is used to display a frame that shows the user how to get started when using the Cyclone IDE
 public class GettingStartedPopup extends JFrame implements DisplayPopups {
 	
 	//Dimensions

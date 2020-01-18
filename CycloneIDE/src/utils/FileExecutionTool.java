@@ -192,7 +192,7 @@ public class FileExecutionTool {
 							
 						}
 						
-						// checks to see if 
+						// checks to see if else if and else are called and if the previous element is if, remove it from the loop container
 						if((line.indexOf(":") != -1 || line.equals("")) && !(line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else_if")) || 
 								line.substring(0, line.indexOf(":")).trim().equals(userCommands.get("else"))) && 
 								!loopContainer.isEmpty() && loopContainer.peek().equals("if")) {
@@ -205,8 +205,10 @@ public class FileExecutionTool {
 				
 				}
 				
+				// method that checks through each character of the input line to detect commands
 				for(int i = 0; i < line.length(); i++) {
 					
+					// the colon is the command key
 					if(line.charAt(i) == ':') {
 						
 						String key = line.substring(0, i).trim();

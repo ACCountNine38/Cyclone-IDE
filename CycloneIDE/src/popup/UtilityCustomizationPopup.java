@@ -30,12 +30,15 @@ import display.IDEInterface;
 import objects.Class;
 import objects.Project;
 
+//This class is used to display a frame that allows the user to customize 
+//the font and tab space size of the console and editor and switch between a light and dark theme
 public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, ActionListener {
 	
 	//Dimensions
 	private static final int WIDTH = DisplayPopups.POPUP_WIDTH - 100;
 	private static final int HEIGHT = DisplayPopups.POPUP_HEIGHT - 200;
 	
+	//Panel height
 	private static final int PANEL_HEIGHT = HEIGHT / 2 - 10;
 	
 	//Title and buttons
@@ -109,34 +112,39 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(titleLabel);
 		
-		//Set up the dark theme label and radio buttons
+		//Set up the dark theme label
 		darkThemeLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		darkThemeLabel.setBounds(50, 75 + HEIGHT + 10, 85, 75);
 		darkThemeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(darkThemeLabel);
 		
+		//Add the radio buttons to a group
 		radioButtonGroup.add(onButton);
 		radioButtonGroup.add(offButton);
 		
+		//Set up the button that turns the dark theme on
 		onButton.setBounds(150, 75 + HEIGHT + 10, 60, 75);
 		onButton.setFont(new Font("Dialog", Font.BOLD, 24));
 		onButton.addActionListener(this);
 		add(onButton);
-		
+
+		//Set up the button that turns the dark theme off
 		offButton.setBounds(210, 75 + HEIGHT + 10, 60, 75);
 		offButton.setFont(new Font("Dialog", Font.BOLD, 24));
 		offButton.addActionListener(this);
 		add(offButton);
 		
-		//Setup the buttons
+		//Setup the exit button
 		exit.setBounds(POPUP_WIDTH - 200, POPUP_HEIGHT - 100, 150, 50);
 		exit.addActionListener(this);
 		add(exit);
 		
+		//Set up the save button
 		save.setBounds(POPUP_WIDTH - 375, POPUP_HEIGHT - 100, 150, 50);
 		save.addActionListener(this);
 		add(save);
 		
+		//Set up the default settings button
 		defaultSettings.setBounds(POPUP_WIDTH - 550, POPUP_HEIGHT - 100, 150, 50);
 		defaultSettings.addActionListener(this);
 		add(defaultSettings);
@@ -170,25 +178,27 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		editorTitleLabel.setBounds(0, 0, WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorTitleLabel);
 		
-		//Editor font
+		//Set up the editor font label
 		editorFontLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorFontLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		editorFontLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		editorFontLabel.setBounds(0, PANEL_HEIGHT / 4, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorFontLabel);
 		
+		//Set up the editor font combo box
 		editorFontComboBox.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorFontComboBox.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		editorFontComboBox.setBounds(KeywordOption.WIDTH, PANEL_HEIGHT / 4, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorFontComboBox);
 		
-		//Editor font size
+		////Set up the editor font size label
 		editorFontSizeLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorFontSizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		editorFontSizeLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		editorFontSizeLabel.setBounds(0, PANEL_HEIGHT / 4 * 2, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorFontSizeLabel);
 		
+		//Set up the editor font size text field
 		editorFontSizeField = new JFormattedTextField(formatter);
 		editorFontSizeField.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorFontSizeField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -196,13 +206,14 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		editorFontSizeField.setBounds(KeywordOption.WIDTH, PANEL_HEIGHT / 4 * 2, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorFontSizeField);
 		
-		//Editor indent spacing
+		//Set up the editor indent space label
 		editorIndentSpaceLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorIndentSpaceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		editorIndentSpaceLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		editorIndentSpaceLabel.setBounds(0, PANEL_HEIGHT / 4 * 3, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		editorPanel.add(editorIndentSpaceLabel);
-		
+
+		//Set up the editor indent space field
 		editorIndentSpaceField = new JFormattedTextField(formatter);
 		editorIndentSpaceField.setFont(new Font("Dialog", Font.BOLD, 24));
 		editorIndentSpaceField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -223,37 +234,39 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 	    formatter.setMinimum(1);
 	    formatter.setMaximum(Integer.MAX_VALUE);
 		
-		//set up the console panel
+		//Set up the console panel
 		consolePanel.setLayout(null);
 		consolePanel.setBounds(50, 75 + HEIGHT / 2 + 10, WIDTH, PANEL_HEIGHT); 
 		consolePanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		
-		//set up the panel title label
+		//Set up the panel title label
 		consoleTitleLabel.setFont(new Font("Dialog", Font.BOLD, 28));
 		consoleTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		consoleTitleLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		consoleTitleLabel.setBounds(0, 0, WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleTitleLabel);
 		
-		//Console font
+		//Set up the console font label
 		consoleFontLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleFontLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		consoleFontLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		consoleFontLabel.setBounds(0, PANEL_HEIGHT / 4, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleFontLabel);
 		
+		//Set up the console font combo box
 		consoleFontComboBox.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleFontComboBox.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		consoleFontComboBox.setBounds(KeywordOption.WIDTH, PANEL_HEIGHT / 4, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleFontComboBox);
 		
-		//Console font size
+		//Set up the console font size label
 		consoleFontSizeLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleFontSizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		consoleFontSizeLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		consoleFontSizeLabel.setBounds(0, PANEL_HEIGHT / 4 * 2, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleFontSizeLabel);
 		
+		//Set up the console font size text field
 		consoleFontSizeField = new JFormattedTextField(formatter);
 		consoleFontSizeField.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleFontSizeField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -261,13 +274,14 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		consoleFontSizeField.setBounds(KeywordOption.WIDTH, PANEL_HEIGHT / 4 * 2, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleFontSizeField);
 		
-		//Console indent spacing
+		//Set up console indent space label
 		consoleIndentSpaceLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleIndentSpaceLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		consoleIndentSpaceLabel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		consoleIndentSpaceLabel.setBounds(0, PANEL_HEIGHT / 4 * 3, KeywordOption.WIDTH, PANEL_HEIGHT / 4);
 		consolePanel.add(consoleIndentSpaceLabel);
 		
+		//Set up the console indent space text field
 		consoleIndentSpaceField = new JFormattedTextField(formatter);
 		consoleIndentSpaceField.setFont(new Font("Dialog", Font.BOLD, 24));
 		consoleIndentSpaceField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -349,7 +363,8 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 		}
 		
 	}
-
+	
+	//This method detects when a button is pressed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -366,8 +381,9 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 			
 			offButton.setSelected(true);
 			
-		} else if(e.getSource() == save) {
+		} else if(e.getSource() == save) { //Save the current settings
 			
+			//Set all blank text fields to a value of 1
 			if(editorFontSizeField.getText().equals("")) {
 				editorFontSizeField.setText("1");
 			} else if(editorIndentSpaceField.getText().equals("")) {
@@ -381,11 +397,14 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 			//Save current settings to the file
 			try {
 				
+				//Print to settings file
 				PrintWriter pr = new PrintWriter(new File("settings/fonts"));
-
+				
+				//Print the font
 				pr.println(editorFontComboBox.getSelectedItem() + " " + Integer.parseInt(editorFontSizeField.getText()) + " " + Integer.parseInt(editorIndentSpaceField.getText()));
 				pr.println(consoleFontComboBox.getSelectedItem() + " " + Integer.parseInt(consoleFontSizeField.getText()) + " " + Integer.parseInt(consoleIndentSpaceField.getText()));
-
+				
+				//Print the selected theme
 				if(onButton.isSelected()) {
 					pr.println("dark");
 				} else {
@@ -398,8 +417,6 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-			String theme = "";
 			
 			//Apply the saved settings
 			ide.loadUtilitySettings();
@@ -425,7 +442,7 @@ public class UtilityCustomizationPopup extends JFrame implements DisplayPopups, 
 			
 		} else if(e.getSource() == exit) { //Close the popup
 			ide.setEnabled(true); //Enable the ide before closing
-			this.dispose();
+			this.dispose(); 
 		}
 		
 	}

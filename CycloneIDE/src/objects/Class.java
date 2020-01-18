@@ -22,6 +22,7 @@ import utils.FileInput;
 import utils.LineNumberComponent;
 import utils.LineNumberModelImpl;
 
+//This class is used for creating class button objects to be added to the project explorer
 public class Class extends JButton {
 	
 	//Button dimensions
@@ -102,14 +103,14 @@ public class Class extends JButton {
 		editorTextArea.setLineWrap(true);
 		editorTextArea.setWrapStyleWord(true);
 		editorTextArea.setTabSize(editorTabSize);
-		editorTextArea.addKeyListener(new KeyListener() { //Insert appropriate number of spaces       
+		editorTextArea.addKeyListener(new KeyListener() {  
 			
 			@Override
 	        public void keyPressed(KeyEvent e) {
 				
+				//Insert appropriate number of spaces when the enter key is pressed  
 	            if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 	            	e.consume();
-	            	//int currentPosition = editorTextArea.getCaretPosition();
 	            	editorTextArea.insert("\n", editorTextArea.getCaretPosition());
 	            	
 	            	int requiredTabs = FileExecutionTool.insertTabs(editorTextArea.getText().substring(0, editorTextArea.getCaretPosition()));
@@ -120,8 +121,6 @@ public class Class extends JButton {
 	            		editorTextArea.insert("\t", editorTextArea.getCaretPosition());
 	            		
 	            	}
-	            	
-	            	//editorTextArea.setCaretPosition(currentPosition);
 	            	
 	            }
 	            

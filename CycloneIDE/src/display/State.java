@@ -54,6 +54,7 @@ public class State extends JFrame implements ActionListener {
 	private JMenu helpMenu = new JMenu("Help");
 	private JMenuItem gettingStartedOption = new JMenuItem("Getting Started");
 	private JMenuItem codingInCycloneOption = new JMenuItem("Coding in Cyclone");
+	private JMenuItem keywordHelpOption = new JMenuItem("Keywords");
 	
 	// constructor of the State class initializes the images, frame, and enables the IDE to execute file
 	public State() {
@@ -78,7 +79,8 @@ public class State extends JFrame implements ActionListener {
 		setCursor(toolkit.createCustomCursor(mouse, new Point(0, 0), "Custom Cursor"));
 
 	}
-
+	
+	// method that adds the menu bar
 	public void addMenuBar() {
 		// create a new JMenuBar item that stores different menus
 		setJMenuBar(menuBar);
@@ -105,7 +107,8 @@ public class State extends JFrame implements ActionListener {
 			}
 
 		});
-
+		
+		// add options to file menu
 		fileMenu.add(saveCurrentTabOption);
 		saveCurrentTabOption.addActionListener(this);
 		fileMenu.add(saveAllTabsOption);
@@ -134,17 +137,21 @@ public class State extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if(State.this instanceof IDEInterface && ((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedIndex() == -1) {
+				//If there are no tabs opened in the editor, return
+				if(State.this instanceof IDEInterface && 
+						((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedIndex() == -1) {
 					return;
 				}
 				
 				//Set the current file based on the selected tab
-				if(State.this instanceof IDEInterface && ((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedIndex() != -1) {
+				if(State.this instanceof IDEInterface) {
 					
+					//Find the current tab by looping through each project and class
 					for(Project currentProject: ((IDEInterface)State.this).getProjectExplorer().getProjects()) {
 						
 						for(Class currentClass: currentProject.getFileButtons()) {
 							
+							//If the current tab is found, save the current tab and set the current file
 							if(((IDEInterface)State.this).getEditor().getTabbedPane().getSelectedComponent().equals(currentClass.getEditorTextAreaScroll())) {
 								
 								//Save the current tab
@@ -153,9 +160,6 @@ public class State extends JFrame implements ActionListener {
 								//Set the current file
 								currentFile = new File(String.format("projects/%s/%s", 
 										currentClass.getProjectName(), currentClass.getClassName()));
-								
-								//System.out.println(String.format("current file set to: projects/%s/%s", 
-								//		currentClass.getProjectName(), currentClass.getClassName()));
 								
 							}
 							
@@ -171,8 +175,8 @@ public class State extends JFrame implements ActionListener {
 			}
 
 		});
-
-		runMenu.add(runOption);
+		
+		runMenu.add(runOption); // add run option
 
 		// create a new menu to show help commands
 		menuBar.add(helpMenu);
@@ -180,6 +184,8 @@ public class State extends JFrame implements ActionListener {
 		gettingStartedOption.addActionListener(this);
 		helpMenu.add(codingInCycloneOption);
 		codingInCycloneOption.addActionListener(this);
+		helpMenu.add(keywordHelpOption);
+		keywordHelpOption.addActionListener(this);
 		
 	}
 
@@ -310,6 +316,14 @@ public class State extends JFrame implements ActionListener {
 
 	public void setCodingInCycloneOption(JMenuItem codingInCycloneOption) {
 		this.codingInCycloneOption = codingInCycloneOption;
+	}
+
+	public JMenuItem getKeywordHelpOption() {
+		return keywordHelpOption;
+	}
+
+	public void setKeywordHelpOption(JMenuItem keywordHelpOption) {
+		this.keywordHelpOption = keywordHelpOption;
 	}
 
 	@Override
