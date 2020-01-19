@@ -20,16 +20,18 @@ import objects.ClassPopup;
 import objects.Project;
 import objects.ProjectPopup;
 
+//This class is used to create a project explorer JPanel to be displayed on the main frame of the Cyclone IDE
 public class ProjectExplorer extends Perspective {
 	
+	//Dimensions
 	private static int orginX = 25;
 	private static int orginY = 25;
 	private static int width = (int) (Perspective.screenWidth/4 - 25);
 	private static int height = (int) (Perspective.screenHeight - 65) - 25;
 	
 	private JPanel projectExplorerPanel = new JPanel();//Main panel that contains all project panels- Box Layout
-	private ArrayList<String> projectDirectories = new ArrayList<String>();
-	private ArrayList<Project> projects = new ArrayList<Project>();
+	private ArrayList<String> projectDirectories = new ArrayList<String>();//Stores project directories
+	private ArrayList<Project> projects = new ArrayList<Project>(); //Projects
 	//Each project has its own main panel - Box Layout
 	//This panel will contain:
 	//	-Button that when pressed reveals project files
@@ -45,17 +47,21 @@ public class ProjectExplorer extends Perspective {
 	
 	private IDEInterface ide; //IDEInterface is passed into the project explorer
 	
+	//Constructor method
 	public ProjectExplorer(IDEInterface ide) {
 		
-		this.ide = ide;
+		this.ide = ide; //Initialize the IDEInterface
 		
+		//Set up the panel
 		panelSetup(orginX, orginY, (int) Perspective.screenWidth, (int) Perspective.screenHeight, State.utilityColor);
 		
+		//Add the JComponents and projects to the project explorer
 		addJComponents();
 		loadFiles();
 		createProjects();
 	}
 	
+	//This method adds required JComponents to the panel
 	public void addJComponents() {
 		
 		//Set up the options for right click pop up menu
@@ -103,6 +109,7 @@ public class ProjectExplorer extends Perspective {
 		//Loop through the project directory array and create a project for each directory
 		for(int i = 0; i < projectDirectories.size(); i++) {
 			
+			//Create a project variable for each directory
 			Project project = new Project(projectDirectories.get(i));
 			projects.add(project);
 			projectExplorerPanel.add(project.getProjectPanel());
@@ -117,31 +124,27 @@ public class ProjectExplorer extends Perspective {
 		
 	}
 	
-	//This method removes all components from the project explorer
-	private void removeAllComponents() {
-		
-		projectExplorerPanel.removeAll();
-		projectDirectories.clear();
-		projects.clear();
-		
-	}
-	
 	//This method adds a single new project
 	public void addNewProject(String projectName) {
 		
+		//Add the new project to the project directories arraylist and
+		//create and add a project variable to the projects array
 		projectDirectories.add(projectName);
 		Project project = new Project(projectName);
 		projects.add(project);
-		projectExplorerPanel.add(project.getProjectPanel()); //not required
+		projectExplorerPanel.add(project.getProjectPanel());  //Add the project panel to the project explorer
 		project.getProjectButton().addActionListener(this); //Add action listener to project button
 		updateProjects();
 		
 	}
 	
+	//This method adds a new class to a selected project
 	public void addNewClass(String selectedProject, String className) {
 		
+		//Find the project with the specified name
 		for(Project currentProject: projects) {
 			
+			//If the selected project is found, add a new class with the specified name to it
 			if(currentProject.getProjectName().equals(selectedProject)) {
 				currentProject.addNewClass(className);
 				updateProjects();
@@ -153,7 +156,7 @@ public class ProjectExplorer extends Perspective {
 	}
 	
 	//This method updates the project list - to be called when a project or class is created or deleted 
-	public void updateProjects() { //NOTE: this method breaks tabs if called
+	public void updateProjects() { 
 		
 		//Remove all project components from the main panel
 		projectExplorerPanel.removeAll();
@@ -183,12 +186,14 @@ public class ProjectExplorer extends Perspective {
 		
 	}
 	
+	//Comparator for sorting projects alphabetically
 	public static Comparator<Project> alphaSorter = new Comparator<Project>(){
 		public int compare(Project proj1, Project proj2) {
 			return proj1.getProjectName().compareTo(proj2.getProjectName());
 		}
 	};
 	
+	//Getter and setter
 	public JPanel getProjectExplorerPanel() {
 		return projectExplorerPanel;
 	}
@@ -212,12 +217,14 @@ public class ProjectExplorer extends Perspective {
 	public void setProjects(ArrayList<Project> projects) {
 		this.projects = projects;
 	}
-
+	
+	//This method detects when a project button or a popup button is pressed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if(e.getSource() == deleteProject) {
+		if(e.getSource() == deleteProject) { //Project right click popup button
 			
+			//As the user to confirm if they want to delete the selected project
 			int option = JOptionPane.showConfirmDialog(ide, "Are you sure you want to delete this project: " + projectMenu.getProject().getProjectName());
 			
 			//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
@@ -233,11 +240,12 @@ public class ProjectExplorer extends Perspective {
 				
 			}
 			
-		} else if(e.getSource() == newClassP) {
+		} else if(e.getSource() == newClassP) { //Project right click popup button
 			
+			//Create a new class
 			ide.createClass(projectMenu.getProject().getProjectName());
 			
-		} else if(e.getSource() == deleteClass) {
+		} else if(e.getSource() == deleteClass) { //Class right click popup button
 			
 			int option = JOptionPane.showConfirmDialog(ide, "Are you sure you want to delete this class: " + classMenu.getSelectedClass().getClassName());
 			
@@ -250,8 +258,9 @@ public class ProjectExplorer extends Perspective {
 				deleteClass(classMenu.getSelectedClass());
 			}
 			
-		} else if(e.getSource() == newClassC) {
+		} else if(e.getSource() == newClassC) { //Class right click popup button
 			
+			//Create a new class
 			ide.createClass(classMenu.getSelectedClass().getProjectName());
 			
 		} 
@@ -289,8 +298,10 @@ public class ProjectExplorer extends Perspective {
 		
 	}
 	
+	//This method shows a popup when a project is right clicked
 	public static void projectPopup(Project project) {
 		
+		//Show the popup when a project is right clicked
 		projectMenu.setProject(project);
 	    projectMenu.show(project.getProjectButton(), 
 	    		(int) project.getProjectButton().getMousePosition().getX(), 
@@ -298,8 +309,10 @@ public class ProjectExplorer extends Perspective {
 		
 	}
 	
+	//This method shows a popup when a class is right clicked
 	public static void classPopup(Class selectedClass) {
 		
+		//Show the popup when a class is right clicked
 		classMenu.setSelectedClass(selectedClass);
 	    classMenu.show(selectedClass, 
 	    		(int) selectedClass.getMousePosition().getX(), 
@@ -339,6 +352,7 @@ public class ProjectExplorer extends Perspective {
 	//This method deletes a selected class
 	private void deleteClass(Class selectedClass) {
 		
+		//Project variable to hold the project of the selected class
 		Project proj = new Project();
 		
 		//Find the project that the class belongs to

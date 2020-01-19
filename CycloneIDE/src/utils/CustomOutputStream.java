@@ -8,12 +8,15 @@ import javax.swing.JTextArea;
 //SOURCE: https://stackoverflow.com/questions/5107629/how-to-redirect-console-content-to-a-textarea-in-java
 public class CustomOutputStream extends OutputStream {
 	
+	//JTextArea
     private JTextArea textArea;
-
+    
+    //Constructor
     public CustomOutputStream(JTextArea textArea) {
         this.textArea = textArea;
     }
 
+    //Send console output to text area
     @Override
     public void write(int b) throws IOException {
         // redirects data to the text area

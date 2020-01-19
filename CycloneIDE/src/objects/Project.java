@@ -18,8 +18,11 @@ import display.Perspective;
 import display.ProjectExplorer;
 import display.State;
 
+//This class is used for creating project objects which contain components to be 
+//used in the project explorer
 public class Project {
 	
+	//Dimensions
 	private static int width = (int) (Perspective.screenWidth/4 - 25);
 	private static int buttonHeight = 50;
 	
@@ -112,7 +115,7 @@ public class Project {
 		filePanel.removeAll();
 		fileButtons.clear();
 		
-		//Set the dimensions of the panels
+		//Set the dimensions of the project panel
 		projectPanel.setBounds(0, 0, width, (filepath.listFiles().length + 1) * buttonHeight);
 		projectPanel.setMaximumSize(projectPanel.getSize());
 		projectPanel.setMinimumSize(projectPanel.getSize());
@@ -120,7 +123,8 @@ public class Project {
 		projectPanel.setBackground(State.utilityColor);
 		projectPanel.setForeground(State.textColor);
 		
-		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight);
+		//Set the bounds of the file panel
+		filePanel.setBounds(0, 50, width, filepath.listFiles().length * buttonHeight); 
 		
 		//Loop through the project directory array and create a file button and tab for each directory
 		for(int i = 0; i < filepath.listFiles().length; i++) {
@@ -165,9 +169,9 @@ public class Project {
 	//This method displays or hides the project class buttons
 	public void collapse() {
 		
-		if(open) { //Collapse
+		if(open) { //Collapse if the project is currently not collapsed
 			
-			open = false;
+			open = false; //Set open to false
 			
 			//Set the project panel size
 			projectPanel.setSize(width, buttonHeight);
@@ -184,9 +188,9 @@ public class Project {
 			filePanel.revalidate();
 			filePanel.repaint();
 			
-		} else { //Uncollapse
+		} else { //Expand if the project is currently collapsed
 			
-			open = true;
+			open = true; //Set open to false
 			
 			//Set the project panel size
 			projectPanel.setSize(width, (filepath.listFiles().length + 1) * buttonHeight);

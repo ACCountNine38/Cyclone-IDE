@@ -4,7 +4,7 @@ package utils;
 import java.awt.Rectangle;
 
 /**
- * 
+ * SOURCE: https://www.algosome.com/articles/line-numbers-java-jtextarea-jtable.html
  * A generic model interface which defines an underlying component with line
  * numbers.
  * 

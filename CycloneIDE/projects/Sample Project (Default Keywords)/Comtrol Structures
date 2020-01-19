@@ -1,0 +1,6 @@
+a = 0
+b = "hi"
+
+if: a < 10 and b == "hi"
+	if: a == 0
+		pl: "hi"

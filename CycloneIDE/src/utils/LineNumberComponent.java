@@ -21,36 +21,39 @@ import javax.swing.JViewport;
 import objects.Class;
 
 /**
- * SOURCE: https://www.algosome.com/articles/line-numbers-java-jtextarea-jtable.html
- * JComponent used to draw line numbers. This JComponent should be added as a row header view in a JScrollPane. Based upon the 
- * LineNumberModel provided, this component will draw the line numbers as needed.
+ * SOURCE:
+ * https://www.algosome.com/articles/line-numbers-java-jtextarea-jtable.html
+ * JComponent used to draw line numbers. This JComponent should be added as a
+ * row header view in a JScrollPane. Based upon the LineNumberModel provided,
+ * this component will draw the line numbers as needed.
+ * 
  * @author Greg Cope
  *
  */
-public class LineNumberComponent extends JComponent{
-	
+public class LineNumberComponent extends JComponent {
+
 	public static final int LEFT_ALIGNMENT = 0;
 	public static final int RIGHT_ALIGNMENT = 1;
 	public static final int CENTER_ALIGNMENT = 2;
 
-	//pixel padding on left and right
+	// pixel padding on left and right
 	private static final int HORIZONTAL_PADDING = 1;
 
-	//pixel padding on left and right
+	// pixel padding on left and right
 	private static final int VERTICAL_PADDING = 3;
 
 	private int alignment = LEFT_ALIGNMENT;
 
 	private LineNumberModel lineNumberModel;
 
-
-	public LineNumberComponent(){
+	// Constructor method
+	public LineNumberComponent() {
 
 		super();
 
 	}
 
-	public LineNumberComponent(LineNumberModel model){
+	public LineNumberComponent(LineNumberModel model) {
 
 		this();
 
@@ -58,13 +61,13 @@ public class LineNumberComponent extends JComponent{
 
 	}
 
-	public void setLineNumberModel(LineNumberModel model){
+	public void setLineNumberModel(LineNumberModel model) {
 
 		lineNumberModel = model;
 
-		if ( model != null ){
+		if (model != null) {
 
-		    adjustWidth();
+			adjustWidth();
 
 		}
 
@@ -72,19 +75,14 @@ public class LineNumberComponent extends JComponent{
 
 	}
 
-	
-
 	/**
-
 	 * Checks and adjusts the width of this component based upon the line numbers
-
 	 */
-
-	public void adjustWidth(){
+	public void adjustWidth() {
 
 		int max = lineNumberModel.getNumberLines();
 
-		if ( getGraphics() == null ){
+		if (getGraphics() == null) {
 
 			return;
 
@@ -92,9 +90,9 @@ public class LineNumberComponent extends JComponent{
 
 		int width = getGraphics().getFontMetrics().stringWidth(String.valueOf(max)) + 24 * HORIZONTAL_PADDING;
 
-		JComponent c = (JComponent)getParent();
+		JComponent c = (JComponent) getParent();
 
-		if (c == null){//not within a container
+		if (c == null) {// not within a container
 
 			return;
 
@@ -102,25 +100,25 @@ public class LineNumberComponent extends JComponent{
 
 		Dimension dimension = c.getPreferredSize();
 
-		if ( c instanceof JViewport ){//do some climbing up the component tree to get the main JScrollPane view
+		if (c instanceof JViewport) {// do some climbing up the component tree to get the main JScrollPane view
 
-			JViewport view = (JViewport)c;
+			JViewport view = (JViewport) c;
 
 			Component parent = view.getParent();
 
-			if ( parent != null && parent instanceof JScrollPane){
+			if (parent != null && parent instanceof JScrollPane) {
 
-				JScrollPane scroller = (JScrollPane)view.getParent();
+				JScrollPane scroller = (JScrollPane) view.getParent();
 
 				dimension = scroller.getViewport().getView().getPreferredSize();
 
-			}			
+			}
 
 		}
 
-		if ( width > getPreferredSize().width || width < getPreferredSize().width){
+		if (width > getPreferredSize().width || width < getPreferredSize().width) {
 
-			setPreferredSize(new Dimension(width + 2*HORIZONTAL_PADDING, dimension.height));
+			setPreferredSize(new Dimension(width + 2 * HORIZONTAL_PADDING, dimension.height));
 
 			revalidate();
 
@@ -130,21 +128,12 @@ public class LineNumberComponent extends JComponent{
 
 	}
 
-	
-
 	/**
-
-	 * Sets how the numbers will be aligned. 
-
-	 * @param alignment One of RIGHT_ALIGNMENT, LEFT_ALIGNMENT, or CENTER_ALIGNMENT
-
-	 * @throws IllegalArgumentException
-
+	 * Sets how the numbers will be aligned.
 	 */
+	public void setAlignment(int alignment) throws IllegalArgumentException {
 
-	public void setAlignment(int alignment) throws IllegalArgumentException{
-
-		if ( alignment < 0 || alignment > 2 ){
+		if (alignment < 0 || alignment > 2) {
 
 			throw new IllegalArgumentException("Invalid alignment option");
 
@@ -154,20 +143,18 @@ public class LineNumberComponent extends JComponent{
 
 	}
 
-	
-
 	@Override
-	public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
 
-		if ( lineNumberModel == null ){
+		if (lineNumberModel == null) {
 
 			return;
 
 		}
 
-		Graphics2D g2d = (Graphics2D)g;
+		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -177,9 +164,9 @@ public class LineNumberComponent extends JComponent{
 
 		g.setColor(getForeground());
 
-		//iterate over all lines to draw the line numbers.
+		// iterate over all lines to draw the line numbers.
 
-		for ( int i = 0; i < lineNumberModel.getNumberLines(); i++ ){
+		for (int i = 0; i < lineNumberModel.getNumberLines(); i++) {
 
 			Rectangle rect = lineNumberModel.getLineRect(i);
 
@@ -187,9 +174,9 @@ public class LineNumberComponent extends JComponent{
 
 			int yPosition = rect.y + rect.height - VERTICAL_PADDING;
 
-			int xPosition = HORIZONTAL_PADDING;//default to left alignment
+			int xPosition = HORIZONTAL_PADDING;// default to left alignment
 
-			switch (alignment){
+			switch (alignment) {
 
 			case RIGHT_ALIGNMENT:
 
@@ -199,26 +186,23 @@ public class LineNumberComponent extends JComponent{
 
 			case CENTER_ALIGNMENT:
 
-				xPosition = getPreferredSize().width/2 - g.getFontMetrics().stringWidth(text)/2;
+				xPosition = getPreferredSize().width / 2 - g.getFontMetrics().stringWidth(text) / 2;
 
-				break;	
+				break;
 
-			default://left alignment, do nothing
+			default:// left alignment, do nothing
 
 				break;
 
 			}
 
-			//g2d.setFont(new Font("serif", Font.ITALIC, 26));
+			// g2d.setFont(new Font("serif", Font.ITALIC, 26));
 			g2d.setFont(Class.editorFont);
 			g2d.setColor(Color.GRAY);
-			g2d.drawString(String.valueOf(i+1) + " ", xPosition, yPosition);
+			g2d.drawString(String.valueOf(i + 1) + " ", xPosition, yPosition);
 
 		}
 
-
 	}
-
-	
 
 }

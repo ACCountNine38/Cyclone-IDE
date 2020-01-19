@@ -24,7 +24,7 @@ public class Variable {
 		if((int)name.charAt(0) >= 48 && (int)name.charAt(0) <= 57) {
 			
 			// terminate the program and display error
-			FileExecutionTool.terminate("Invalid Variable Name, Cannot Start With a Number: Line " + lineNumber, lineNumber);
+			FileExecutionTool.terminate("Invalid Variable Name, Cannot Start With a Number: Line ", lineNumber);
 			return;
 			
 		}
@@ -33,7 +33,7 @@ public class Variable {
 		if(name.equals(FileExecutionTool.userCommands.get("true")) || name.equals(FileExecutionTool.userCommands.get("false"))) {
 			
 			// terminate the program and display error
-			FileExecutionTool.terminate("Invalid Variable Name, Cannot be a Boolean Value: Line " + lineNumber, lineNumber);
+			FileExecutionTool.terminate("Invalid Variable Name, Cannot be a Boolean Value: Line ", lineNumber);
 			return;
 			
 		}
@@ -43,7 +43,7 @@ public class Variable {
 			
 			if(name.contains(character + "")) {
 				
-				FileExecutionTool.terminate("Invalid Variable Name: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Invalid Variable Name: Line ", lineNumber);
 				return;
 				
 			}
@@ -64,15 +64,245 @@ public class Variable {
 		
 	}
 	
-	public static void getRandom(String input) {
+	// method that set a random value to the variable
+	public void getRandom(String input, int lineNumber) {
 		
-		boolean isValid = true;
+		// loop through the variable list and sees if the input matches a variable already declared
+		for(Variable var: FileExecutionTool.userDeclaredVariables) {
+			
+			if(input.equals(var.name)) {
+				
+				// tests if the variable can be can be converted to integer
+				if(datatype.equals("int")) {
+					
+					try {
+						
+						// try and catch to see if a integer value can be made
+						int randomizer = Integer.parseInt(var.getValue());
+						
+						// translate the code to Java and set the value to the randomized value
+						value = var.getValue() + "";
+						FileExecutionTool.translatedCode += "\n" + name + " = (int)(Math.random()*" + var.getName() + ");";
+						return;
+						
+					} catch (NumberFormatException error) { }
+					
+				}
+				
+				// tests if the variable can be can be converted to double
+				if(datatype.equals("double")) {
+					try {
+						
+						// try and catch to see if a double value can be made
+						double randomizer = Double.parseDouble(var.getValue());
+						
+						// translate the code to Java and set the value to the randomized value
+						value = var.getValue() + "";
+						FileExecutionTool.translatedCode += "\n" + name + " = Math.random()*" + var.getName() + ";";
+						return;
+						
+					} catch (NumberFormatException error) { }
+				}
+				
+			}
+			
+		}
+		
 		// tests if the variable can be can be converted to integer
-		try {
-			int testValue = Integer.parseInt(input);
-			isValid = true;
-		} catch (NumberFormatException e) {
-			isValid = false;
+		if(datatype.equals("int")) {
+			
+			try {
+				
+				int randomizer = Integer.parseInt(input);
+				
+				// translate the code to Java and set the value to the randomized value
+				value = randomizer + "";
+				FileExecutionTool.translatedCode += "\n" + name + " = (int)(Math.random()*" + randomizer + ");";
+				return;
+				
+			} catch (NumberFormatException error) { }
+			
+		}
+		
+		// tests if the variable can be can be converted to double
+		if(datatype.equals("double")) {
+			try {
+				
+				double randomizer = Double.parseDouble(input);
+				
+				// translate the code to Java and set the value to the randomized value
+				value = randomizer + "";
+				FileExecutionTool.translatedCode += "\n" + name + " = Math.random()*" + randomizer + ";";
+				return;
+				
+			} catch (NumberFormatException error) { }
+		}
+		
+		// output error message if value cannot be used to randomize
+		FileExecutionTool.terminate("Invalid Input to Randomize. Must be Integer: Line ", lineNumber);
+		
+	}
+	
+	// method that set a random value to the variable
+	public void parse(String input, int lineNumber) {
+		
+		for(Variable var: FileExecutionTool.userDeclaredVariables) {
+			
+			if(input.equals(var.name)) {
+				
+				// checks to see if the variable can be parsed by the input
+				if(var.getDatatype().equals("String")) {
+					
+					if(datatype.equals("int")) {
+						
+						try {
+							
+							// tests to see if the number can be converted into an integer
+							int integerValue = Integer.parseInt(var.getValue().substring(1, var.getValue().length() - 1));
+							value = var.getValue();
+							FileExecutionTool.translatedCode += "\n" + name + " = Integer.parseInt(" + var.getName() + ");";
+							return;
+							
+						} catch (NumberFormatException error) {
+							
+							// output error message if it cannot
+							FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+							return;
+							
+						}
+						
+					} else if(datatype.equals("double")) {
+						
+						try {
+							
+							double doubleValue = Double.parseDouble(var.getValue().substring(1, var.getValue().length() - 1));
+							value = var.getValue();
+							FileExecutionTool.translatedCode += "\n" + name + " = Double.parseDouble(" + var.getName() + ");";
+							return;
+							
+						} catch (NumberFormatException error) {
+							
+							FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+							return;
+							
+						}
+						
+					} else {
+						
+						FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+						return;
+						
+					}
+										
+				} else {
+					
+					FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+					return;
+					
+				}
+				
+			}
+			
+		}
+		
+		// tests if the variable can be can be converted to integer if its not an already declared variable
+		if(getDatatype(input, lineNumber).equals("String")) {
+			
+			// checks to see if the variable can be parsed by the input
+			if(datatype.equals("int")) {
+				
+				try {
+
+					// tests to see if the number can be converted into an integer
+					int integerValue = Integer.parseInt(input.substring(1, input.length() - 1));
+					value = input;
+					FileExecutionTool.translatedCode += "\n" + name + " = Integer.parseInt(" + input + ");";
+					return;
+					
+				} catch (NumberFormatException error) {
+					
+					FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+					return;
+					
+				}
+				
+			} else if(datatype.equals("double")) {
+				
+				try {
+					
+					// tests to see if the number can be converted into a double
+					double doubleValue = Double.parseDouble(input.substring(1, input.length() - 1));
+					value = input;
+					FileExecutionTool.translatedCode += "\n" + name + " = Double.parseDouble(" + input + ");";
+					return;
+					
+				} catch (NumberFormatException error) {
+					
+					FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+					return;
+					
+				}
+				
+			} else {
+				
+				FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+				return;
+				
+			}
+								
+		} else {
+			
+			FileExecutionTool.terminate("Invalid Variable/Input to Parse(keyword: int/double variable: String value): Line ", lineNumber);
+			return;
+			
+		}
+		
+	}
+	
+	// method that turns a value to String, to be used by a String variable
+	public void toStringValue(String input, int lineNumber) {
+		
+		if(datatype.equals("String")) {
+			
+			// checks if the input is a variable that already exist
+			for(Variable var: FileExecutionTool.userDeclaredVariables) {
+				
+				if(input.equals(var.name)) {
+					
+					// tests if the variable is a String, then translate it to Java to execute
+					if(var.getDatatype().equals("String")) {
+						
+						FileExecutionTool.translatedCode += "\n" + name + " = " + var.getName() + ";";
+						return;
+											
+					} else {
+						
+						FileExecutionTool.translatedCode += "\n" + name + " = " + var.getName() + " + \"\";";
+						return;
+						
+					}
+					
+				}
+				
+			}
+			
+			// if the input is not a declared variable, tests if the variable is a String, then translate it to Java to execute
+			if(getDatatype(input, lineNumber).equals("String")) {
+				
+				FileExecutionTool.translatedCode += "\n" + name + " = " + input + ";";
+				return;
+									
+			} else {
+				
+				FileExecutionTool.translatedCode += "\n" + name + " = " + input + " + \"\";";
+				return;
+				
+			}
+			
+		} else {
+			
+			FileExecutionTool.terminate("Invalid Variable, To_String Can Only be Applied to String Variables(keyword: String variable: value): Line ", lineNumber);
+			
 		}
 		
 	}
@@ -89,27 +319,25 @@ public class Variable {
 			
 			FileExecutionTool.translatedCode += "\n" + name + " = " + name + " " + operator + " (int)" + inputValue + ";";
 			
-		}
-		else if((getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("int")) ||
+		} else if((getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("int")) ||
 				(getDatatype(inputValue, lineNumber).equals("double") && datatype.equals("double")) ||
 				(getDatatype(inputValue, lineNumber).equals("int") && datatype.equals("double")) ||
 				(getDatatype(inputValue, lineNumber).equals("String") && datatype.equals("String") && operator.equals("+"))) {
 			
 			if(inputValue.equals("0") && operator.equals("/")) {
 				
-				FileExecutionTool.terminate("Cannot divide by 0: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Cannot divide by 0: Line ", lineNumber);
 				
 			} else {
-			
+				
 				FileExecutionTool.translatedCode += "\n" + name + " = " + name + " " + operator + " " + inputValue + ";";
 			
 			}
 			
-		} 
-		// other cases are not allowed for calculation
-		else {
+		} else {
 			
-			FileExecutionTool.terminate("Invalid Syntax. Unmatching Datatype/Value: Line " + lineNumber, lineNumber);
+			// other cases are not allowed for calculation
+			FileExecutionTool.terminate("Invalid Syntax. Unmatching Datatype/Value: Line ", lineNumber);
 			
 		}
 		
@@ -150,7 +378,7 @@ public class Variable {
 		}
 		
 		// other cases are not permitted
-		FileExecutionTool.terminate("Unrecongnizable Datatype: Line " + lineNumber, lineNumber);
+		FileExecutionTool.terminate("Unrecongnizable Datatype: Line ", lineNumber);
 		return "";
 		
 	}
@@ -208,7 +436,7 @@ public class Variable {
 		
 		// checks if the input value's data-type is valid
 		if(getDatatype(value, lineNumber) == null) {
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber), lineNumber);
+			FileExecutionTool.terminate("InputMismatchException: " + "Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber) + " Line: ", lineNumber);
 			return;
 		}
 		
@@ -227,7 +455,7 @@ public class Variable {
 		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals("String") && datatype.equals("String")) {
 			
 			// remove the quotation marks to be stored
-			this.value = value.substring(1, value.length());
+			this.value = value.substring(0, value.length());
 			FileExecutionTool.translatedCode += "\n" + name + " = " + value + ";";
 			
 		} else if(getDatatype(value, lineNumber) != null && getDatatype(value, lineNumber).equals(datatype)) {
@@ -238,7 +466,7 @@ public class Variable {
 		} else {
 			
 			// terminate the program if value data-type is invalid
-			FileExecutionTool.terminate("InputMismatchException: Line " + lineNumber + ". Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber), lineNumber);
+			FileExecutionTool.terminate("InputMismatchException: " + "Variable: " + datatype + ", Input: " + getDatatype(value, lineNumber) + " Line: ", lineNumber);
 			
 		}
 		

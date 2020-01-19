@@ -8,14 +8,23 @@ import utils.FileExecutionTool;
 /*
  * class that executes the function of java while loop
  * error checks the conditionLine conditions
- * if the conditionLine condition is invalid, program is terminated and error custom message displays
+ * if the condition is invalid, program is terminated and error custom message displays
  */
 public class Loop {
-	
-	// method that initializes the loop given the condition and line number
+
+	// method that translates the code to Java for file execution
 	public static void initialize(String condition, int lineNumber) {
 		
-		// translate the code to Java after error checking
+		FileExecutionTool.translatedCode += String.format("\nint lineNumberLimit%d = 0;\nwhile(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {"
+				+ "\nlineNumberLimit%d++;\nif(lineNumberLimit%d > 1000) {\n"
+				+ "\nSystem.out.println(\"Loop Limit Reached: Line %d\");"
+				+ "\nbreak;\n}\n", lineNumber, lineNumber, lineNumber, lineNumber);
+		
+	}
+	
+	// method that translates the code to Java for file saving
+	public static void initializeToFile(String condition, int lineNumber) {
+		
 		FileExecutionTool.translatedCode += "\nwhile(" + breakDownCondition(new LinkedList<String>(), condition, lineNumber) + ") {";
 		
 	}
@@ -163,7 +172,7 @@ public class Loop {
 						} else {
 							
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line " , lineNumber);
 							return "";
 							
 						}
@@ -211,7 +220,7 @@ public class Loop {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 						return "";
 						
 					}
@@ -219,7 +228,7 @@ public class Loop {
 				} else {
 					
 					// terminate the program if the data-type of both sides of the operator does not match
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 					
 					return "";
 					
@@ -228,7 +237,8 @@ public class Loop {
 			} else {
 				
 				// if there are no operators, then program terminates
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Loop Statement\n"
+						+ "Make Sure Spaces are Added Between Comparison Signs: Line ", lineNumber);
 				
 				return "";
 				
@@ -308,7 +318,7 @@ public class Loop {
 							
 						} else {
 							// other types of comparison operators are not allowed
-							FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+							FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 							return "";
 							
 						}
@@ -331,7 +341,7 @@ public class Loop {
 					// other cases of values cannot be compared
 					else {
 						
-						FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+						FileExecutionTool.terminate("Uncomparable Values: Line " , lineNumber);
 						return "";
 						
 					}
@@ -341,7 +351,7 @@ public class Loop {
 				// terminate the program if the left and right operators does not match
 				else {
 					
-					FileExecutionTool.terminate("Uncomparable Values: Line " + lineNumber, lineNumber);
+					FileExecutionTool.terminate("Uncomparable Values: Line ", lineNumber);
 					
 					return "";
 					
@@ -350,7 +360,8 @@ public class Loop {
 			} else {
 				
 				// terminate the program if operators(==, >=, <, etc.) are not found within the input condition
-				FileExecutionTool.terminate("Unrecongnized Control Structure Statement: Line " + lineNumber, lineNumber);
+				FileExecutionTool.terminate("Unrecongnized Loop Statement\n"
+						+ "Make Sure Spaces are Added Between Comparison Signs: Line ", lineNumber);
 				
 				return "";
 				

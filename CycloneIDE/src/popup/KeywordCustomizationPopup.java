@@ -26,6 +26,8 @@ import javax.swing.SwingConstants;
 import display.IDEInterface;
 import utils.FileExecutionTool;
 
+//This class is used to display a frame that allows the user to customize 
+//the keywords used in the Cyclone coding language
 public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, ActionListener {
 	
 	//Panel dimensions
@@ -173,7 +175,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 				
 			}
 			
-			input.close();
+			input.close(); 
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -231,7 +233,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 
 		try {
 			
-			//Print to the file
+			//Print to the user commands file
 			PrintWriter pr = new PrintWriter(file);
 			
 			//Loop through the options array list and print each new keyword to the file
@@ -244,6 +246,7 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 			e.printStackTrace();
 		}
 		
+		//Update the commands so that they will be used the next time a program is compiled
 		FileExecutionTool.updateCommands();
 		
 	}
@@ -283,7 +286,8 @@ public class KeywordCustomizationPopup extends JFrame implements DisplayPopups, 
 		return keyword;
 		
 	}
-
+	
+	//This method detects when a button is pressed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		

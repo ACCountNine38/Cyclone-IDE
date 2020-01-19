@@ -1,9 +1,7 @@
 package display;
 
 import java.awt.Color;
-import java.awt.FileDialog;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -17,17 +15,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 
 import objects.Class;
 import objects.Project;
 import popup.CodingInCyclonePopup;
 import popup.GettingStartedPopup;
 import popup.KeywordCustomizationPopup;
+import popup.KeywordHelpPopup;
 import popup.UtilityCustomizationPopup;
 import utils.FileExecutionTool;
 
+//This class is used for creating the main frame of the Cyclone IDE
 public class IDEInterface extends State {
 	
 	// perspectives
@@ -35,37 +33,45 @@ public class IDEInterface extends State {
 	private Editor editor;
 	private ProjectExplorer projectExplorer;
 	
+	//GUI panel
 	private static JPanel GUIPanel = new JPanel(null);
 	
+	//Constructor method
 	public IDEInterface() {
 		
+		//Read the JDK file path and load the utility settings
 		readJDKFilepath();
 		loadUtilitySettings();
 		
+		//Add the project explorer, editor, and console
 		addPerspectives();
 		
+		//Add the menu bar
 		addMenuBar();
 		
+		//Set up the frame
 		frameSetup(this, "Cyclone IDE", (int) Perspective.screenWidth, (int) Perspective.screenHeight);
 		
-		//Warn user before closing while edited tabs are open
+		//Warn user before closing the frame while edited tabs are open
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				
+				//If there are edited tabs opened, prompt the user to save them
 				if(editor.editedTabsOpen()) {
+					
+					//Prompt the user to save edited tabs
 					int option = JOptionPane.showConfirmDialog(IDEInterface.this, "Would you like to save edited tabs before closing");
-					//System.out.println("Option = " + option);
 					//Yes = 0, No = 1, Cancel = 2, Closing the window = -1
-					if(option == 0) {
+					if(option == 0) { //If the user selects yes, save all tabs and close the program
 						editor.saveAllTabs();
 						System.exit(0);
-					} else if(option == 1) {
+					} else if(option == 1) { //If the user selects no, exit without saving the tabs
 						System.exit(0);
 					} 
-				} else {
+				} else { //If there are no edited tabs, exit the program
 					System.exit(0);
 				}
 				
@@ -78,15 +84,19 @@ public class IDEInterface extends State {
 	//This method adds the project explorer, console, and editor to the frame
 	private void addPerspectives(){
 		
+		//Set up the console
 		console = new Console();
 		GUIPanel.add(console);
 		
+		//Set up the editor
 		editor = new Editor(this);
 		GUIPanel.add(editor);
 		
+		//Set up the project explorer
 		projectExplorer = new ProjectExplorer(this);
 		GUIPanel.add(projectExplorer);
 		
+		//Set up the GUI panel
 		GUIPanel.setBounds(0, 0, (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
 		GUIPanel.setBackground(State.utilityColor);
 		add(GUIPanel);
@@ -111,7 +121,8 @@ public class IDEInterface extends State {
 		frame.setVisible(true);
 
 	}
-		
+	
+	//This method detects when a menu bar option is pressed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -140,7 +151,10 @@ public class IDEInterface extends State {
 		} else if (e.getSource() ==  getCodingInCycloneOption()) { //Show coding help screen
 			this.setEnabled(false);
 			new CodingInCyclonePopup(this);
-		} 
+		} else if(e.getSource() == getKeywordHelpOption()) {
+			this.setEnabled(false);
+			new KeywordHelpPopup(this);
+		}
 		
 	}
 	
@@ -191,9 +205,10 @@ public class IDEInterface extends State {
 			//Create the folder
 			File file = new File(String.format("projects/%s", projectName));
 			boolean directoryCreated = file.mkdir();
-
+			
+			//Add the project to the project explorer if it's successfully created
 			if(directoryCreated) {
-				projectExplorer.addNewProject(projectName); //Add the project to the project explorer if it's successfully created
+				projectExplorer.addNewProject(projectName); 
 			}
 			
 		}
@@ -214,7 +229,7 @@ public class IDEInterface extends State {
         //Enter a class name
 		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
 		
-		boolean validName = true;
+		boolean validName = true; //Determines if the class name is valid
 		
 		//Check if a class name was entered
 		if(className.isEmpty()) {
@@ -226,8 +241,9 @@ public class IDEInterface extends State {
 		}
 		
 		//Check if the class name is taken
-		Project project = null;
+		Project project = null; //Stores the current project
 		
+		//Initialize the variable of the current project
 		for(Project currentProject: projectExplorer.getProjects()) {
 			if(selectedProject.equals(currentProject.getProjectName())) {
 				project = currentProject;
@@ -235,6 +251,7 @@ public class IDEInterface extends State {
 			}
 		}
 		
+		//Check if theclass name is taken
 		for(File currentClass: project.getFilepath().listFiles()) {
 			
 			if(className.equalsIgnoreCase(currentClass.getName())) {
@@ -261,10 +278,11 @@ public class IDEInterface extends State {
 		//If the project name is not taken, create the file
 		if(validName) {
 			
+			//Class file
 			File file = new File(String.format("projects/%s/%s", project.getProjectName(), className));
 			
 			try {
-				file.createNewFile();
+				file.createNewFile(); //Create the class file
 				projectExplorer.addNewClass(selectedProject, className); //Add the new class to its project
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -298,7 +316,7 @@ public class IDEInterface extends State {
         //Enter a class name
 		String className = JOptionPane.showInputDialog("Enter a class name:").trim();
 		
-		boolean validName = true;
+		boolean validName = true; //Determines if the project name is valid
 		
 		//Check if a class name was entered
 		if(className.isEmpty()) {
@@ -308,8 +326,9 @@ public class IDEInterface extends State {
 		}
 		
 		//Check if the class name is taken
-		Project project = null;
+		Project project = null; //Stores the current project
 		
+		//Initialize the variable of the current project
 		for(Project currentProject: projectExplorer.getProjects()) {
 			if(selectedProject.equals(currentProject.getProjectName())) {
 				project = currentProject;
@@ -317,6 +336,7 @@ public class IDEInterface extends State {
 			}
 		}
 		
+		//Check if the class name is already taken
 		for(File currentClass: project.getFilepath().listFiles()) {
 			
 			if(className.equalsIgnoreCase(currentClass.getName())) {
@@ -341,10 +361,11 @@ public class IDEInterface extends State {
 		//If the project name is not taken, create the folder
 		if(validName) {
 			
+			//Class file
 			File file = new File(String.format("projects/%s/%s", project.getProjectName(), className));
 
 			try {
-				file.createNewFile();
+				file.createNewFile(); //Create the new class file
 				projectExplorer.addNewClass(selectedProject, className); //Add the new class to its project
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -358,33 +379,43 @@ public class IDEInterface extends State {
     //and dark in the utility settings
     public void resetColor() {
     	
+    	//Set the background colour
     	GUIPanel.setBackground(State.utilityColor);
     	
+    	//Set the console colour
     	Console.consoleTextArea.setBackground(State.utilityColor);
     	Console.consoleTextArea.setForeground(State.textColor);
     	console.setBackground(State.utilityColor);
     	
+    	//Set the project explorer colour
     	projectExplorer.setBackground(State.utilityColor);
     	projectExplorer.getProjectExplorerPanel().setBackground(State.utilityColor);
     	
+    	//Set the editor colour
     	editor.getTabbedPane().setBackground(State.utilityColor);
     	editor.setBackground(State.utilityColor);
     	editor.repaint();
     	
+    	//Set the colour of the components of each project
     	for(Project currentProject: projectExplorer.getProjects()) {
     		
+    		//Set the colour of the project button
     		currentProject.getProjectButton().setBackground(State.utilityColor);
     		currentProject.getProjectButton().setForeground(State.textColor);
     		currentProject.getProjectButton().repaint();
     		
+    		//Set the project class file panel
     		currentProject.getFilePanel().setBackground(State.utilityColor);
     		currentProject.getFilePanel().setForeground(State.textColor);
     		currentProject.getFilePanel().repaint();
     		
+    		//Set the colour of the project panel
     		currentProject.getProjectPanel().setBackground(State.utilityColor);
     		currentProject.getProjectPanel().setForeground(State.textColor);
     		currentProject.getProjectPanel().repaint();
     		
+    		//Adjust coulour settings of each of the project's classes
+    		//Set the colour of each class button and the class' text area
     		for(Class currentClass: currentProject.getFileButtons()) {
     			currentClass.setBackground(State.utilityColor);
     			currentClass.setForeground(State.textColor);
@@ -397,6 +428,7 @@ public class IDEInterface extends State {
     		
     	}
     	
+    	//Repaint components
     	GUIPanel.repaint();
     	console.repaint();
     	projectExplorer.repaint();
@@ -484,7 +516,7 @@ public class IDEInterface extends State {
 		String currentFilepath = "";
 		
 		try {
-			//Write data to a file
+			//Read the current JDK file path from the file
 			Scanner input = new Scanner(new File("settings/jdkFilepath"));
 			if(input.hasNextLine())
 				currentFilepath = input.nextLine();
@@ -500,10 +532,12 @@ public class IDEInterface extends State {
         fileChooser.setDialogTitle(String.format("Select the JDK folder, jdk1.8.0_181 (Current filepath: %s)", currentFilepath));
         fileChooser.setAcceptAllFileFilterUsed(false);
         
+        //Set the file path when the user clicks to confirm it
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
         	JOptionPane.showMessageDialog(this, String.format("JDK Filepath set to: %s", fileChooser.getSelectedFile().getAbsolutePath()));
         }
         
+        //Check the selected file path
         String file = fileChooser.getSelectedFile().getAbsolutePath();
 	    File filepath = new File(file);
 	    
@@ -512,7 +546,7 @@ public class IDEInterface extends State {
 			
 			try {
 				
-				//Write data to a file
+				//Save the selected file path to a file
 				PrintWriter pr = new PrintWriter(new File("settings/jdkFilepath"));
 				pr.println(file);
 				pr.close();
@@ -524,8 +558,6 @@ public class IDEInterface extends State {
 				System.out.println("Save Failed");
 			}
 
-		} else {
-			System.out.println("Invalid Filepath");
 		}
 	    
 	}
