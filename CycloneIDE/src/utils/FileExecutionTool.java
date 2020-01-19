@@ -73,6 +73,7 @@ public class FileExecutionTool {
 	
 	public static void resetCode() {
 		
+		Console.consoleTextArea.setText("Hello World!");
 		previousTabNumber = 0;
 		currentTabNumber = 0;
 		//translatedCode = String.format("public class JarRunFile%d { " 
@@ -472,8 +473,6 @@ public class FileExecutionTool {
 	
 	//This method allows the user to export cyclone code as java code
 	public static void exportFile(File file) {
-		
-		Console.consoleTextArea.setText("");
 
 		resetCode();
 		Console.consoleTextArea.setText("");
