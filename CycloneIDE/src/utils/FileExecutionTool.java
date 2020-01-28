@@ -79,7 +79,6 @@ public class FileExecutionTool {
 	// method that resets the program when user runs the program
 	public static void resetCode() {
 		
-		// resets the output file, indent information, and console
 		previousTabNumber = 0;
 		currentTabNumber = 0;
 		translatedCode = String.format("public class JarRunFile%d { " 
