@@ -4,3 +4,12 @@ b = "hi"
 if: a < 10 and b == "hi"
 	if: a == 0
 		pl: "hi"
+		
+if: a < -2
+	pl: "a smaller than -2"
+eif: a > 5
+	pl: "a greater than 5"
+else:
+	pl: "a is smaller than 5 and greater than -2"
+
+pl: "a is: " + a

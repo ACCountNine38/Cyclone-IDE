@@ -32,8 +32,18 @@ public class Print {
 		// trims the output line to remove leading and trailing spaces
 		String outputLine = output.trim();
 		
+		// tests to see if the print statement is empty
+		if(outputLine.equals("")) {
+			
+			// return a set of quotation marks and translate it for file execution
+			printList.add("\"\"");
+			
+			return toOutput(printList);
+			
+		}
+		
 		// checks if output line contains a plus, if it does, then break it down into tokens
-		if(outputLine.contains("+")) {
+		if(outputLine.contains("+") && !outputLine.contains("\\+")) {
 			
 			String token = outputLine.substring(0, outputLine.indexOf("+")).trim();
 			
@@ -56,10 +66,10 @@ public class Print {
 			// if the token is not a variable, then check if its a valid value
 			if(!variableFound) {
 				
-				if(Variable.getDatatype(outputLine, lineNumber).equals("int") || Variable.getDatatype(outputLine, lineNumber).equals("double") 
-						|| Variable.getDatatype(outputLine, lineNumber).equals("boolean") || Variable.getDatatype(outputLine, lineNumber).equals("String")) {
+				if(Variable.getDatatype(token, lineNumber).equals("int") || Variable.getDatatype(token, lineNumber).equals("double") 
+						|| Variable.getDatatype(token, lineNumber).equals("boolean") || Variable.getDatatype(token, lineNumber).equals("String")) {
 					
-					printList.add(outputLine);
+					printList.add(token);
 					
 				} else {
 					

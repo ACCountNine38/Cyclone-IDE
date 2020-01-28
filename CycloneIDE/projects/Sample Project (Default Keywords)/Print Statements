@@ -1,6 +1,6 @@
 a = 0
 b = "hello "
 c = "wor"
-p: "hello"
-pl: c + "ld"
-p: a
+p: b
+pl: c + "ld " + "version " + a
+p: "hi"

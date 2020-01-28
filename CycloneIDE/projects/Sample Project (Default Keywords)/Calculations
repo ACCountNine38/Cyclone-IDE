@@ -2,8 +2,14 @@ a = 2
 b = 5
 a + b
 a * b
-pl: a
+pl: "a is: " + a
 
 c = 10.55
 c / 2
-pl: c
+pl: "c is: " + c
+
+
+a = 3
+b = 4.5
+a / b
+p: a

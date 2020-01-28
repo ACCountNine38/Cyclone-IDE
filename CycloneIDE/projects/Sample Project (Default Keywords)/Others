@@ -1,16 +1,18 @@
 a = 0
 b = "32"
 parse: a: b
-pl: "parsed value of a is: "
-pl: a
+pl: "parse int of a is: " + a
 
-c = 0
-r: c: 100
-pl: "random value of c is: "
-pl: c
+c = 12.88
+d = "43.056"
+parse: c: d
+pl: "parse double of c is: " + c
 
-d = 0.44
-e = "temp"
-toString: e: d
-pl: "toString of e is: "
-pl: e
+e = 0
+r: e: 100
+pl: "random value of e is: " + e
+
+f = 0.44
+g = "temp"
+toString: g: f
+pl: "toString of f is: " + g

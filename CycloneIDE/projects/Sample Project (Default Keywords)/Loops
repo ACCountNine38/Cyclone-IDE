@@ -1,4 +1,13 @@
 a = 0
-loop: a < 10
-	p: "hi "
+loop: a < 5
+	pl: "hi " + a
 	a + 1
+	
+loop: true
+	a + 2
+	if: a > 90
+		b:
+	eif: a > 80
+		pl: "a > 80"
+
+p: "success"

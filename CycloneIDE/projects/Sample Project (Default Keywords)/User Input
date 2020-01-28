@@ -1,3 +1,5 @@
 a = 0
 in: a
-pl: a
+pl: "Input of a is: " + a
+a * 2
+pl: "a times 2 is: " + a
