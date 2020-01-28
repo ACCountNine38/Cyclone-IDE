@@ -8,9 +8,9 @@ Cyclone is created by Alan Sun and Dylan Williams. It is made for the ICS4U1 cou
 Cyclone Development Environment is only suiable for Windows devices. The compiler being used does not support Mac and other operating systems. 
 
 # Trailer Images
-![](Cyclone-IDE/images/trailer/image1.png)
-![](Cyclone-IDE/images/trailer/image2.png)
-![](Cyclone-IDE/images/trailer/image3.png)
-![](Cyclone-IDE/images/trailer/image4.png)
-![](Cyclone-IDE/images/trailer/image5.png)
-![](Cyclone-IDE/images/trailer/image6.png)
+![](CycloneIDE/images/trailer/image1.JPG)
+![](CycloneIDE/images/trailer/image2.JPG)
+![](CycloneIDE/images/trailer/image3.JPG)
+![](CycloneIDE/images/trailer/image4.JPG)
+![](CycloneIDE/images/trailer/image5.JPG)
+![](CycloneIDE/images/trailer/image6.JPG)
