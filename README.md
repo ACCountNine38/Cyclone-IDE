@@ -7,7 +7,7 @@ Cyclone is created by Alan Sun and Dylan Williams for the culminating project in
 # Additional Note
 Cyclone Development Environment is only suiable for Windows devices. The compiler being used does not support Mac and other operating systems. 
 
-# Sneak Peaks
+# Preview
 ![](CycloneIDE/images/trailer/image1.JPG)
 ![](CycloneIDE/images/trailer/image2.JPG)
 ![](CycloneIDE/images/trailer/image3.JPG)
