@@ -1,4 +1,4 @@
-# Cyclone-IDE
+# D++
 Cyclone simulates an integrated development environment that will allow users to program using a programming language similar to Python, but the keywords are customizable. This new language will use simpler keywords and to substitute for Java’s keywords.  Additionally, this new language will follow the convention of using tab spaces to indicate that several lines are a part of a block of code.  The application will have a text area in which the user will enter their code, an area in which files project folders and files will be displayed, and a text area for the console.  To run a program, the application will convert the code written in our new programming language to Java code before executing it.  It will then take input and display output to the console. We aim to design this program with a lot of customization features. The user also has the ability to convert the project made in this IDE to java and output it. Additionally, all the keywords and the IDE’s layout can all be customized by the user. 
 
 # Development
