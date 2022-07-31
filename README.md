@@ -1,13 +1,24 @@
-# D++
-Renamed from Cyclone IDE cuz why not :)
-
-D++ simulates an integrated development environment that will allow users to program using a programming language similar to Python, but the keywords are customizable. This new language will use simpler keywords and to substitute for Java’s keywords.  Additionally, this new language will follow the convention of using tab spaces to indicate that several lines are a part of a block of code.  The application will have a text area in which the user will enter their code, an area in which files project folders and files will be displayed, and a text area for the console.  To run a program, the application will convert the code written in our new programming language to Java code before executing it.  It will then take input and display output to the console. We aim to design this program with a lot of customization features. The user also has the ability to convert the project made in this IDE to java and output it. Additionally, all the keywords and the IDE’s layout can all be customized by the user. 
-
 # Development
-D++ is created by Alan Sun and Dylan Williams for the culminating project in the Grade 12 Computer Science Course (ICS4U1). It serves the mean to challenge our ability to design something that is different than what we have done previously. It uses many unique datastures such as Hash Map, Stack, and Queue. In order for a program in D++ to execute properly, the direct use of JDK instead of JRE is also explored in this project.
+D++ and the Cyclone-IDE is created by Alan Sun and Dylan Williams. It is built from scratch completely using Java. Its creation enforces us to go above and beyound our skill level. 
+
+# D++
+D++ is a programming language that is designed to be beginner friendly. It has simple syntaxes similar to Python, where each instruction is separated on a different line, using tabs to indicate nesting. Keywords and built in functions in D++ is highly customizable. For example, users can change the keyword 'print' to any string they want, such as 'p' or 'cout'. New programmers can take advantage of this customizability to reduce the complexity of keywords and built in functions for simple I/O programs, while also being able to change the keywords to their other comfort languages. 
+
+# Cyclone-IDE
+Cyclone is the IDE for the custom programming language D++. It offers, but not limited to the following UI features: 
+* code editor with line numbers
+* output console that updates when program is executed
+* task bar that contains all the opened files
+* menu bar that provides access to different UI commands and setting pannels
+* project menu that contains folders and files of a project
+* customization pannel that enables users to customize keywords and built in functions
+* appearance window that enable users to switch between dark mode and light mode
+* help pannel that gives a tour for using the IDE
+
+After a user finishes writing their simple D++ program, the IDE will translate the code into Java and uses the Java Virtual Machine to compile.
 
 # Additional Note
-D++ Development Environment is only suiable for Windows devices. The compiler being used does not support Mac and other operating systems. 
+D++ Development Environment is only suiable for Windows devices. The compiler being used does not support MacOS and Linux operating systems. 
 
 # Preview
 ![](CycloneIDE/images/trailer/image1.JPG)
