@@ -11,7 +11,7 @@ Cyclone is the IDE for the custom programming language D++. It offers, but not l
 * task bar that contains all the opened files
 * menu bar that provides access to different UI commands and setting pannels
 * project menu that contains folders and files of a project
-* customization pannel that enables users to customize keywords and built in functions
+* utility customization pannel that enables users to customize keywords and built in functions
 * appearance window that enable users to switch between dark mode and light mode
 * help pannel that gives a tour for using the IDE
 
